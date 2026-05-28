@@ -98,7 +98,7 @@ export function LiveTrace() {
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_220px]">
         {/* log column */}
-        <div className="px-5 py-4 min-h-[360px] font-mono text-[12.5px] leading-[1.85] border-b lg:border-b-0 lg:border-r border-[var(--border)]">
+        <div className="px-3 sm:px-5 py-4 min-h-[280px] sm:min-h-[360px] font-mono text-[11px] sm:text-[12.5px] leading-[1.85] border-b lg:border-b-0 lg:border-r border-[var(--border)]">
           <AnimatePresence initial={false}>
             {visible.filter(Boolean).map((l, idx) => (
               <motion.div
@@ -107,7 +107,7 @@ export function LiveTrace() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.25 }}
-                className="grid grid-cols-[78px_56px_1fr] gap-2 items-start"
+                className="grid grid-cols-[58px_44px_1fr] sm:grid-cols-[78px_56px_1fr] gap-1.5 sm:gap-2 items-start"
               >
                 <span className="text-[var(--text-dim)]">{l.t}</span>
                 <span

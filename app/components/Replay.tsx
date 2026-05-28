@@ -66,7 +66,7 @@ export function Replay() {
           </p>
 
           {/* benefits tile row */}
-          <div className="mt-6 grid grid-cols-3 gap-2">
+          <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-2">
             <BenefitTile
               icon={<Clock size={13} strokeWidth={1.8} />}
               value="10x"
@@ -137,8 +137,8 @@ export function Replay() {
           className="panel p-0 overflow-hidden relative"
         >
           {/* top header bar */}
-          <div className="flex items-center justify-between px-4 py-2.5 border-b border-[var(--border)] bg-[rgba(255,255,255,0.015)]">
-            <div className="flex items-center gap-4 font-mono text-[11.5px] text-[var(--text-muted)]">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 px-3 sm:px-4 py-2.5 border-b border-[var(--border)] bg-[rgba(255,255,255,0.015)]">
+            <div className="flex items-center gap-3 sm:gap-4 font-mono text-[10.5px] sm:text-[11.5px] text-[var(--text-muted)]">
               <span className="inline-flex items-center gap-1.5">
                 <RotateCcw size={11} className="text-[var(--text-dim)]" />
                 Run · <span className="text-white">8f9a-22b1</span>
@@ -148,7 +148,7 @@ export function Replay() {
                 2.47s
               </span>
             </div>
-            <div className="flex items-center gap-2 px-2.5 py-1 rounded-md border border-[var(--border)] bg-[rgba(255,255,255,0.02)] font-mono text-[11.5px] text-white">
+            <div className="flex items-center gap-2 px-2.5 py-1 rounded-md border border-[var(--border)] bg-[rgba(255,255,255,0.02)] font-mono text-[10.5px] sm:text-[11.5px] text-white">
               Replay #2 (fixed parser)
               <ChevronDown size={11} className="text-[var(--text-dim)]" />
             </div>
@@ -172,13 +172,13 @@ export function Replay() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="border-b lg:border-b-0 lg:border-r border-[var(--border)] p-3"
+              className="border-b lg:border-b-0 lg:border-r border-[var(--border)] p-3 overflow-hidden"
             >
               <Label>
                 Step 3: summarize{" "}
                 <span className="text-[var(--signal-fail)]">(Failed)</span>
               </Label>
-              <pre className="mt-2.5 font-mono text-[11px] leading-[1.55] text-[var(--text-muted)] whitespace-pre-wrap">
+              <pre className="mt-2.5 font-mono text-[10px] sm:text-[11px] leading-[1.55] text-[var(--text-muted)] whitespace-pre-wrap break-all sm:break-normal">
 {`{
   "summary": `}<span className="text-[var(--signal-fail)]">&quot;...&quot;</span>{`,
   "key_points": `}<span className="text-[var(--signal-fail)]">[]</span>{`,
@@ -195,13 +195,13 @@ export function Replay() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.5, delay: 0.4 }}
-              className="border-b lg:border-b-0 lg:border-r border-[var(--border)] p-3"
+              className="border-b lg:border-b-0 lg:border-r border-[var(--border)] p-3 overflow-hidden"
             >
               <Label>
                 Replay: summarize{" "}
                 <span className="text-[var(--signal-ok)]">(Replayed)</span>
               </Label>
-              <pre className="mt-2.5 font-mono text-[11px] leading-[1.55] text-[var(--text-muted)] whitespace-pre-wrap">
+              <pre className="mt-2.5 font-mono text-[10px] sm:text-[11px] leading-[1.55] text-[var(--text-muted)] whitespace-pre-wrap break-all sm:break-normal">
 {`{
   "summary": `}<span className="text-white">&quot;AI regulation is evolving rapidly, with focus on safety and transparency.&quot;</span>{`,
   "key_points": `}<span className="text-white">[&quot;safety&quot;, &quot;transparency&quot;]</span>{`,

@@ -68,7 +68,7 @@ export function FAQ() {
         {/* sticky left column */}
         <div className="lg:sticky lg:top-28 lg:self-start">
           <div className="eyebrow">FAQ</div>
-          <h2 className="mt-6 text-[48px] sm:text-[64px] lg:text-[80px] leading-[0.95] tracking-[-0.04em] text-[var(--accent-soft)]">
+          <h2 className="mt-6 text-[36px] sm:text-[64px] lg:text-[80px] leading-[0.95] tracking-[-0.04em] text-[var(--accent-soft)]">
             Questions,
             <br />
             <span className="font-serif-italic text-white">answered.</span>
