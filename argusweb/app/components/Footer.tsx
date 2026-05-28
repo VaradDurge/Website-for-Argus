@@ -18,7 +18,7 @@ export function Footer() {
           opacity: 0.4,
         }}
       />
-      <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-12 grid lg:grid-cols-[1.2fr_1fr_1.2fr] gap-8 items-start">
+      <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1.2fr] gap-8 items-start">
         <div>
           <Logo />
           <p className="mt-4 max-w-xs text-[13px] leading-[1.6] text-[var(--text-muted)]">

@@ -41,7 +41,7 @@ export function Hero() {
               ❍ Forensic Observability for AI Agents
             </div>
 
-            <h1 className="mt-6 font-medium text-[44px] sm:text-[58px] lg:text-[72px] leading-[1.02] tracking-[-0.035em]">
+            <h1 className="mt-6 font-medium text-[32px] sm:text-[58px] lg:text-[72px] leading-[1.05] tracking-[-0.035em]">
               Your agent finished.
               <br />
               But did it actually{" "}

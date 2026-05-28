@@ -58,6 +58,14 @@
     color: var(--text);
     font-family: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
     font-feature-settings: "ss01", "cv11";
+    overflow-x: hidden;
+  }
+
+  /* scale down 20% on mobile so nothing overlaps */
+  @media (max-width: 640px) {
+    html {
+      zoom: 0.8;
+    }
   }
 
   body {
@@ -72,7 +80,6 @@
         rgba(0, 240, 168, 0.04),
         transparent 60%
       );
-    background-attachment: fixed;
   }
 
   ::selection {

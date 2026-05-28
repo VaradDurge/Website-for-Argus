@@ -21,7 +21,7 @@ export function Stats() {
   return (
     <section className="relative pt-6 pb-10 lg:pb-14">
       <div className="mx-auto max-w-[1280px] px-6 lg:px-10">
-        <div className="flex items-center justify-center gap-6 sm:gap-10 lg:gap-14 flex-wrap">
+        <div className="grid grid-cols-2 gap-6 sm:flex sm:items-center sm:justify-center sm:gap-10 lg:gap-14 sm:flex-wrap">
           {STATS.map((s) => (
             <Counter key={s.label} {...s} />
           ))}
@@ -58,17 +58,19 @@ function Counter({
   }, [inView, mv, value]);
 
   return (
-    <div ref={ref} className="flex items-center gap-2.5">
-      <Icon size={16} strokeWidth={1.6} className="text-[#f5b13c]" />
-      <div className="flex items-baseline gap-0.5">
-        <motion.span className="text-[22px] sm:text-[26px] font-semibold tracking-[-0.02em] text-white">
-          {display}
-        </motion.span>
-        <span className="text-[16px] sm:text-[18px] font-semibold text-[#f5b13c] tracking-[-0.01em]">
-          {suffix}
-        </span>
+    <div ref={ref} className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2.5">
+      <div className="flex items-center gap-2">
+        <Icon size={16} strokeWidth={1.6} className="text-[#f5b13c]" />
+        <div className="flex items-baseline gap-0.5">
+          <motion.span className="text-[22px] sm:text-[26px] font-semibold tracking-[-0.02em] text-white">
+            {display}
+          </motion.span>
+          <span className="text-[16px] sm:text-[18px] font-semibold text-[#f5b13c] tracking-[-0.01em]">
+            {suffix}
+          </span>
+        </div>
       </div>
-      <span className="font-mono text-[10px] tracking-[0.12em] uppercase text-[var(--text-dim)] ml-0.5">
+      <span className="font-mono text-[10px] tracking-[0.12em] uppercase text-[var(--text-dim)] sm:ml-0.5">
         {label}
       </span>
     </div>
