@@ -20,7 +20,7 @@ export function Nav() {
       <BetaAccessModal open={betaOpen} onClose={() => setBetaOpen(false)} />
       <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />
       <div className="absolute inset-0 -z-10 backdrop-blur-xl bg-[rgba(7,7,10,0.6)] border-b border-[var(--border)]" />
-      <nav className="mx-auto flex max-w-[1280px] items-center justify-between px-6 lg:px-10 h-16">
+      <nav className="mx-auto flex max-w-[1280px] items-center justify-between px-3 sm:px-6 lg:px-10 h-16">
         {/* left: logo + divider + social icons */}
         <div className="flex items-center gap-2 sm:gap-3">
           <a href="/" className="flex items-center gap-2">
