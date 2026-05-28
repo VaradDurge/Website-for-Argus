@@ -106,7 +106,30 @@ export function Pipeline() {
         <div className="mt-12 md:hidden flex flex-col gap-3">
           {NODES.map((n, i) => (
             <div key={n.name} className="flex flex-col items-start gap-2">
-              <NodeCard node={n} delay={i * 0.1} />
+              {n.rootCause ? (
+                /* summarize node + root cause side by side */
+                <div className="flex items-start gap-3 w-full">
+                  <div className="flex-1 min-w-0">
+                    <NodeCard node={n} delay={i * 0.1} />
+                  </div>
+                  <div className="shrink-0 flex flex-col items-center pt-2">
+                    <span className="w-px h-4 bg-[var(--signal-warn)]/50" />
+                    <span className="px-1.5 py-0.5 rounded-[4px] border border-[var(--signal-warn)]/60 bg-[rgba(245,177,60,0.06)] font-mono text-[9px] tracking-[0.16em] uppercase text-[var(--signal-warn)] whitespace-nowrap">
+                      Root Cause
+                    </span>
+                    <svg width="2" height="8" className="mt-0.5" aria-hidden>
+                      <line x1="1" y1="0" x2="1" y2="8" stroke="var(--signal-warn)" strokeWidth="1" strokeDasharray="2 2" opacity="0.4" />
+                    </svg>
+                    <div className="mt-1 w-[120px] rounded-md border border-[var(--signal-warn)]/30 bg-[rgba(245,177,60,0.04)] px-2 py-1.5">
+                      <p className="text-[9px] leading-[1.4] text-[var(--signal-warn)] text-center">
+                        ARGUS detected this before it degraded downstream
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <NodeCard node={n} delay={i * 0.1} />
+              )}
               {i < NODES.length - 1 && (
                 <div className="ml-7 h-6 w-px bg-[var(--border)]" />
               )}
@@ -172,36 +195,39 @@ function NodeCard({
         </p>
       </div>
 
-      {/* root cause callout below warn node */}
+      {/* root cause callout — below on desktop, right side on mobile */}
       {node.rootCause && (
-        <div className="mt-3 flex flex-col items-center">
-          <span className="w-px h-3 bg-[var(--signal-warn)]/50" />
-          <span className="px-2 py-0.5 rounded-[4px] border border-[var(--signal-warn)]/60 bg-[rgba(245,177,60,0.06)] font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--signal-warn)]">
-            Root Cause
-          </span>
-          <svg
-            width="2"
-            height="10"
-            className="mt-0.5"
-            aria-hidden
-          >
-            <line
-              x1="1"
-              y1="0"
-              x2="1"
-              y2="10"
-              stroke="var(--signal-warn)"
-              strokeWidth="1"
-              strokeDasharray="2 2"
-              opacity="0.4"
-            />
-          </svg>
-          <div className="mt-1 max-w-[180px] rounded-md border border-[var(--signal-warn)]/30 bg-[rgba(245,177,60,0.04)] px-3 py-2">
-            <p className="text-[10.5px] leading-[1.5] text-[var(--signal-warn)] text-center">
-              ARGUS detected this failure before it degraded downstream nodes
-            </p>
+        <>
+          {/* desktop: below the card */}
+          <div className="hidden md:flex mt-3 flex-col items-center">
+            <span className="w-px h-3 bg-[var(--signal-warn)]/50" />
+            <span className="px-2 py-0.5 rounded-[4px] border border-[var(--signal-warn)]/60 bg-[rgba(245,177,60,0.06)] font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--signal-warn)]">
+              Root Cause
+            </span>
+            <svg
+              width="2"
+              height="10"
+              className="mt-0.5"
+              aria-hidden
+            >
+              <line
+                x1="1"
+                y1="0"
+                x2="1"
+                y2="10"
+                stroke="var(--signal-warn)"
+                strokeWidth="1"
+                strokeDasharray="2 2"
+                opacity="0.4"
+              />
+            </svg>
+            <div className="mt-1 max-w-[180px] rounded-md border border-[var(--signal-warn)]/30 bg-[rgba(245,177,60,0.04)] px-3 py-2">
+              <p className="text-[10.5px] leading-[1.5] text-[var(--signal-warn)] text-center">
+                ARGUS detected this failure before it degraded downstream nodes
+              </p>
+            </div>
           </div>
-        </div>
+        </>
       )}
     </motion.div>
   );
