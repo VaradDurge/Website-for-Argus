@@ -154,16 +154,43 @@ export function Replay() {
             </div>
           </div>
 
-          {/* main 4-column grid */}
+          {/* main grid */}
           <div className="grid grid-cols-1 lg:grid-cols-[150px_1fr_1fr]">
-            {/* execution steps */}
-            <div className="border-b lg:border-b-0 lg:border-r border-[var(--border)] p-3">
+            {/* execution steps — desktop: vertical list */}
+            <div className="hidden lg:block border-r border-[var(--border)] p-3">
               <Label>Execution Steps</Label>
               <ol className="mt-2.5 space-y-1">
                 {STEPS.map((s) => (
                   <StepRow key={s.n} step={s} />
                 ))}
               </ol>
+            </div>
+
+            {/* execution steps — mobile: horizontal compact flow */}
+            <div className="lg:hidden border-b border-[var(--border)] px-3 py-3">
+              <Label>Execution Steps</Label>
+              <div className="mt-2.5 flex items-center gap-0 overflow-x-auto scroll-pretty">
+                {STEPS.map((s, i) => (
+                  <div key={s.n} className="flex items-center shrink-0">
+                    <span
+                      className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-md font-mono text-[11px] ${
+                        s.active
+                          ? "border border-[var(--signal-warn)]/55 bg-[rgba(245,177,60,0.08)] text-[var(--signal-warn)] font-semibold"
+                          : "text-[var(--text-muted)]"
+                      }`}
+                    >
+                      {s.name}
+                      <StepIcon status={s.status} />
+                    </span>
+                    {i < STEPS.length - 1 && (
+                      <svg width="16" height="8" viewBox="0 0 16 8" fill="none" className="shrink-0 mx-0.5" aria-hidden>
+                        <line x1="0" y1="4" x2="10" y2="4" stroke="var(--border-strong)" strokeWidth="1" strokeDasharray="2 2" />
+                        <path d="M9 1.5 L14 4 L9 6.5" stroke="var(--border-strong)" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* failed JSON */}
