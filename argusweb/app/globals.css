@@ -51,6 +51,13 @@
   100% { background-position: 0%   50%; }
 }
 
+/* scale down 20% on mobile so nothing overlaps */
+@media (max-width: 640px) {
+  html {
+    zoom: 0.8;
+  }
+}
+
 @layer base {
   html,
   body {
@@ -59,13 +66,6 @@
     font-family: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
     font-feature-settings: "ss01", "cv11";
     overflow-x: hidden;
-  }
-
-  /* scale down 20% on mobile so nothing overlaps */
-  @media (max-width: 640px) {
-    html {
-      zoom: 0.8;
-    }
   }
 
   body {
