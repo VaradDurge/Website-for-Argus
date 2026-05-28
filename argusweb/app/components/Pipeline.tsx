@@ -112,18 +112,24 @@ export function Pipeline() {
                   <div className="flex-1 min-w-0">
                     <NodeCard node={n} delay={i * 0.1} />
                   </div>
-                  <div className="shrink-0 flex flex-col items-center pt-2">
-                    <span className="w-px h-4 bg-[var(--signal-warn)]/50" />
-                    <span className="px-1.5 py-0.5 rounded-[4px] border border-[var(--signal-warn)]/60 bg-[rgba(245,177,60,0.06)] font-mono text-[9px] tracking-[0.16em] uppercase text-[var(--signal-warn)] whitespace-nowrap">
-                      Root Cause
-                    </span>
-                    <svg width="2" height="8" className="mt-0.5" aria-hidden>
-                      <line x1="1" y1="0" x2="1" y2="8" stroke="var(--signal-warn)" strokeWidth="1" strokeDasharray="2 2" opacity="0.4" />
+                  {/* horizontal connector + callout */}
+                  <div className="shrink-0 flex items-center self-center gap-0">
+                    {/* horizontal dashed line pointing from card to badge */}
+                    <svg width="24" height="2" className="shrink-0" aria-hidden>
+                      <line x1="0" y1="1" x2="24" y2="1" stroke="var(--signal-warn)" strokeWidth="1" strokeDasharray="3 3" opacity="0.5" />
                     </svg>
-                    <div className="mt-1 w-[120px] rounded-md border border-[var(--signal-warn)]/30 bg-[rgba(245,177,60,0.04)] px-2 py-1.5">
-                      <p className="text-[9px] leading-[1.4] text-[var(--signal-warn)] text-center">
-                        ARGUS detected this before it degraded downstream
-                      </p>
+                    <div className="flex flex-col items-center">
+                      <span className="px-1.5 py-0.5 rounded-[4px] border border-[var(--signal-warn)]/60 bg-[rgba(245,177,60,0.06)] font-mono text-[9px] tracking-[0.16em] uppercase text-[var(--signal-warn)] whitespace-nowrap">
+                        Root Cause
+                      </span>
+                      <svg width="2" height="6" className="mt-0.5" aria-hidden>
+                        <line x1="1" y1="0" x2="1" y2="6" stroke="var(--signal-warn)" strokeWidth="1" strokeDasharray="2 2" opacity="0.4" />
+                      </svg>
+                      <div className="mt-0.5 w-[110px] rounded-md border border-[var(--signal-warn)]/30 bg-[rgba(245,177,60,0.04)] px-2 py-1.5">
+                        <p className="text-[9px] leading-[1.4] text-[var(--signal-warn)] text-center">
+                          ARGUS detected this before it degraded downstream
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
