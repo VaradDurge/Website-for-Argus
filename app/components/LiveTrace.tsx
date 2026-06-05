@@ -87,12 +87,7 @@ export function LiveTrace() {
         {/* card header */}
         <div className="flex items-center justify-between px-5 py-3 border-b border-[var(--border)]">
           <span className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.22em] uppercase text-[var(--text-muted)]">
-            <span className="live-dot" style={{ width: 6, height: 6 }} />
             Argus Live Trace
-          </span>
-          <span className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.18em] uppercase text-[var(--signal-ok)]">
-            <span className="live-dot" />
-            Live
           </span>
         </div>
 

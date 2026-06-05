@@ -28,7 +28,6 @@ export function Nav() {
         <a href="/" className="flex items-center gap-2 shrink-0">
           <Logo />
           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-[var(--signal-warn)]/30 bg-[rgba(245,177,60,0.06)]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[var(--signal-warn)] animate-pulse" />
             <span className="font-mono text-[9px] tracking-[0.14em] uppercase text-[var(--signal-warn)]">Beta</span>
           </span>
         </a>

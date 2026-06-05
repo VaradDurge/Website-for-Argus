@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Check,
   ChevronRight,
@@ -10,6 +10,8 @@ import {
   type LucideIcon,
   Lock,
   Play,
+  Settings2,
+  X,
 } from "lucide-react";
 
 const WATCHER_CODE = `from argus import ArgusWatcher
@@ -250,7 +252,94 @@ function CliCardEl({ card }: { card: CliCard }) {
   );
 }
 
+const WATCHER_PARAMS: { name: string; value: string; comment: string }[] = [
+  { name: "max_field_size", value: "50_000", comment: "Truncate large fields" },
+  { name: "validators", value: "{...}", comment: "Per-node semantic validators" },
+  { name: "strict", value: "False", comment: "Raise on failure?" },
+  { name: "investigate", value: "True", comment: 'True | False | "always"' },
+  { name: "redact_keys", value: "None", comment: "Keys to scrub from output" },
+  { name: "persist_state", value: "True", comment: "Save state snapshots" },
+  { name: "record_http", value: "False", comment: "Record HTTP for deterministic reruns" },
+  { name: "semantic_judge", value: "False", comment: "LLM-as-judge evaluation" },
+  { name: "judge_model", value: '"gpt-4o"', comment: "Which model for the judge" },
+];
+
+function WatcherParamsPopup({ open, onClose }: { open: boolean; onClose: () => void }) {
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4" onClick={onClose}>
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+      <div
+        className="relative w-full max-w-lg rounded-2xl border border-[var(--border)] bg-[var(--bg)] shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* header */}
+        <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)]">
+          <div className="flex items-center gap-2.5">
+            <Settings2 size={16} className="text-[var(--accent-soft)]" />
+            <span className="font-mono text-[11px] tracking-[0.18em] uppercase text-[var(--text-muted)]">
+              ArgusWatcher Parameters
+            </span>
+          </div>
+          <button
+            onClick={onClose}
+            className="inline-flex items-center justify-center w-7 h-7 rounded-md border border-[var(--border)] text-[var(--text-muted)] hover:text-white hover:border-[var(--border-strong)] transition-colors"
+            aria-label="Close"
+          >
+            <X size={14} />
+          </button>
+        </div>
+
+        {/* params list */}
+        <div className="px-5 py-4 max-h-[60vh] overflow-y-auto scroll-pretty">
+          <pre className="font-mono text-[11.5px] leading-[1.8]">
+            <code>
+              <span className="text-[var(--text-dim)]">{"watcher = "}</span>
+              <span className="text-[var(--accent-soft)]">ArgusWatcher</span>
+              <span className="text-[var(--text-muted)]">{"("}</span>
+              {"\n"}
+              {WATCHER_PARAMS.map((p, i) => (
+                <span key={p.name}>
+                  {"    "}
+                  <span className="text-white">{p.name}</span>
+                  <span className="text-[var(--text-muted)]">=</span>
+                  <span className="text-[var(--signal-ok)]">{p.value}</span>
+                  <span className="text-[var(--text-muted)]">,</span>
+                  {"  "}
+                  <span className="text-[var(--text-dim)]"># {p.comment}</span>
+                  {i < WATCHER_PARAMS.length - 1 ? "\n" : ""}
+                </span>
+              ))}
+              {"\n"}
+              <span className="text-[var(--text-muted)]">{")"}</span>
+            </code>
+          </pre>
+        </div>
+
+        {/* footer hint */}
+        <div className="px-5 py-3 border-t border-[var(--border)]">
+          <p className="font-mono text-[10px] tracking-[0.12em] text-[var(--text-dim)]">
+            All parameters are optional — defaults shown above.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function CodeCardEl({ card }: { card: CodeCard }) {
+  const [paramsOpen, setParamsOpen] = useState(false);
+
   return (
     <CardShell>
       <CardHead
@@ -264,7 +353,17 @@ function CodeCardEl({ card }: { card: CodeCard }) {
           <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-[var(--text-dim)]">
             {card.lang}
           </span>
-          <CopyButton text={card.raw} />
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={() => setParamsOpen(true)}
+              className="shrink-0 inline-flex items-center gap-1.5 px-2 py-1 rounded-md border border-[var(--border)] font-mono text-[10px] tracking-[0.1em] text-[var(--accent-soft)] hover:border-[var(--accent-soft)]/40 hover:bg-[rgba(109,92,255,0.06)] transition-colors"
+              aria-label="View watcher parameters"
+            >
+              <Settings2 size={11} />
+              Params
+            </button>
+            <CopyButton text={card.raw} />
+          </div>
         </div>
         <pre className="px-3.5 py-3 font-mono text-[11.5px] leading-[1.7] overflow-x-auto scroll-pretty">
           <code>
@@ -272,6 +371,7 @@ function CodeCardEl({ card }: { card: CodeCard }) {
           </code>
         </pre>
       </CodeTile>
+      <WatcherParamsPopup open={paramsOpen} onClose={() => setParamsOpen(false)} />
     </CardShell>
   );
 }
