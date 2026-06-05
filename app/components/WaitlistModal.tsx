@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ArrowRight, Check } from "lucide-react";
-import { RiGithubFill, RiDiscordFill } from "@remixicon/react";
+import { RiGithubFill, RiDiscordFill, RiInstagramFill } from "@remixicon/react";
 
 interface Props {
   open: boolean;
@@ -132,6 +132,15 @@ export function WaitlistModal({ open, onClose }: Props) {
                         className="flex items-center justify-center w-9 h-9 rounded-lg border border-white/15 bg-[rgba(255,255,255,0.04)] text-[var(--text-muted)] hover:text-white hover:bg-[rgba(255,255,255,0.08)] transition-colors shrink-0"
                       >
                         <RiGithubFill size={17} />
+                      </a>
+                      <a
+                        href="https://www.instagram.com/argus.in"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Instagram"
+                        className="flex items-center justify-center w-9 h-9 rounded-lg border border-white/15 bg-[rgba(255,255,255,0.04)] text-[var(--text-muted)] hover:text-[#E4405F] hover:bg-[rgba(255,255,255,0.08)] transition-colors shrink-0"
+                      >
+                        <RiInstagramFill size={17} />
                       </a>
                     </div>
 

@@ -8,7 +8,7 @@ import { Logo } from "./Logo";
 import { WaitlistModal } from "./WaitlistModal";
 import { BetaAccessModal } from "./BetaAccessModal";
 import { ContactModal } from "./ContactModal";
-import { RiGithubFill, RiDiscordFill } from "@remixicon/react";
+import { RiGithubFill, RiDiscordFill, RiInstagramFill } from "@remixicon/react";
 
 export function Nav() {
   const [waitlistOpen, setWaitlistOpen] = useState(false);
@@ -52,6 +52,15 @@ export function Nav() {
             className="flex items-center justify-center w-8 h-8 rounded-md text-[var(--text-muted)] hover:text-white transition-colors"
           >
             <RiGithubFill size={18} />
+          </a>
+          <a
+            href="https://www.instagram.com/argus.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+            className="flex items-center justify-center w-8 h-8 rounded-md text-[var(--text-muted)] hover:text-[#E4405F] transition-colors"
+          >
+            <RiInstagramFill size={18} />
           </a>
         </div>
 
@@ -160,6 +169,15 @@ export function Nav() {
               className="flex items-center justify-center w-9 h-9 rounded-md border border-[var(--border)] text-[var(--text-muted)] hover:text-white transition-colors"
             >
               <RiGithubFill size={18} />
+            </a>
+            <a
+              href="https://www.instagram.com/argus.in"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="flex items-center justify-center w-9 h-9 rounded-md border border-[var(--border)] text-[var(--text-muted)] hover:text-[#E4405F] transition-colors"
+            >
+              <RiInstagramFill size={18} />
             </a>
           </div>
 
