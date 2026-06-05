@@ -252,16 +252,34 @@ function CliCardEl({ card }: { card: CliCard }) {
   );
 }
 
-const WATCHER_PARAMS: { name: string; value: string; comment: string }[] = [
-  { name: "max_field_size", value: "50_000", comment: "Truncate large fields" },
-  { name: "validators", value: "{...}", comment: "Per-node semantic validators" },
-  { name: "strict", value: "False", comment: "Raise on failure?" },
-  { name: "investigate", value: "True", comment: 'True | False | "always"' },
-  { name: "redact_keys", value: "None", comment: "Keys to scrub from output" },
-  { name: "persist_state", value: "True", comment: "Save state snapshots" },
-  { name: "record_http", value: "False", comment: "Record HTTP for deterministic reruns" },
-  { name: "semantic_judge", value: "False", comment: "LLM-as-judge evaluation" },
-  { name: "judge_model", value: '"gpt-4o"', comment: "Which model for the judge" },
+const PARAM_GROUPS: {
+  label: string;
+  params: { name: string; default: string; type: string }[];
+}[] = [
+  {
+    label: "Core",
+    params: [
+      { name: "max_field_size", default: "50_000", type: "int" },
+      { name: "strict", default: "False", type: "bool" },
+      { name: "investigate", default: "True", type: "bool | \"always\"" },
+    ],
+  },
+  {
+    label: "Security",
+    params: [
+      { name: "redact_keys", default: "None", type: "list[str]" },
+      { name: "validators", default: "{}", type: "dict" },
+    ],
+  },
+  {
+    label: "Replay & eval",
+    params: [
+      { name: "persist_state", default: "True", type: "bool" },
+      { name: "record_http", default: "False", type: "bool" },
+      { name: "semantic_judge", default: "False", type: "bool" },
+      { name: "judge_model", default: "\"gpt-4o\"", type: "str" },
+    ],
+  },
 ];
 
 function WatcherParamsPopup({ open, onClose }: { open: boolean; onClose: () => void }) {
@@ -280,57 +298,52 @@ function WatcherParamsPopup({ open, onClose }: { open: boolean; onClose: () => v
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4" onClick={onClose}>
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
       <div
-        className="relative w-full max-w-lg rounded-2xl border border-[var(--border)] bg-[var(--bg)] shadow-2xl"
+        className="relative w-full max-w-md rounded-2xl border border-[var(--border)] bg-[var(--bg)] shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)]">
-          <div className="flex items-center gap-2.5">
-            <Settings2 size={16} className="text-[var(--accent-soft)]" />
-            <span className="font-mono text-[11px] tracking-[0.18em] uppercase text-[var(--text-muted)]">
-              ArgusWatcher Parameters
-            </span>
-          </div>
+        <div className="flex items-center justify-between px-5 py-3.5 border-b border-[var(--border)]">
+          <span className="font-mono text-[10.5px] tracking-[0.18em] uppercase text-[var(--text-muted)]">
+            ArgusWatcher kwargs
+          </span>
           <button
             onClick={onClose}
-            className="inline-flex items-center justify-center w-7 h-7 rounded-md border border-[var(--border)] text-[var(--text-muted)] hover:text-white hover:border-[var(--border-strong)] transition-colors"
+            className="inline-flex items-center justify-center w-6 h-6 rounded-md text-[var(--text-dim)] hover:text-white transition-colors"
             aria-label="Close"
           >
-            <X size={14} />
+            <X size={13} />
           </button>
         </div>
 
-        {/* params list */}
-        <div className="px-5 py-4 max-h-[60vh] overflow-y-auto scroll-pretty">
-          <pre className="font-mono text-[11.5px] leading-[1.8]">
-            <code>
-              <span className="text-[var(--text-dim)]">{"watcher = "}</span>
-              <span className="text-[var(--accent-soft)]">ArgusWatcher</span>
-              <span className="text-[var(--text-muted)]">{"("}</span>
-              {"\n"}
-              {WATCHER_PARAMS.map((p, i) => (
-                <span key={p.name}>
-                  {"    "}
-                  <span className="text-white">{p.name}</span>
-                  <span className="text-[var(--text-muted)]">=</span>
-                  <span className="text-[var(--signal-ok)]">{p.value}</span>
-                  <span className="text-[var(--text-muted)]">,</span>
-                  {"  "}
-                  <span className="text-[var(--text-dim)]"># {p.comment}</span>
-                  {i < WATCHER_PARAMS.length - 1 ? "\n" : ""}
-                </span>
-              ))}
-              {"\n"}
-              <span className="text-[var(--text-muted)]">{")"}</span>
-            </code>
-          </pre>
-        </div>
-
-        {/* footer hint */}
-        <div className="px-5 py-3 border-t border-[var(--border)]">
-          <p className="font-mono text-[10px] tracking-[0.12em] text-[var(--text-dim)]">
-            All parameters are optional — defaults shown above.
-          </p>
+        {/* grouped params */}
+        <div className="px-5 py-4 space-y-4 max-h-[60vh] overflow-y-auto scroll-pretty">
+          {PARAM_GROUPS.map((group) => (
+            <div key={group.label}>
+              <span className="font-mono text-[9.5px] tracking-[0.2em] uppercase text-[var(--text-dim)]">
+                {group.label}
+              </span>
+              <div className="mt-2 space-y-0">
+                {group.params.map((p) => (
+                  <div
+                    key={p.name}
+                    className="flex items-baseline justify-between gap-4 py-[5px] border-b border-[var(--border)]/40 last:border-0"
+                  >
+                    <code className="font-mono text-[11.5px] text-white whitespace-nowrap">
+                      {p.name}
+                    </code>
+                    <div className="flex items-baseline gap-2 shrink-0">
+                      <span className="font-mono text-[10.5px] text-[var(--text-dim)]">
+                        {p.type}
+                      </span>
+                      <span className="font-mono text-[11px] text-[var(--signal-ok)]">
+                        {p.default}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
