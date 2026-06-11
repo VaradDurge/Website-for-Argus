@@ -27,54 +27,6 @@ export default function Architecture() {
         </figcaption>
       </figure>
 
-      <Heading level={2} id="file-structure">
-        File Structure
-      </Heading>
-      <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        The ARGUS codebase is organized by concern, not by feature. Each directory owns one
-        responsibility.
-      </p>
-
-      <CodeBlock
-        language="text"
-        code={`argus/
-├── __init__.py              # Public API (ArgusWatcher)
-├── watcher.py               # Core watcher implementation
-├── config.py                # Configuration loading + merging
-├── models.py                # Data models (Trace, Step, Detection)
-│
-├── detectors/               # Detection layer implementations
-│   ├── __init__.py
-│   ├── statistical.py       # Z-score and anomaly detection
-│   ├── semantic.py          # Embedding similarity + LLM judge
-│   ├── behavioral.py        # Execution pattern analysis
-│   └── structural.py        # Schema and type validation
-│
-├── forensics/               # Root cause analysis
-│   ├── __init__.py
-│   └── analyzer.py          # Causal chain builder
-│
-├── storage/                 # Persistence backends
-│   ├── __init__.py
-│   ├── sqlite.py            # SQLite storage (default)
-│   └── base.py              # Abstract storage interface
-│
-├── cli/                     # CLI commands
-│   ├── __init__.py
-│   ├── main.py              # Click app entry point
-│   ├── cmd_watch.py         # argus watch
-│   ├── cmd_trace.py         # argus trace
-│   ├── cmd_replay.py        # argus replay
-│   ├── cmd_report.py        # argus report
-│   ├── cmd_login.py         # argus login
-│   ├── cmd_open_ui.py       # argus ui
-│   └── cmd_update.py        # argus update
-│
-└── ui/                      # Local dashboard
-    ├── server.py            # FastAPI server
-    └── static/              # Frontend assets`}
-      />
-
       <Heading level={2} id="data-flow">
         Data Flow
       </Heading>

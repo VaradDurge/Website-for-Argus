@@ -176,7 +176,6 @@ export const DOCS_REGISTRY: Record<string, DocPage> = {
       "System design, file structure, and extension points.",
     toc: [
       { id: "system-overview", label: "System Overview", level: 2 },
-      { id: "file-structure", label: "File Structure", level: 2 },
       { id: "data-flow", label: "Data Flow", level: 2 },
       { id: "extension-points", label: "Extension Points", level: 2 },
     ],
