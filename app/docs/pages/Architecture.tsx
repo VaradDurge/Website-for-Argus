@@ -14,13 +14,13 @@ export default function Architecture() {
         backends, add custom detectors, or build your own UI on top of the trace API.
       </p>
 
-      <figure className="my-6">
+      <figure className="my-6 max-w-[480px]">
         <Image
           src="/Argus_Arch.png"
           alt="ARGUS system architecture: instrumentation layer → storage → detection engine → forensics → presentation (CLI, UI, API)"
-          width={720}
-          height={405}
-          className="rounded-lg border border-[var(--border)]"
+          width={480}
+          height={270}
+          className="w-full h-auto rounded-lg border border-[var(--border)]"
         />
         <figcaption className="mt-2 text-center text-[12px] text-[var(--text-dim)]">
           Layered architecture: instrumentation → detection → presentation

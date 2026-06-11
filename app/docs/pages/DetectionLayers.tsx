@@ -15,13 +15,13 @@ export default function DetectionLayers() {
         in an AI pipeline — from numerical anomalies to meaning drift.
       </p>
 
-      <figure className="my-6">
+      <figure className="my-6 max-w-[480px]">
         <Image
           src="/Argus_DetectionLayers.png"
           alt="Four detection layers: Statistical, Semantic, Behavioral, Structural"
-          width={720}
-          height={405}
-          className="rounded-lg border border-[var(--border)]"
+          width={480}
+          height={270}
+          className="w-full h-auto rounded-lg border border-[var(--border)]"
         />
         <figcaption className="mt-2 text-center text-[12px] text-[var(--text-dim)]">
           The four detection layers run in parallel after each pipeline execution

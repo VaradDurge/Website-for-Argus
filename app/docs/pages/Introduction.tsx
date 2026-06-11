@@ -50,11 +50,21 @@ export default function Introduction() {
         language="python"
         code={`from argus import ArgusWatcher
 
-watcher = ArgusWatcher()
-watcher.watch(graph)           # instrument your LangGraph
+watcher = ArgusWatcher(
+    max_field_size=50_000,       # max chars per captured state field
+    strict=False,                # True = raise on detection (useful for CI)
+    investigate=True,            # run root cause analysis on failures
+    redact_keys=["api_key"],     # scrub sensitive fields from traces
+    persist_state=True,          # save state at each step for replay
+    record_http=False,           # record HTTP calls for mocked replay
+    semantic_judge=False,        # enable LLM-as-judge evaluation
+    judge_model="gpt-4o",       # model for semantic judging
+)
+
+watcher.watch(graph)             # instrument your LangGraph
 app = graph.compile()
 result = app.invoke(state)
-watcher.finalize()             # run detectors, generate trace`}
+watcher.finalize()               # run detectors, generate trace`}
       />
 
       <p className="mt-4 text-[15px] leading-[1.75] text-[var(--text-muted)]">
@@ -63,13 +73,13 @@ watcher.finalize()             # run detectors, generate trace`}
         something subtle — you&apos;ll know about it.
       </p>
 
-      <figure className="my-6">
+      <figure className="my-6 max-w-[480px]">
         <Image
           src="/Argus_Arch.png"
           alt="ARGUS architecture diagram showing the watcher wrapping a pipeline, detectors analyzing the trace, and forensic output"
-          width={720}
-          height={405}
-          className="rounded-lg border border-[var(--border)]"
+          width={480}
+          height={270}
+          className="w-full h-auto rounded-lg border border-[var(--border)]"
         />
         <figcaption className="mt-2 text-center text-[12px] text-[var(--text-dim)]">
           ARGUS wraps your pipeline, runs multi-layer detection, and produces forensic traces
