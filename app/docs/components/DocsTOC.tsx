@@ -36,18 +36,18 @@ export function DocsTOC({ items }: DocsTOCProps) {
 
   return (
     <nav aria-label="Table of contents" className="flex flex-col gap-1">
-      <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-[var(--text-dim)] mb-2">
+      <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-[var(--text-dim)] mb-3">
         On this page
       </p>
       {items.map((item) => (
         <a
           key={item.id}
           href={`#${item.id}`}
-          className={`block text-[12px] leading-[1.5] py-1 border-l transition-colors ${
+          className={`block text-[12px] leading-[1.5] py-1 border-l transition-all duration-200 ${
             item.level === 3 ? "pl-5" : "pl-3"
           } ${
             activeId === item.id
-              ? "text-[var(--accent-soft)] border-[var(--accent-soft)]"
+              ? "text-[var(--accent-soft)] border-[var(--accent-soft)] bg-[rgba(109,92,255,0.04)] rounded-r-md"
               : "text-[var(--text-dim)] border-transparent hover:text-[var(--text-muted)] hover:border-[var(--border-strong)]"
           }`}
         >

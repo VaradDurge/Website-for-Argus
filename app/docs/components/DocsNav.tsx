@@ -19,6 +19,14 @@ export function DocsNav() {
     <>
       <header className="sticky top-0 z-40 border-b border-[var(--border)]">
         <div className="absolute inset-0 -z-10 backdrop-blur-xl bg-[rgba(7,7,10,0.8)]" />
+        {/* faint accent line under nav */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-px -z-10"
+          style={{
+            background:
+              "linear-gradient(90deg, transparent 10%, rgba(109,92,255,0.2) 50%, transparent 90%)",
+          }}
+        />
         <div className="flex items-center justify-between h-14 px-4 lg:px-6">
           {/* left: logo + docs badge + breadcrumbs */}
           <div className="flex items-center gap-3 min-w-0">
