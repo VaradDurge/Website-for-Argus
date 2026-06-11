@@ -31,7 +31,7 @@ export function Footer() {
         </div>
 
         <ul className="flex items-center gap-6 text-[13px] text-[var(--text-muted)] lg:justify-center">
-          <li><a href="#docs" className="hover:text-white transition-colors">Docs</a></li>
+          <li><a href="/docs" className="hover:text-white transition-colors">Docs</a></li>
           <li><a href="#replay" className="hover:text-white transition-colors">Replay</a></li>
           <li><a href="#github" className="hover:text-white transition-colors">GitHub</a></li>
         </ul>

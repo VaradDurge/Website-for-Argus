@@ -76,7 +76,7 @@ export function Nav() {
           </li>
           <li>
             <a
-              href="#docs"
+              href="/docs"
               className="px-3.5 py-2 text-[13.5px] text-[var(--text-muted)] hover:text-white transition-colors rounded-md"
             >
               Docs
@@ -133,7 +133,7 @@ export function Nav() {
             Contact
           </button>
           <a
-            href="#docs"
+            href="/docs"
             onClick={() => setMobileMenuOpen(false)}
             className="px-3 py-2.5 text-[14px] text-[var(--text-muted)] hover:text-white transition-colors rounded-md"
           >

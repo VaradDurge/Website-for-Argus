@@ -19,12 +19,19 @@ export function ProximityGlow({
 
   useEffect(() => {
     let rafId = 0;
+    let animating = false;
     let targetX = 0.5;
     let targetY = 0.5;
     let targetO = 0;
     let x = 0.5;
     let y = 0.5;
     let o = 0;
+
+    const startLoop = () => {
+      if (animating) return;
+      animating = true;
+      rafId = requestAnimationFrame(tick);
+    };
 
     const onMove = (e: MouseEvent) => {
       const el = wrapRef.current;
@@ -37,6 +44,8 @@ export function ProximityGlow({
       targetO = dist > proximity ? 0 : 1 - dist / proximity;
       targetX = (e.clientX - r.left) / r.width;
       targetY = (e.clientY - r.top) / r.height;
+
+      if (targetO > 0) startLoop();
     };
 
     const onLeave = () => {
@@ -63,12 +72,17 @@ export function ProximityGlow({
         spotRef.current.style.opacity = op;
       }
 
+      // Stop the loop once fully faded out and settled
+      if (targetO === 0 && o < 0.001) {
+        animating = false;
+        return;
+      }
+
       rafId = requestAnimationFrame(tick);
     };
 
     window.addEventListener("mousemove", onMove, { passive: true });
     window.addEventListener("mouseleave", onLeave);
-    rafId = requestAnimationFrame(tick);
 
     return () => {
       window.removeEventListener("mousemove", onMove);

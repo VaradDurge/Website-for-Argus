@@ -63,7 +63,7 @@ export function Hero() {
               <button onClick={() => setBetaOpen(true)}>
                 <ButtonColorful label="Beta Access" />
               </button>
-              <a href="#docs">
+              <a href="/docs">
                 <StarButton lightColor="#8b7dff" backgroundColor="transparent">
                   Read the docs
                 </StarButton>
