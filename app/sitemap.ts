@@ -9,6 +9,7 @@ const DOC_SLUGS = [
   'configuration',
   'watchers',
   'detection-layers',
+  'adaptive-learning',
   'cli-reference',
   'api-reference',
   'storage',
