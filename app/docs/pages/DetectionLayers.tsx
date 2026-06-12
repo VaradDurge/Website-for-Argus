@@ -209,6 +209,24 @@ export default function DetectionLayers() {
         For domain-specific structural checks, use the <code>validators</code> parameter on
         ArgusWatcher. This lets you define custom validation functions per field.
       </Callout>
+
+      <Heading level={2} id="adaptive-learning">
+        Adaptive Learning
+      </Heading>
+      <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        The detection layers aren&apos;t static. When the semantic judge (LLM) discovers a new failure
+        pattern, it proposes a candidate signature. After human approval, the pattern is added to the
+        heuristic engine — so future runs catch it without needing an LLM call.
+      </p>
+      <p className="mt-4 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        Patterns can be approved as <span className="text-white font-medium">Private</span> (local only)
+        or <span className="text-white font-medium">Shared</span> (synced to all ARGUS users via cloud).
+        See the{" "}
+        <a href="/docs/adaptive-learning" className="text-[var(--accent-soft)] underline decoration-dotted underline-offset-2 hover:text-white hover:decoration-solid">
+          Adaptive Learning
+        </a>{" "}
+        page for details.
+      </p>
     </>
   );
 }

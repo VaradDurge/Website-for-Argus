@@ -9,6 +9,7 @@ import {
   Code2,
   Database,
   GitBranch,
+  Brain,
   type LucideIcon,
 } from "lucide-react";
 
@@ -38,6 +39,7 @@ export const SIDEBAR_SECTIONS: SidebarSection[] = [
       { slug: "configuration", label: "Configuration", icon: Settings },
       { slug: "watchers", label: "Watchers", icon: Eye },
       { slug: "detection-layers", label: "Detection Layers", icon: Shield },
+      { slug: "adaptive-learning", label: "Adaptive Learning", icon: Brain },
     ],
   },
   {

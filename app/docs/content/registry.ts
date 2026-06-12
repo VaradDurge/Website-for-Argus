@@ -25,6 +25,7 @@ import CLIReference from "../pages/CLIReference";
 import Storage from "../pages/Storage";
 import Architecture from "../pages/Architecture";
 import APIReference from "../pages/APIReference";
+import AdaptiveLearning from "../pages/AdaptiveLearning";
 
 export const DOCS_REGISTRY: Record<string, DocPage> = {
   introduction: {
@@ -115,8 +116,24 @@ export const DOCS_REGISTRY: Record<string, DocPage> = {
       { id: "semantic-detection", label: "Semantic Detection", level: 2 },
       { id: "behavioral-detection", label: "Behavioral Detection", level: 2 },
       { id: "structural-detection", label: "Structural Detection", level: 2 },
+      { id: "adaptive-learning", label: "Adaptive Learning", level: 2 },
     ],
     component: DetectionLayers,
+  },
+
+  "adaptive-learning": {
+    slug: "adaptive-learning",
+    title: "Adaptive Learning",
+    description:
+      "How ARGUS learns new failure patterns from LLM analysis and lets you approve them for the heuristic engine.",
+    toc: [
+      { id: "overview", label: "Overview", level: 2 },
+      { id: "how-it-works", label: "How It Works", level: 2 },
+      { id: "three-tier-registry", label: "Three-Tier Registry", level: 2 },
+      { id: "semantic-judge-override", label: "Semantic Judge Override", level: 2 },
+      { id: "approvals-ui", label: "Approvals UI", level: 2 },
+    ],
+    component: AdaptiveLearning,
   },
 
   "cli-reference": {
