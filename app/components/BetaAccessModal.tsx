@@ -17,7 +17,15 @@ export function BetaAccessModal({ open, onClose }: Props) {
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
+
+    // Lock body scroll while modal is open
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      window.removeEventListener("keydown", handler);
+      document.body.style.overflow = prevOverflow;
+    };
   }, [open, onClose]);
 
   return (
@@ -42,7 +50,7 @@ export function BetaAccessModal({ open, onClose }: Props) {
             transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             className="fixed inset-0 z-[101] flex items-center justify-center pointer-events-none"
           >
-            <div className="pointer-events-auto w-full max-w-[480px] mx-4">
+            <div className="pointer-events-auto w-full max-w-[480px] mx-4 max-h-[90vh] overflow-y-auto rounded-xl">
               <div className="panel p-5 relative">
                 <button
                   onClick={onClose}
