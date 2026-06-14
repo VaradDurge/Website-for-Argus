@@ -98,7 +98,7 @@ export function Nav() {
             <LiquidMetalButton label="Waitlist" />
           </button>
           <button onClick={() => setBetaOpen(true)}>
-            <ButtonColorful label="Beta Access" />
+            <ButtonColorful label="Book a Call" />
           </button>
         </div>
 
@@ -181,10 +181,10 @@ export function Nav() {
             </a>
           </div>
 
-          {/* Beta Access button */}
+          {/* Book a Call button */}
           <div className="px-3 pt-1">
             <button onClick={() => { setBetaOpen(true); setMobileMenuOpen(false); }} className="w-full">
-              <ButtonColorful label="Beta Access" />
+              <ButtonColorful label="Book a Call" />
             </button>
           </div>
         </div>

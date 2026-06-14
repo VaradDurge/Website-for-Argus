@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@calcom/embed-react": "^1.5.3",
     "@paper-design/shaders": "^0.0.76",
     "@radix-ui/react-slot": "^1.2.4",
     "@remixicon/react": "^4.9.0",

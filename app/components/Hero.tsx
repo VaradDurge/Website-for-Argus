@@ -61,9 +61,12 @@ export function Hero() {
 
             <div className="mt-8 flex items-center gap-3">
               <button onClick={() => setBetaOpen(true)}>
-                <ButtonColorful label="Beta Access" />
+                <ButtonColorful label="Book a Call" />
               </button>
-              <a href="/docs">
+              <span className="text-[11px] text-[var(--text-dim)] tracking-wide">
+                ~1 min setup
+              </span>
+              <a href="/docs" className="ml-auto sm:ml-0">
                 <StarButton lightColor="#8b7dff" backgroundColor="transparent">
                   Read the docs
                 </StarButton>
