@@ -3,7 +3,6 @@ import type { MetadataRoute } from 'next'
 const BASE = 'https://arguslabs.in'
 
 const DOC_SLUGS = [
-  'introduction',
   'quickstart',
   'core-concepts',
   'configuration',
