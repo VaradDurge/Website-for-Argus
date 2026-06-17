@@ -19,8 +19,9 @@ const STATS: { value: number; suffix: string; label: string; icon: typeof Activi
 
 export function Stats() {
   return (
-    <section className="relative pt-6 pb-10 lg:pb-14">
+    <section id="stats" className="relative pt-16 lg:pt-20 pb-10 lg:pb-14">
       <div className="mx-auto max-w-[1280px] px-6 lg:px-10">
+        <div className="eyebrow text-center mb-8">By the numbers</div>
         <div className="grid grid-cols-2 gap-6 sm:flex sm:items-center sm:justify-center sm:gap-10 lg:gap-14 sm:flex-wrap">
           {STATS.map((s) => (
             <Counter key={s.label} {...s} />
@@ -62,7 +63,7 @@ function Counter({
       <div className="flex items-center gap-2">
         <Icon size={16} strokeWidth={1.6} className="text-[#f5b13c]" />
         <div className="flex items-baseline gap-0.5">
-          <motion.span className="text-[22px] sm:text-[26px] font-semibold tracking-[-0.02em] text-white">
+          <motion.span className="text-[28px] sm:text-[32px] font-semibold tracking-[-0.02em] text-white">
             {display}
           </motion.span>
           <span className="text-[16px] sm:text-[18px] font-semibold text-[#f5b13c] tracking-[-0.01em]">

@@ -63,7 +63,7 @@ export function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section className="relative py-24 lg:py-36">
+    <section className="relative py-28 lg:py-44">
       <div className="mx-auto max-w-[1280px] px-6 lg:px-10 grid lg:grid-cols-[0.9fr_1.4fr] gap-12 lg:gap-20 items-start">
         {/* sticky left column */}
         <div className="lg:sticky lg:top-28 lg:self-start">

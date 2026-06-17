@@ -113,7 +113,7 @@ export function WaitlistModal({ open, onClose }: Props) {
                     {/* socials */}
                     <div className="mt-2 flex items-center gap-3">
                       <a
-                        href="https://discord.gg/zW774xvS"
+                        href="https://discord.gg/nhbdZkcG"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-2.5 px-4 py-2.5 rounded-lg border border-[#5865F2]/30 bg-[rgba(88,101,242,0.08)] text-[#5865F2] hover:bg-[rgba(88,101,242,0.15)] transition-colors"

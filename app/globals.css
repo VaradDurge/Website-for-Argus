@@ -25,7 +25,7 @@
   --signal-fail: #ff5a6a;
 
   /* tones */
-  --grid: rgba(255, 255, 255, 0.04);
+  --grid: rgba(255, 255, 255, 0.03);
   --grid-strong: rgba(255, 255, 255, 0.08);
 }
 
@@ -71,12 +71,12 @@
     background-image:
       radial-gradient(
         1200px 600px at 85% -10%,
-        rgba(109, 92, 255, 0.08),
+        rgba(109, 92, 255, 0.06),
         transparent 60%
       ),
       radial-gradient(
         800px 500px at -10% 30%,
-        rgba(0, 240, 168, 0.04),
+        rgba(0, 240, 168, 0.03),
         transparent 60%
       );
   }
@@ -446,4 +446,30 @@
 }
 .scroll-pretty::-webkit-scrollbar-track {
   background: transparent;
+}
+
+/* ───────── trial UI: hide ALL scrollbars ───────── */
+.trial-ui,
+.trial-ui *,
+.trial-ui *::before,
+.trial-ui *::after {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+.trial-ui::-webkit-scrollbar,
+.trial-ui *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+/* ───────── social proof ticker ───────── */
+@keyframes ticker-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes ticker-right {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
 }

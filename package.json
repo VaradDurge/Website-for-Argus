@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@calcom/embed-react": "^1.5.3",
+    "@googleapis/sheets": "^13.0.2",
     "@paper-design/shaders": "^0.0.76",
     "@radix-ui/react-slot": "^1.2.4",
     "@remixicon/react": "^4.9.0",
@@ -17,7 +18,6 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.40.0",
-    "googleapis": "^172.0.0",
     "lucide-react": "^1.16.0",
     "next": "16.2.6",
     "react": "19.2.4",

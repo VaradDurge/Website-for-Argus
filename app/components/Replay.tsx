@@ -6,44 +6,51 @@ import {
   AlertTriangle,
   X,
   Clock,
-  DollarSign,
-  Leaf,
   Database,
   Play,
   Zap,
-  ChevronDown,
   RotateCcw,
+  ArrowDown,
 } from "lucide-react";
-import { ProximityGlow } from "./ProximityGlow";
 
 type StepStatus = "ok" | "warn" | "fail" | "pending";
 
-const STEPS: {
+interface Step {
   n: number;
   name: string;
   status: StepStatus;
   active?: boolean;
-  meta?: string;
-}[] = [
+}
+
+const STEPS: Step[] = [
   { n: 1, name: "extract", status: "ok" },
   { n: 2, name: "enrich", status: "ok" },
-  {
-    n: 3,
-    name: "summarize",
-    status: "warn",
-    active: true,
-    meta: "Failed output\n1.34s",
-  },
+  { n: 3, name: "summarize", status: "warn", active: true },
   { n: 4, name: "validate", status: "fail" },
   { n: 5, name: "respond", status: "pending" },
 ];
 
+const CLR: Record<StepStatus, string> = {
+  ok: "var(--signal-ok)",
+  warn: "var(--signal-warn)",
+  fail: "var(--signal-fail)",
+  pending: "var(--text-dim)",
+};
+
+const BG: Record<StepStatus, string> = {
+  ok: "rgba(0,240,168,0.08)",
+  warn: "rgba(245,177,60,0.08)",
+  fail: "rgba(255,90,106,0.08)",
+  pending: "rgba(255,255,255,0.03)",
+};
+
 export function Replay() {
   return (
-    <section id="replay" className="relative py-24 lg:py-32">
-      <div className="mx-auto max-w-[1280px] px-6 lg:px-10 grid lg:grid-cols-[0.78fr_2.2fr] gap-10 lg:gap-12">
-        {/* ───────── LEFT RAIL ───────── */}
-        <div>
+    <section id="replay" className="relative py-28 lg:py-40">
+      <div className="mx-auto max-w-[1280px] px-6 lg:px-10">
+
+        {/* ─── Header ─── */}
+        <div className="text-center max-w-[640px] mx-auto mb-16">
           <div className="eyebrow">↺ Replay any run</div>
           <h2 className="mt-5 text-[40px] sm:text-[48px] lg:text-[56px] leading-[1.02] tracking-[-0.035em] font-medium">
             See the{" "}
@@ -60,415 +67,211 @@ export function Replay() {
               truth.
             </span>
           </h2>
-          <p className="mt-5 text-[14.5px] leading-[1.65] text-[var(--text-muted)] max-w-md">
+          <p className="mt-5 text-[15px] leading-[1.65] text-[var(--text-muted)] max-w-md mx-auto">
             Re-run from any step. ARGUS reuses everything that&apos;s already
             correct — so you only pay for what changed.
           </p>
-
-          {/* benefits tile row */}
-          <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-2">
-            <BenefitTile
-              icon={<Clock size={13} strokeWidth={1.8} />}
-              value="10x"
-              label="Faster Debugging"
-              caption="Skip what already worked"
-              accent="var(--accent-soft)"
-            />
-            <BenefitTile
-              icon={<DollarSign size={13} strokeWidth={1.8} />}
-              value="40%"
-              label="Lower Cost"
-              caption="Reuses saved state & results"
-              accent="var(--signal-warn)"
-            />
-            <BenefitTile
-              icon={<Leaf size={13} strokeWidth={1.8} />}
-              value="Zero"
-              label="Wasted Compute"
-              caption="Only re-run what matters"
-              accent="var(--signal-ok)"
-            />
-          </div>
-
-          {/* how replay works */}
-          <div className="mt-5 panel p-5">
-            <div className="font-mono text-[10.5px] tracking-[0.22em] uppercase text-[var(--text-dim)] mb-5">
-              How Replay Works
-            </div>
-            <ul className="space-y-0">
-              <HowStep
-                icon={<Database size={16} strokeWidth={1.8} />}
-                title="Execute your pipeline"
-                caption="ARGUS records every node output and state"
-                accent="var(--accent-soft)"
-                accentBg="rgba(139,125,255,0.10)"
-                accentBorder="rgba(139,125,255,0.30)"
-                showConnector
-              />
-              <HowStep
-                icon={<Play size={16} strokeWidth={1.8} />}
-                title="Re-run from any step"
-                caption="We load saved states up to that point"
-                accent="var(--signal-warn)"
-                accentBg="rgba(245,177,60,0.10)"
-                accentBorder="rgba(245,177,60,0.30)"
-                showConnector
-              />
-              <HowStep
-                icon={<Zap size={16} strokeWidth={1.8} />}
-                title="Only downstream runs"
-                caption="Everything before stays cached and reused"
-                accent="var(--signal-ok)"
-                accentBg="rgba(0,240,168,0.10)"
-                accentBorder="rgba(0,240,168,0.30)"
-              />
-            </ul>
-          </div>
         </div>
 
-        {/* ───────── RIGHT COLUMN (canvas + reused/ran stack) ───────── */}
-        <div className="flex flex-col gap-4 self-center min-w-0">
-        <ProximityGlow className="rounded-[16px]" proximity={5000}>
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="panel p-0 overflow-hidden relative"
-        >
-          {/* top header bar */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 px-3 sm:px-4 py-2.5 border-b border-[var(--border)] bg-[rgba(255,255,255,0.015)]">
-            <div className="flex items-center gap-3 sm:gap-4 font-mono text-[10.5px] sm:text-[11.5px] text-[var(--text-muted)]">
-              <span className="inline-flex items-center gap-1.5">
-                <RotateCcw size={11} className="text-[var(--text-dim)]" />
-                Run · <span className="text-white">8f9a-22b1</span>
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <Clock size={11} className="text-[var(--text-dim)]" />
-                2.47s
-              </span>
+        <div className="max-w-[900px] mx-auto space-y-6">
+
+          {/* ─── 1. Pipeline flow ─── */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.5 }}
+          >
+            {/* Run header */}
+            <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center gap-4 text-[13px] text-[var(--text-muted)]">
+                <span className="flex items-center gap-1.5">
+                  <RotateCcw size={12} className="text-[var(--text-dim)]" />
+                  Run · <span className="text-white font-medium">8f9a-22b1</span>
+                </span>
+                <span className="flex items-center gap-1.5 text-[var(--text-dim)]">
+                  <Clock size={12} /> 2.47s
+                </span>
+              </div>
+              <Badge status="ok" icon={<Play size={10} />}>Replay #2</Badge>
             </div>
-            <div className="flex items-center gap-2 px-2.5 py-1 rounded-md border border-[var(--border)] bg-[rgba(255,255,255,0.02)] font-mono text-[10.5px] sm:text-[11.5px] text-white">
-              Replay #2 (fixed parser)
-              <ChevronDown size={11} className="text-[var(--text-dim)]" />
+
+            {/* Desktop pipeline */}
+            <div className="hidden sm:flex items-start justify-between">
+              {STEPS.map((s, i) => (
+                <div key={s.n} className="flex items-start flex-1">
+                  <div className="flex flex-col items-center flex-1">
+                    <div
+                      className="w-10 h-10 rounded-full flex items-center justify-center mb-2.5"
+                      style={{
+                        border: `1.5px ${s.status === "pending" ? "dashed" : "solid"} ${CLR[s.status]}`,
+                        background: s.active ? BG.warn : "transparent",
+                        boxShadow: s.active ? "0 0 24px -4px rgba(245,177,60,0.35)" : "none",
+                      }}
+                    >
+                      <SIcon status={s.status} />
+                    </div>
+                    <span className="text-[14px] text-white font-medium mb-1">{s.name}</span>
+                    <Badge status={s.status}>{s.status === "pending" ? "Queued" : s.status === "ok" ? "Passed" : "Failed"}</Badge>
+                  </div>
+                  {i < STEPS.length - 1 && (
+                    <div className="flex items-center pt-5 shrink-0 -mx-1">
+                      <svg width="40" height="2" viewBox="0 0 40 2">
+                        <line x1="0" y1="1" x2="40" y2="1" stroke={s.status === "ok" ? "rgba(0,240,168,0.25)" : "var(--border)"} strokeWidth="1" strokeDasharray={s.status === "ok" ? "none" : "3 3"} />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
+
+            {/* Mobile pipeline */}
+            <div className="sm:hidden space-y-2">
+              {STEPS.map((s) => (
+                <div
+                  key={s.n}
+                  className="flex items-center gap-3 py-2.5 px-3 rounded-lg"
+                  style={{ background: s.active ? BG.warn : "transparent" }}
+                >
+                  <span className="w-2 h-2 rounded-full shrink-0" style={{ background: CLR[s.status] }} />
+                  <span className="text-[14px] text-white flex-1">{s.name}</span>
+                  <Badge status={s.status} small>{s.status === "pending" ? "Queued" : s.status === "ok" ? "Passed" : "Failed"}</Badge>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* ─── Arrow connector ─── */}
+          <div className="flex justify-center py-2">
+            <ArrowDown size={18} className="text-[var(--text-dim)]" />
           </div>
 
-          {/* main grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-[150px_1fr_1fr]">
-            {/* execution steps — desktop: vertical list */}
-            <div className="hidden lg:block border-r border-[var(--border)] p-3">
-              <Label>Execution Steps</Label>
-              <ol className="mt-2.5 space-y-1">
-                {STEPS.map((s) => (
-                  <StepRow key={s.n} step={s} />
-                ))}
-              </ol>
+          {/* ─── 2. Before / After comparison ─── */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="grid grid-cols-1 sm:grid-cols-2 gap-5"
+          >
+            {/* Before */}
+            <div className="panel p-5">
+              <div className="flex items-center gap-2.5 mb-5">
+                <Badge status="fail" icon={<X size={10} />}>Before</Badge>
+                <span className="ml-auto text-[12px] text-[var(--text-dim)]">step 3: summarize</span>
+              </div>
+              <Row label="confidence" value="0.42" status="fail" />
+              <Row label="key_points" value="[]" status="fail" />
+              <Row label="entities" value="[]" status="fail" />
+              <Row label="output" value='"placeholder text"' status="fail" last />
             </div>
 
-            {/* execution steps — mobile: horizontal compact flow */}
-            <div className="lg:hidden border-b border-[var(--border)] px-3 py-3">
-              <Label>Execution Steps</Label>
-              <div className="mt-2.5 flex items-center gap-0 overflow-x-auto scroll-pretty">
-                {STEPS.map((s, i) => (
-                  <div key={s.n} className="flex items-center shrink-0">
-                    <span
-                      className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-md font-mono text-[11px] ${
-                        s.active
-                          ? "border border-[var(--signal-warn)]/55 bg-[rgba(245,177,60,0.08)] text-[var(--signal-warn)] font-semibold"
-                          : "text-[var(--text-muted)]"
-                      }`}
-                    >
-                      {s.name}
-                      <StepIcon status={s.status} />
-                    </span>
-                    {i < STEPS.length - 1 && (
-                      <svg width="16" height="8" viewBox="0 0 16 8" fill="none" className="shrink-0 mx-0.5" aria-hidden>
-                        <line x1="0" y1="4" x2="10" y2="4" stroke="var(--border-strong)" strokeWidth="1" strokeDasharray="2 2" />
-                        <path d="M9 1.5 L14 4 L9 6.5" stroke="var(--border-strong)" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    )}
-                  </div>
-                ))}
+            {/* After */}
+            <div className="panel p-5">
+              <div className="flex items-center gap-2.5 mb-5">
+                <Badge status="ok" icon={<Check size={10} />}>After</Badge>
+                <span className="ml-auto text-[12px] text-[var(--text-dim)]">replayed</span>
+              </div>
+              <Row label="confidence" value="0.93" status="ok" />
+              <Row label="key_points" value='["safety", "transparency"]' status="ok" />
+              <Row label="entities" value='["AI regulation"]' status="ok" />
+              <Row label="output" value="Full structured summary" status="ok" last />
+            </div>
+          </motion.div>
+
+          {/* ─── 3. Reused / Ran ─── */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="grid grid-cols-1 sm:grid-cols-2 gap-5"
+          >
+            <div className="panel p-5">
+              <div className="flex items-center gap-2.5 mb-3">
+                <Database size={14} className="text-[var(--accent-soft)]" />
+                <span className="text-[14px] font-medium text-white">Reused</span>
+              </div>
+              <p className="text-[13px] text-[var(--text-muted)] mb-3">States & outputs from completed steps</p>
+              <div className="flex items-center gap-2 flex-wrap">
+                <Badge status="ok" icon={<Check size={9} />} small>extract</Badge>
+                <Badge status="ok" icon={<Check size={9} />} small>enrich</Badge>
+                <span className="text-[12px] text-[var(--signal-ok)] ml-1">2.47s saved</span>
               </div>
             </div>
 
-            {/* failed JSON */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="border-b lg:border-b-0 lg:border-r border-[var(--border)] p-3 overflow-hidden"
-            >
-              <Label>
-                Step 3: summarize{" "}
-                <span className="text-[var(--signal-fail)]">(Failed)</span>
-              </Label>
-              <pre className="mt-2.5 font-mono text-[10px] sm:text-[11px] leading-[1.55] text-[var(--text-muted)] whitespace-pre-wrap break-all sm:break-normal">
-{`{
-  "summary": `}<span className="text-[var(--signal-fail)]">&quot;...&quot;</span>{`,
-  "key_points": `}<span className="text-[var(--signal-fail)]">[]</span>{`,
-  "entities": `}<span className="text-[var(--signal-fail)]">[]</span>{`,
-  "confidence": `}<span className="text-[var(--signal-fail)]">0.42</span>{`,
-  "note": `}<span className="text-[var(--signal-fail)]">&quot;placeholder text&quot;</span>{`
-}`}
-              </pre>
-            </motion.div>
+            <div className="panel p-5">
+              <div className="flex items-center gap-2.5 mb-3">
+                <Zap size={14} className="text-[var(--signal-warn)]" />
+                <span className="text-[14px] font-medium text-white">Ran</span>
+              </div>
+              <p className="text-[13px] text-[var(--text-muted)] mb-3">Only steps after the selected point</p>
+              <div className="flex items-center gap-2 flex-wrap">
+                <Badge status="warn" icon={<AlertTriangle size={9} />} small>summarize</Badge>
+                <span className="text-[12px] text-[var(--signal-warn)] ml-1">1.34s compute</span>
+              </div>
+            </div>
+          </motion.div>
+        </div>
 
-            {/* replayed JSON */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="border-b lg:border-b-0 lg:border-r border-[var(--border)] p-3 overflow-hidden"
-            >
-              <Label>
-                Replay: summarize{" "}
-                <span className="text-[var(--signal-ok)]">(Replayed)</span>
-              </Label>
-              <pre className="mt-2.5 font-mono text-[10px] sm:text-[11px] leading-[1.55] text-[var(--text-muted)] whitespace-pre-wrap break-all sm:break-normal">
-{`{
-  "summary": `}<span className="text-white">&quot;AI regulation is evolving rapidly, with focus on safety and transparency.&quot;</span>{`,
-  "key_points": `}<span className="text-white">[&quot;safety&quot;, &quot;transparency&quot;]</span>{`,
-  "entities": `}<span className="text-white">[&quot;AI regulation&quot;]</span>{`,
-  "confidence": `}<span className="text-[var(--signal-ok)]">0.93</span>{`
-}`}
-              </pre>
-            </motion.div>
-
-          </div>
-
-        </motion.div>
-        </ProximityGlow>
-
-        {/* ───────── BOTTOM: reused vs ran (separate from canvas) ───────── */}
+        {/* ─── Stats ─── */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
-          className="panel p-0 overflow-hidden"
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mt-14 flex items-center justify-center gap-12 sm:gap-20 flex-wrap"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
-            {/* what we reused */}
-            <div className="p-5 border-b lg:border-b-0 lg:border-r border-[var(--border)]">
-              <div className="flex items-center gap-2.5">
-                <span className="flex items-center justify-center w-7 h-7 rounded-md bg-[rgba(139,125,255,0.12)] border border-[rgba(139,125,255,0.3)] text-[var(--accent-soft)]">
-                  <Database size={13} />
-                </span>
-                <span className="font-mono text-[12px] font-semibold tracking-[0.08em] uppercase text-white">
-                  What we reused
-                </span>
-              </div>
-              <p className="mt-3 text-[13px] leading-[1.5] text-[var(--text-muted)]">
-                States &amp; outputs from completed steps
-              </p>
-              <div className="mt-3 flex flex-wrap items-center gap-2">
-                <Pill status="ok" label="extract" />
-                <Pill status="ok" label="enrich" />
-                <span className="font-mono text-[12px] text-[var(--signal-ok)] ml-1">
-                  2.47s saved
-                </span>
-              </div>
-            </div>
-
-            {/* what we ran */}
-            <div className="p-5">
-              <div className="flex items-center gap-2.5">
-                <span className="flex items-center justify-center w-7 h-7 rounded-md bg-[rgba(245,177,60,0.12)] border border-[rgba(245,177,60,0.3)] text-[var(--signal-warn)]">
-                  <Zap size={13} />
-                </span>
-                <span className="font-mono text-[12px] font-semibold tracking-[0.08em] uppercase text-white">
-                  What we ran
-                </span>
-              </div>
-              <p className="mt-3 text-[13px] leading-[1.5] text-[var(--text-muted)]">
-                Only steps after the selected point
-              </p>
-              <div className="mt-3 flex flex-wrap items-center gap-2">
-                <Pill status="warn" label="summarize" highlight />
-                <span className="font-mono text-[12px] text-[var(--signal-warn)] ml-1">
-                  1.34s compute
-                </span>
-              </div>
-            </div>
-          </div>
+          <Stat value="10x" label="Faster debugging" accent="var(--accent-soft)" />
+          <Stat value="40%" label="Lower cost" accent="var(--signal-warn)" />
+          <Stat value="Zero" label="Wasted compute" accent="var(--signal-ok)" />
         </motion.div>
-        </div>
       </div>
     </section>
   );
 }
 
-/* ───────── helpers ───────── */
+/* ── Badge (dark tinted) ── */
 
-function Label({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-[var(--text-dim)]">
-      {children}
-    </div>
-  );
-}
-
-function StepRow({
-  step,
-}: {
-  step: { n: number; name: string; status: StepStatus; active?: boolean; meta?: string };
-}) {
-  const isActive = step.active;
-  return (
-    <li
-      className={`relative rounded-md px-2 py-1.5 font-mono text-[12px] ${
-        isActive
-          ? "border border-[var(--signal-warn)]/55 bg-[rgba(245,177,60,0.06)]"
-          : "border border-transparent"
-      }`}
-    >
-      <div className="flex items-center gap-2">
-        <span className="text-[var(--text-dim)] w-3 text-right">{step.n}</span>
-        <span
-          className={`flex-1 ${
-            isActive ? "text-white" : "text-[var(--text-muted)]"
-          }`}
-        >
-          {step.name}
-        </span>
-        <StepIcon status={step.status} />
-      </div>
-      {step.meta && (
-        <div className="mt-0.5 ml-[20px] text-[10.5px] leading-[1.4] text-[var(--text-dim)] whitespace-pre-line">
-          {step.meta}
-        </div>
-      )}
-    </li>
-  );
-}
-
-function StepIcon({ status }: { status: StepStatus }) {
-  if (status === "ok")
-    return <Check size={12} className="text-[var(--signal-ok)]" />;
-  if (status === "warn")
-    return <AlertTriangle size={12} className="text-[var(--signal-warn)]" />;
-  if (status === "fail")
-    return <X size={12} className="text-[var(--signal-fail)]" />;
-  return (
-    <span className="w-2 h-2 rounded-full border border-[var(--text-dim)]" />
-  );
-}
-
-function BenefitTile({
-  icon,
-  value,
-  label,
-  caption,
-  accent,
-}: {
-  icon: React.ReactNode;
-  value: string;
-  label: string;
-  caption: string;
-  accent: string;
-}) {
-  return (
-    <div className="panel-tight p-2.5">
-      <div style={{ color: accent }}>{icon}</div>
-      <div
-        className="mt-1.5 text-[22px] font-medium leading-none tracking-[-0.02em]"
-        style={{ color: accent }}
-      >
-        {value}
-      </div>
-      <div
-        className="mt-1 text-[10.5px] leading-[1.25] font-medium"
-        style={{ color: accent }}
-      >
-        {label}
-      </div>
-      <div className="mt-0.5 text-[9.5px] leading-[1.35] text-[var(--text-dim)]">
-        {caption}
-      </div>
-    </div>
-  );
-}
-
-function HowStep({
-  icon,
-  title,
-  caption,
-  accent,
-  accentBg,
-  accentBorder,
-  showConnector = false,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  caption: string;
-  accent: string;
-  accentBg: string;
-  accentBorder: string;
-  showConnector?: boolean;
-}) {
-  return (
-    <li className="flex items-start gap-3 pb-4 last:pb-0 relative">
-      <div className="relative shrink-0">
-        <span
-          className="flex items-center justify-center w-9 h-9 rounded-md"
-          style={{
-            background: accentBg,
-            border: `1px solid ${accentBorder}`,
-            color: accent,
-          }}
-        >
-          {icon}
-        </span>
-        {showConnector && (
-          <span
-            aria-hidden
-            className="absolute left-1/2 top-9 -translate-x-1/2 w-px h-[calc(100%-12px)]"
-            style={{
-              backgroundImage:
-                "linear-gradient(to bottom, var(--border-strong) 50%, transparent 50%)",
-              backgroundSize: "1px 4px",
-              backgroundRepeat: "repeat-y",
-            }}
-          />
-        )}
-      </div>
-      <div className="min-w-0 pt-1">
-        <div className="text-[13.5px] text-white font-medium leading-[1.3]">
-          {title}
-        </div>
-        <div className="text-[12px] leading-[1.5] text-[var(--text-muted)] mt-0.5">
-          {caption}
-        </div>
-      </div>
-    </li>
-  );
-}
-
-
-function Pill({
-  status,
-  label,
-  highlight = false,
-}: {
-  status: StepStatus;
-  label: string;
-  highlight?: boolean;
-}) {
+function Badge({ status, children, icon, small }: { status: StepStatus; children: React.ReactNode; icon?: React.ReactNode; small?: boolean }) {
   return (
     <span
-      className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-md border font-mono text-[11.5px] ${
-        highlight
-          ? "border-[var(--signal-warn)]/55 bg-[rgba(245,177,60,0.07)] text-white"
-          : "border-[var(--border)] bg-[rgba(255,255,255,0.02)] text-[var(--text-muted)]"
-      }`}
+      className={`inline-flex items-center gap-1.5 rounded-lg font-medium ${small ? "px-2 py-0.5 text-[11px]" : "px-2.5 py-1 text-[13px]"}`}
+      style={{ background: BG[status], color: CLR[status] }}
     >
-      {label}
-      <StepIcon status={status} />
+      {icon || <span className="w-[6px] h-[6px] rounded-full" style={{ background: CLR[status] }} />}
+      {children}
     </span>
   );
 }
 
+/* ── Compare row ── */
+
+function Row({ label, value, status, last }: { label: string; value: string; status: "ok" | "fail"; last?: boolean }) {
+  return (
+    <div className={`flex items-center justify-between py-3 ${last ? "" : "border-b border-[var(--border)]/40"}`}>
+      <span className="text-[13px] text-[var(--text-dim)]">{label}</span>
+      <span className="text-[13px] font-medium truncate ml-4 text-right" style={{ color: CLR[status] }}>{value}</span>
+    </div>
+  );
+}
+
+/* ── Stat ── */
+
+function Stat({ value, label, accent }: { value: string; label: string; accent: string }) {
+  return (
+    <div className="text-center">
+      <div className="text-[32px] font-semibold tracking-[-0.03em]" style={{ color: accent }}>{value}</div>
+      <div className="text-[13px] text-[var(--text-muted)] mt-1">{label}</div>
+    </div>
+  );
+}
+
+/* ── Step icon ── */
+
+function SIcon({ status }: { status: StepStatus }) {
+  if (status === "ok") return <Check size={16} className="text-[var(--signal-ok)]" strokeWidth={2.5} />;
+  if (status === "warn") return <AlertTriangle size={16} className="text-[var(--signal-warn)]" strokeWidth={2} />;
+  if (status === "fail") return <X size={16} className="text-[var(--signal-fail)]" strokeWidth={2.5} />;
+  return <span className="w-3 h-3 rounded-full border-[1.5px] border-[var(--text-dim)]" />;
+}

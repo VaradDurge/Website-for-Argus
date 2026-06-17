@@ -51,7 +51,7 @@ const NODES: PipelineNode[] = [
 
 export function Pipeline() {
   return (
-    <section className="relative py-24 lg:py-32 overflow-hidden">
+    <section id="pipeline" className="relative py-28 lg:py-40 overflow-hidden">
       {/* corner mesh */}
       <div
         className="absolute right-0 bottom-0 w-[40vw] h-[60%] -z-10 dots-bg opacity-40"
@@ -63,30 +63,32 @@ export function Pipeline() {
       />
 
       <div className="mx-auto max-w-[1280px] px-6 lg:px-10">
-        <div className="eyebrow">▸ Watch ARGUS catch a failure</div>
+        <div className="text-center mb-10">
+          <div className="eyebrow inline-block">▸ Watch ARGUS catch a failure</div>
 
-        <h2 className="mt-5 max-w-3xl text-[36px] sm:text-[46px] lg:text-[54px] leading-[1.05] tracking-[-0.03em] font-medium">
-          Every node, traced.
-          <br />
-          <span
-            className="font-serif-italic"
-            style={{
-              backgroundImage:
-                "linear-gradient(90deg, #f5b13c 0%, #f97316 28%, #ec4899 60%, #c084fc 100%)",
-              backgroundClip: "text",
-              WebkitBackgroundClip: "text",
-              color: "transparent",
-            }}
-          >
-            Every silence, surfaced.
-          </span>
-        </h2>
+          <h2 className="mt-5 text-[36px] sm:text-[46px] lg:text-[54px] leading-[1.05] tracking-[-0.03em] font-medium">
+            Every node, traced.
+            <br />
+            <span
+              className="font-serif-italic"
+              style={{
+                backgroundImage:
+                  "linear-gradient(90deg, #f5b13c 0%, #f97316 28%, #ec4899 60%, #c084fc 100%)",
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                color: "transparent",
+              }}
+            >
+              Every silence, surfaced.
+            </span>
+          </h2>
 
-        <p className="mt-5 max-w-xl text-[14.5px] leading-[1.65] text-[var(--text-muted)]">
-          ARGUS watches every step of your agent pipeline during development and testing,
-          <br className="hidden sm:block" />
-          catching silent failures before they ever reach production.
-        </p>
+          <p className="mt-5 text-[14.5px] leading-[1.65] text-[var(--text-muted)] max-w-xl mx-auto">
+            ARGUS watches every step of your agent pipeline during development and testing,
+            <br className="hidden sm:block" />
+            catching silent failures before they ever reach production.
+          </p>
+        </div>
 
         {/* node strip — desktop */}
         <div className="mt-14 hidden md:flex items-start">
@@ -119,7 +121,7 @@ export function Pipeline() {
                       <line x1="0" y1="1" x2="24" y2="1" stroke="var(--signal-warn)" strokeWidth="1" strokeDasharray="3 3" opacity="0.5" />
                     </svg>
                     <div className="flex flex-col items-center">
-                      <span className="px-1.5 py-0.5 rounded-[4px] border border-[var(--signal-warn)]/60 bg-[rgba(245,177,60,0.06)] font-mono text-[9px] tracking-[0.16em] uppercase text-[var(--signal-warn)] whitespace-nowrap">
+                      <span className="px-1.5 py-0.5 rounded-[4px] border border-[var(--signal-warn)]/60 bg-[rgba(245,177,60,0.06)] text-[9px] tracking-[0.16em] uppercase text-[var(--signal-warn)] whitespace-nowrap">
                         Root Cause
                       </span>
                       <svg width="2" height="6" className="mt-0.5" aria-hidden>
@@ -179,10 +181,10 @@ function NodeCard({
           >
             <StatusIcon status={node.status} />
           </span>
-          <span className="font-mono text-[13px] text-white truncate">
+          <span className="text-[13px] text-white font-medium truncate">
             {node.name}
           </span>
-          <span className="ml-auto font-mono text-[11px] text-[var(--text-dim)] tabular-nums shrink-0">
+          <span className="ml-auto text-[11px] text-[var(--text-dim)] tabular-nums shrink-0">
             {node.time}
           </span>
         </div>
@@ -207,7 +209,7 @@ function NodeCard({
           {/* desktop: below the card */}
           <div className="hidden md:flex mt-3 flex-col items-center">
             <span className="w-px h-3 bg-[var(--signal-warn)]/50" />
-            <span className="px-2 py-0.5 rounded-[4px] border border-[var(--signal-warn)]/60 bg-[rgba(245,177,60,0.06)] font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--signal-warn)]">
+            <span className="px-2 py-0.5 rounded-[4px] border border-[var(--signal-warn)]/60 bg-[rgba(245,177,60,0.06)] text-[10px] tracking-[0.18em] uppercase text-[var(--signal-warn)]">
               Root Cause
             </span>
             <svg

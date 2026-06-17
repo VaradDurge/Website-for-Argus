@@ -36,7 +36,7 @@ export function Nav() {
         <div className="hidden md:flex items-center gap-1 ml-3">
           <div className="w-px h-5 bg-[var(--border)] mx-1" />
           <a
-            href="https://discord.gg/zW774xvS"
+            href="https://discord.gg/nhbdZkcG"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Discord"
@@ -88,6 +88,14 @@ export function Nav() {
               className="px-3.5 py-2 text-[13.5px] text-[var(--text-muted)] hover:text-white transition-colors rounded-md"
             >
               Replay
+            </a>
+          </li>
+          <li>
+            <a
+              href="#features"
+              className="px-3.5 py-2 text-[13.5px] text-[var(--text-muted)] hover:text-white transition-colors rounded-md"
+            >
+              Features
             </a>
           </li>
         </ul>
@@ -146,6 +154,13 @@ export function Nav() {
           >
             Replay
           </a>
+          <a
+            href="#features"
+            onClick={() => setMobileMenuOpen(false)}
+            className="px-3 py-2.5 text-[14px] text-[var(--text-muted)] hover:text-white transition-colors rounded-md"
+          >
+            Features
+          </a>
 
           {/* divider */}
           <div className="h-px bg-[var(--border)] my-1" />
@@ -153,7 +168,7 @@ export function Nav() {
           {/* social icons */}
           <div className="flex items-center gap-3 px-3">
             <a
-              href="https://discord.gg/zW774xvS"
+              href="https://discord.gg/nhbdZkcG"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Discord"

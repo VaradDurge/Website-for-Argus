@@ -3,7 +3,7 @@
 import { liquidMetalFragmentShader, ShaderMount } from "@paper-design/shaders";
 import { Sparkles } from "lucide-react";
 import type React from "react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 
 interface LiquidMetalButtonProps {
   label?: string;
@@ -26,6 +26,7 @@ export function LiquidMetalButton({
   const shaderMount = useRef<any>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const rippleId = useRef(0);
+  const styleInjected = useRef(false);
 
   const dimensions = useMemo(() => {
     if (viewMode === "icon") {
@@ -48,7 +49,8 @@ export function LiquidMetalButton({
     };
   }, [viewMode]);
 
-  useEffect(() => {
+  const ensureStyle = () => {
+    if (styleInjected.current) return;
     const styleId = "shader-canvas-style-exploded";
     if (!document.getElementById(styleId)) {
       const style = document.createElement("style");
@@ -70,64 +72,69 @@ export function LiquidMetalButton({
       `;
       document.head.appendChild(style);
     }
+    styleInjected.current = true;
+  };
 
-    const loadShader = async () => {
-      try {
-        if (shaderRef.current) {
-          if (shaderMount.current?.destroy) {
-            shaderMount.current.destroy();
-          }
-          shaderMount.current = new ShaderMount(
-            shaderRef.current,
-            liquidMetalFragmentShader,
-            {
-              u_repetition: 4,
-              u_softness: 0.5,
-              u_shiftRed: 0.3,
-              u_shiftBlue: 0.3,
-              u_distortion: 0,
-              u_contour: 0,
-              u_angle: 45,
-              u_scale: 8,
-              u_shape: 1,
-              u_offsetX: 0.1,
-              u_offsetY: -0.1,
-            },
-            undefined,
-            0.6
-          );
-        }
-      } catch (error) {
-        console.error("Failed to load shader:", error);
-      }
-    };
+  const startShader = useCallback(() => {
+    if (shaderMount.current || !shaderRef.current) return;
+    ensureStyle();
+    try {
+      shaderMount.current = new ShaderMount(
+        shaderRef.current,
+        liquidMetalFragmentShader,
+        {
+          u_repetition: 4,
+          u_softness: 0.5,
+          u_shiftRed: 0.3,
+          u_shiftBlue: 0.3,
+          u_distortion: 0,
+          u_contour: 0,
+          u_angle: 45,
+          u_scale: 8,
+          u_shape: 1,
+          u_offsetX: 0.1,
+          u_offsetY: -0.1,
+        },
+        undefined,
+        1
+      );
+    } catch {
+      // shader init failed — button still works without it
+    }
+  }, []);
 
-    loadShader();
-
-    return () => {
-      if (shaderMount.current?.destroy) {
-        shaderMount.current.destroy();
-        shaderMount.current = null;
-      }
-    };
+  const stopShader = useCallback(() => {
+    if (shaderMount.current?.destroy) {
+      shaderMount.current.destroy();
+      shaderMount.current = null;
+    }
   }, []);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
+    startShader();
     shaderMount.current?.setSpeed?.(1);
   };
 
   const handleMouseLeave = () => {
     setIsHovered(false);
     setIsPressed(false);
-    shaderMount.current?.setSpeed?.(0.6);
+    stopShader();
   };
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    // Ensure shader is running for click feedback
+    startShader();
     if (shaderMount.current?.setSpeed) {
       shaderMount.current.setSpeed(2.4);
       setTimeout(() => {
-        shaderMount.current?.setSpeed?.(isHovered ? 1 : 0.6);
+        if (shaderMount.current?.setSpeed) {
+          shaderMount.current.setSpeed(isHovered ? 1 : 0.6);
+        }
+        // If not hovered, stop shader after click animation
+        if (!isHovered) {
+          setTimeout(stopShader, 400);
+        }
       }, 300);
     }
 

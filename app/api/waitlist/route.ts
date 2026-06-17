@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { google } from "googleapis";
+import { sheets_v4, auth as gauth } from "@googleapis/sheets";
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Auth via service account credentials stored in env vars
-    const auth = new google.auth.GoogleAuth({
+    const auth = new gauth.GoogleAuth({
       credentials: {
         type: "service_account",
         client_email: process.env.GOOGLE_CLIENT_EMAIL,
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
       scopes: ["https://www.googleapis.com/auth/spreadsheets"],
     });
 
-    const sheets = google.sheets({ version: "v4", auth });
+    const sheets = new sheets_v4.Sheets({ auth });
 
     await sheets.spreadsheets.values.append({
       spreadsheetId: process.env.GOOGLE_SHEET_ID,

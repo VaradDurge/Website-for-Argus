@@ -88,7 +88,7 @@ export function ContactModal({ open, onClose }: Props) {
 
                   {/* Discord */}
                   <a
-                    href="https://discord.gg/6D7gezer"
+                    href="https://discord.gg/nhbdZkcG"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-3.5 px-4 py-3 rounded-[10px] border border-[#5865F2]/25 hover:border-[#5865F2]/50 bg-[rgba(88,101,242,0.06)] hover:bg-[rgba(88,101,242,0.12)] transition-colors group"

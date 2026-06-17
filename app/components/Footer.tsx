@@ -9,7 +9,7 @@ export function Footer() {
   const cmd = "pip install argus-agent";
 
   return (
-    <footer className="relative border-t border-[var(--border)] mt-10">
+    <footer id="footer" className="relative border-t border-[var(--border)] mt-16">
       <div
         className="absolute inset-x-0 top-0 h-px"
         style={{
@@ -33,7 +33,7 @@ export function Footer() {
         <ul className="flex items-center gap-6 text-[13px] text-[var(--text-muted)] lg:justify-center">
           <li><a href="/docs" className="hover:text-white transition-colors">Docs</a></li>
           <li><a href="#replay" className="hover:text-white transition-colors">Replay</a></li>
-          <li><a href="#github" className="hover:text-white transition-colors">GitHub</a></li>
+          <li><a href="https://github.com/VaradDurge/ARGUS" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">GitHub</a></li>
         </ul>
 
         <div className="lg:justify-self-end">

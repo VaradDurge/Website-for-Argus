@@ -140,7 +140,7 @@ watcher.finalize()               # run detectors, generate trace`}
       <Callout type="info" title="Beta">
         ARGUS is currently in beta. The core API is stable, but some detection layers and CLI
         commands are still being refined. Join the{" "}
-        <a href="https://discord.gg/zW774xvS" target="_blank" rel="noopener noreferrer" className="text-[var(--accent-soft)] underline decoration-dotted underline-offset-2 hover:text-white hover:decoration-solid">
+        <a href="https://discord.gg/nhbdZkcG" target="_blank" rel="noopener noreferrer" className="text-[var(--accent-soft)] underline decoration-dotted underline-offset-2 hover:text-white hover:decoration-solid">
           Discord
         </a>{" "}
         for early access and to shape the roadmap.
