@@ -464,11 +464,11 @@ function RunsPanel({ onSelectRun }: { onSelectRun: () => void }) {
                 key={i}
                 onClick={run.clickable ? onSelectRun : undefined}
                 className={`border-b border-[var(--border)]/40 transition-colors ${
-                  run.clickable ? "hover:bg-white/[0.02] cursor-pointer" : "opacity-80"
+                  run.clickable ? "hover:bg-white/[0.02] cursor-pointer" : "opacity-40"
                 }`}
               >
                 <td className="py-2.5 pr-3">
-                  <div className="text-[12px] text-white">{run.name || run.id}</div>
+                  <div className={`text-[12px] ${run.clickable ? "text-white" : "text-[var(--text-muted)]"}`}>{run.name || run.id}</div>
                   <div className="flex items-center gap-2 mt-0.5">
                     <span className="font-mono text-[10px] text-[var(--text-dim)]">{run.id}</span>
                     {run.failedNode && <span className="text-[10px] text-[var(--signal-fail)]">{run.failedNode}</span>}
