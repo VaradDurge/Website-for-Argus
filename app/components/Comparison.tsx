@@ -38,7 +38,7 @@ export function Comparison() {
     <section className="relative py-20 lg:py-24">
       <div className="mx-auto max-w-[960px] px-6 lg:px-10">
         {/* Header */}
-        <div className="mb-10 lg:mb-12">
+        <div className="mb-14 lg:mb-16">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -57,7 +57,7 @@ export function Comparison() {
               delay: 0.1,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="mt-4 text-[28px] sm:text-[34px] lg:text-[38px] leading-[1.1] tracking-[-0.03em] font-medium"
+            className="mt-5 text-[38px] sm:text-[46px] lg:text-[52px] leading-[1.05] tracking-[-0.03em] font-medium"
           >
             They trace.{" "}
             <span className="font-serif-italic text-[var(--accent-soft)]">
