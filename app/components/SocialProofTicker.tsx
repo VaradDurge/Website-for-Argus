@@ -230,7 +230,7 @@ function TickerRow({
 export function SocialProofTicker() {
   return (
     <section
-      className="relative py-20 lg:py-28 overflow-hidden"
+      className="relative py-24 lg:py-32 overflow-hidden"
       style={{
         maskImage:
           "linear-gradient(to right, transparent, black 5%, black 95%, transparent)",

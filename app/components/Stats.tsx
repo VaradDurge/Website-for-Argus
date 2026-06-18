@@ -19,7 +19,7 @@ const STATS: { value: number; suffix: string; label: string; icon: typeof Activi
 
 export function Stats() {
   return (
-    <section id="stats" className="relative pt-16 lg:pt-20 pb-10 lg:pb-14">
+    <section id="stats" className="relative py-24 lg:py-32">
       <div className="mx-auto max-w-[1280px] px-6 lg:px-10">
         <motion.div
           initial={{ opacity: 0, y: 10 }}

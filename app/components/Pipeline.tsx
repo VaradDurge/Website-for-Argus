@@ -51,7 +51,7 @@ const NODES: PipelineNode[] = [
 
 export function Pipeline() {
   return (
-    <section id="pipeline" className="relative py-28 lg:py-40 overflow-hidden">
+    <section id="pipeline" className="relative py-24 lg:py-32 overflow-hidden">
       {/* corner mesh */}
       <div
         className="absolute right-0 bottom-0 w-[40vw] h-[60%] -z-10 dots-bg opacity-40"

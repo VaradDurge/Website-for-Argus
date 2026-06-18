@@ -63,7 +63,7 @@ export function Replay() {
   return (
     <section
       id="replay"
-      className="relative py-28 lg:py-40"
+      className="relative py-24 lg:py-32"
       style={{ fontFamily: "var(--font-inter), ui-sans-serif, system-ui, sans-serif" }}
     >
       <div ref={sectionRef} className="mx-auto max-w-[1280px] px-6 lg:px-10">
