@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, JetBrains_Mono, Instrument_Serif } from "next/font/google";
+import { Geist, Inter, JetBrains_Mono, Instrument_Serif } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const geist = Geist({
   variable: "--font-geist",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
 });
@@ -93,7 +99,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geist.variable} ${mono.variable} ${serif.variable} antialiased`}
+      className={`${geist.variable} ${inter.variable} ${mono.variable} ${serif.variable} antialiased`}
     >
       <body className="min-h-screen bg-[var(--bg)] text-[var(--text)] selection:bg-[var(--accent)]/30 selection:text-white">
         {children}

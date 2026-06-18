@@ -46,7 +46,7 @@ const BG: Record<StepStatus, string> = {
 
 export function Replay() {
   return (
-    <section id="replay" className="relative py-28 lg:py-40">
+    <section id="replay" className="relative py-28 lg:py-40" style={{ fontFamily: "var(--font-inter), ui-sans-serif, system-ui, sans-serif" }}>
       <div className="mx-auto max-w-[1280px] px-6 lg:px-10">
 
         {/* ─── Header ─── */}
@@ -155,7 +155,7 @@ export function Replay() {
             className="grid grid-cols-1 sm:grid-cols-2 gap-3"
           >
             {/* Before */}
-            <div className="panel p-4">
+            <div className="rounded-xl border border-[var(--border)] p-4" style={{ background: "#0a0a0f" }}>
               <div className="flex items-center gap-2 mb-3">
                 <Badge status="fail" icon={<X size={10} />}>Before</Badge>
                 <span className="ml-auto text-[11px] text-[var(--text-dim)]">step 3: summarize</span>
@@ -167,7 +167,7 @@ export function Replay() {
             </div>
 
             {/* After */}
-            <div className="panel p-4">
+            <div className="rounded-xl border border-[var(--border)] p-4" style={{ background: "#0a0a0f" }}>
               <div className="flex items-center gap-2 mb-3">
                 <Badge status="ok" icon={<Check size={10} />}>After</Badge>
                 <span className="ml-auto text-[11px] text-[var(--text-dim)]">replayed</span>
@@ -187,7 +187,7 @@ export function Replay() {
             transition={{ duration: 0.5, delay: 0.15 }}
             className="grid grid-cols-1 sm:grid-cols-2 gap-3"
           >
-            <div className="panel p-4">
+            <div className="rounded-xl border border-[var(--border)] p-4" style={{ background: "#0a0a0f" }}>
               <div className="flex items-center gap-2 mb-1.5">
                 <Database size={13} className="text-[var(--accent-soft)]" />
                 <span className="text-[13px] font-medium text-white">Reused</span>
@@ -200,7 +200,7 @@ export function Replay() {
               </div>
             </div>
 
-            <div className="panel p-4">
+            <div className="rounded-xl border border-[var(--border)] p-4" style={{ background: "#0a0a0f" }}>
               <div className="flex items-center gap-2 mb-1.5">
                 <Zap size={13} className="text-[var(--signal-warn)]" />
                 <span className="text-[13px] font-medium text-white">Ran</span>
