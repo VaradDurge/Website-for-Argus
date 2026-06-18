@@ -330,7 +330,7 @@ export function Replay() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 pt-2"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-10 pt-2"
           >
             {/* Reused indicator */}
             <div className="flex items-center gap-3">

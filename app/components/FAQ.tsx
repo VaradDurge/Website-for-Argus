@@ -81,7 +81,7 @@ export function FAQ() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-6 text-[36px] sm:text-[64px] lg:text-[80px] leading-[0.95] tracking-[-0.04em] text-[var(--accent-soft)]"
+            className="mt-4 sm:mt-6 text-[28px] sm:text-[64px] lg:text-[80px] leading-[0.95] tracking-[-0.04em] text-[var(--accent-soft)]"
           >
             Questions,
             <br />
@@ -109,7 +109,7 @@ export function FAQ() {
                 >
                   <button
                     onClick={() => setOpen(isOpen ? null : i)}
-                    className="w-full flex items-center justify-between gap-6 py-5 text-left group transition-colors hover:bg-white/[0.01] rounded-sm"
+                    className="w-full flex items-center justify-between gap-4 sm:gap-6 py-4 sm:py-5 text-left group transition-colors hover:bg-white/[0.01] rounded-sm"
                     aria-expanded={isOpen}
                   >
                     <span
@@ -147,7 +147,7 @@ export function FAQ() {
                           initial={{ y: 8, opacity: 0 }}
                           animate={{ y: 0, opacity: 1 }}
                           transition={{ duration: 0.3, delay: 0.1 }}
-                          className="pb-6 pr-12 text-[14.5px] leading-[1.7] text-[var(--text-muted)]"
+                          className="pb-5 pr-4 sm:pr-12 text-[13.5px] sm:text-[14.5px] leading-[1.7] text-[var(--text-muted)]"
                         >
                           {item.a}
                         </motion.p>

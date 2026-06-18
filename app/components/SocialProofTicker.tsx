@@ -154,9 +154,9 @@ function CardComponent({ card }: { card: ProofCard }) {
   const avatarUrl = `https://api.dicebear.com/9.x/notionists/svg?seed=${card.avatar}&backgroundColor=transparent`;
 
   return (
-    <div className="proof-card shrink-0 w-[380px] rounded-2xl bg-[var(--surface)] border border-[var(--border)] p-6 flex flex-col justify-between">
+    <div className="proof-card shrink-0 w-[300px] sm:w-[380px] rounded-2xl bg-[var(--surface)] border border-[var(--border)] p-4 sm:p-6 flex flex-col justify-between">
       {/* Quote */}
-      <p className="text-[14px] leading-[1.7] text-[var(--text-muted)] mb-6">
+      <p className="text-[13px] sm:text-[14px] leading-[1.65] text-[var(--text-muted)] mb-4 sm:mb-6">
         &ldquo;{card.text}&rdquo;
       </p>
 

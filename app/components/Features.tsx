@@ -140,7 +140,7 @@ export function Features() {
                       transition={{ duration: 0.2, ease: "easeOut" }}
                       className="overflow-hidden"
                     >
-                      <p className="px-4 pl-[44px] pb-3 text-[13.5px] leading-[1.6] text-[var(--text-muted)]">
+                      <p className="px-3 pl-[36px] sm:px-4 sm:pl-[44px] pb-3 text-[13px] sm:text-[13.5px] leading-[1.6] text-[var(--text-muted)]">
                         {f.body}
                       </p>
                     </motion.div>

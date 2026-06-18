@@ -35,8 +35,8 @@ export function Comparison() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <section className="relative py-20 lg:py-24">
-      <div className="mx-auto max-w-[960px] px-6 lg:px-10">
+    <section className="relative py-24 lg:py-32">
+      <div className="mx-auto max-w-[960px] px-4 sm:px-6 lg:px-10">
         {/* Header */}
         <div className="mb-14 lg:mb-16 text-center">
           <motion.div

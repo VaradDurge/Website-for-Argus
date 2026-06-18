@@ -30,7 +30,7 @@ export function Stats() {
         >
           By the numbers
         </motion.div>
-        <div className="grid grid-cols-2 gap-6 sm:flex sm:items-center sm:justify-center sm:gap-10 lg:gap-14 sm:flex-wrap">
+        <div className="grid grid-cols-2 gap-4 sm:flex sm:items-center sm:justify-center sm:gap-10 lg:gap-14 sm:flex-wrap">
           {STATS.map((s, i) => (
             <Counter key={s.label} {...s} index={i} />
           ))}
@@ -95,7 +95,7 @@ function Counter({
         </motion.div>
         <div className="flex items-baseline gap-0.5">
           <motion.span
-            className="text-[28px] sm:text-[32px] font-semibold tracking-[-0.02em] text-white tabular-nums"
+            className="text-[24px] sm:text-[32px] font-semibold tracking-[-0.02em] text-white tabular-nums"
             animate={done ? { scale: [1, 1.06, 1] } : {}}
             transition={{ duration: 0.3, ease: "easeOut" }}
           >

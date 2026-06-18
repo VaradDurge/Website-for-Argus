@@ -150,7 +150,7 @@ export function Pipeline() {
                       <svg width="2" height="6" className="mt-0.5" aria-hidden>
                         <line x1="1" y1="0" x2="1" y2="6" stroke="var(--signal-warn)" strokeWidth="1" strokeDasharray="2 2" opacity="0.4" />
                       </svg>
-                      <div className="mt-0.5 w-[110px] rounded-md border border-[var(--signal-warn)]/30 bg-[rgba(245,177,60,0.04)] px-2 py-1.5">
+                      <div className="mt-0.5 w-[95px] sm:w-[110px] rounded-md border border-[var(--signal-warn)]/30 bg-[rgba(245,177,60,0.04)] px-1.5 sm:px-2 py-1.5">
                         <p className="text-[9px] leading-[1.4] text-[var(--signal-warn)] text-center">
                           ARGUS detected this before it degraded downstream
                         </p>

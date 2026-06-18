@@ -68,7 +68,7 @@ export function Footer() {
               }
               setTimeout(() => setCopied(false), 1400);
             }}
-            className="group inline-flex items-center gap-3 panel-tight px-3.5 py-2.5 font-mono text-[12.5px] hover:border-[var(--accent)] transition-colors"
+            className="group inline-flex items-center gap-2 sm:gap-3 panel-tight px-2.5 sm:px-3.5 py-2 sm:py-2.5 font-mono text-[11px] sm:text-[12.5px] hover:border-[var(--accent)] transition-colors"
           >
             <span className="text-[var(--text-dim)]">$</span>
             <span className="text-white">{cmd}</span>

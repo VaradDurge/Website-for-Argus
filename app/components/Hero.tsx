@@ -83,7 +83,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 12, filter: "blur(4px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 0.6, delay: 0.45, ease: "easeOut" }}
-            className="mt-6 mx-auto max-w-[480px] text-[15px] sm:text-[17px] leading-[1.65] text-[var(--text-muted)]"
+            className="mt-5 sm:mt-6 mx-auto max-w-[340px] sm:max-w-[480px] text-[14px] sm:text-[17px] leading-[1.65] text-[var(--text-muted)]"
           >
             ARGUS catches silent failures and traces root causes{" "}
             <span className="text-white font-medium">before you deploy</span> —
