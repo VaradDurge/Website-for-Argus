@@ -6,17 +6,17 @@ import { motion } from "framer-motion";
 const ROWS = [
   {
     capability: "Silent failures",
-    argus: "Detects hallucinations, empty outputs, semantic degradation automatically",
-    others: "Logs successful calls — silent failures go unnoticed",
+    argus: "Auto-detects hallucinations, empty outputs, semantic degradation",
+    others: "Logs calls as successful — silent failures invisible",
   },
   {
     capability: "Root cause",
-    argus: "Walks backward through the graph to the exact node that broke",
+    argus: "Walks backward through the graph to the node that broke",
     others: "Manual trace inspection",
   },
   {
     capability: "Replay",
-    argus: "Re-run any node with recorded inputs and frozen upstream state",
+    argus: "Re-run any node with frozen inputs and recorded state",
     others: "Not available",
   },
   {
@@ -26,7 +26,7 @@ const ROWS = [
   },
   {
     capability: "CI/CD gating",
-    argus: "Built-in — fail pipelines on detected regressions",
+    argus: "Built-in — fail pipelines on regressions",
     others: "Requires custom integration",
   },
 ];
@@ -35,10 +35,10 @@ export function Comparison() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <section className="relative py-24 lg:py-32">
-      <div className="mx-auto max-w-[1280px] px-6 lg:px-10">
+    <section className="relative py-20 lg:py-24">
+      <div className="mx-auto max-w-[960px] px-6 lg:px-10">
         {/* Header */}
-        <div className="mb-14 lg:mb-18">
+        <div className="mb-10 lg:mb-12">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -57,7 +57,7 @@ export function Comparison() {
               delay: 0.1,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="mt-5 text-[38px] sm:text-[46px] lg:text-[52px] leading-[1.05] tracking-[-0.03em] font-medium"
+            className="mt-4 text-[28px] sm:text-[34px] lg:text-[38px] leading-[1.1] tracking-[-0.03em] font-medium"
           >
             They trace.{" "}
             <span className="font-serif-italic text-[var(--accent-soft)]">
@@ -72,7 +72,7 @@ export function Comparison() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.4 }}
-          className="hidden lg:grid grid-cols-[56px_1fr_1fr_1fr] gap-6 pb-3 border-b border-[var(--border)]"
+          className="hidden lg:grid grid-cols-[36px_0.8fr_1fr_1fr] gap-4 pb-2 border-b border-[var(--border)]"
         >
           <span />
           <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-[var(--text-dim)]">
@@ -118,9 +118,9 @@ export function Comparison() {
                 />
 
                 {/* Desktop layout */}
-                <div className="hidden lg:grid grid-cols-[56px_1fr_1fr_1fr] gap-6 py-6 pl-4 pr-2 cursor-default">
+                <div className="hidden lg:grid grid-cols-[36px_0.8fr_1fr_1fr] gap-4 py-3.5 pl-3 pr-2 cursor-default">
                   <span
-                    className="font-mono text-[13px] tracking-[0.1em] pt-0.5 transition-colors duration-300"
+                    className="font-mono text-[12px] tracking-[0.1em] pt-px transition-colors duration-300"
                     style={{
                       color: isHovered
                         ? "var(--accent-soft)"
@@ -131,7 +131,7 @@ export function Comparison() {
                   </span>
 
                   <span
-                    className="text-[15px] font-medium tracking-[-0.01em] transition-colors duration-300"
+                    className="text-[13.5px] font-medium tracking-[-0.01em] transition-colors duration-300"
                     style={{
                       color: isHovered ? "white" : "var(--text-muted)",
                     }}
@@ -139,9 +139,9 @@ export function Comparison() {
                     {row.capability}
                   </span>
 
-                  <div className="flex items-start gap-2.5">
+                  <div className="flex items-start gap-2">
                     <span
-                      className="mt-[7px] w-1.5 h-1.5 rounded-full shrink-0 transition-colors duration-300"
+                      className="mt-[6px] w-1 h-1 rounded-full shrink-0 transition-colors duration-300"
                       style={{
                         background: isHovered
                           ? "var(--signal-ok)"
@@ -149,7 +149,7 @@ export function Comparison() {
                       }}
                     />
                     <span
-                      className="text-[14px] leading-[1.55] transition-colors duration-300"
+                      className="text-[13px] leading-[1.5] transition-colors duration-300"
                       style={{
                         color: isHovered ? "white" : "var(--text-muted)",
                       }}
@@ -158,29 +158,29 @@ export function Comparison() {
                     </span>
                   </div>
 
-                  <span className="text-[14px] leading-[1.55] text-[var(--text-dim)]">
+                  <span className="text-[13px] leading-[1.5] text-[var(--text-dim)]">
                     {row.others}
                   </span>
                 </div>
 
                 {/* Mobile layout */}
-                <div className="lg:hidden py-5 pl-4 pr-2 space-y-2.5 cursor-default">
-                  <div className="flex items-center gap-4">
-                    <span className="font-mono text-[13px] tracking-[0.1em] text-[var(--text-dim)]">
+                <div className="lg:hidden py-3.5 pl-3 pr-2 space-y-1.5 cursor-default">
+                  <div className="flex items-center gap-3">
+                    <span className="font-mono text-[12px] tracking-[0.1em] text-[var(--text-dim)]">
                       {String(i + 1).padStart(2, "0")}
                     </span>
-                    <span className="text-[15px] font-medium text-[var(--text-muted)]">
+                    <span className="text-[13.5px] font-medium text-[var(--text-muted)]">
                       {row.capability}
                     </span>
                   </div>
-                  <div className="pl-10 flex items-start gap-2">
-                    <span className="mt-[7px] w-1.5 h-1.5 rounded-full shrink-0 bg-[var(--signal-ok)]" />
-                    <span className="text-[13.5px] leading-[1.55] text-white">
+                  <div className="pl-8 flex items-start gap-1.5">
+                    <span className="mt-[5px] w-1 h-1 rounded-full shrink-0 bg-[var(--signal-ok)]" />
+                    <span className="text-[12.5px] leading-[1.5] text-white">
                       {row.argus}
                     </span>
                   </div>
-                  <div className="pl-10">
-                    <span className="text-[13px] leading-[1.55] text-[var(--text-dim)]">
+                  <div className="pl-8">
+                    <span className="text-[12px] leading-[1.5] text-[var(--text-dim)]">
                       {row.others}
                     </span>
                   </div>
