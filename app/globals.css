@@ -464,6 +464,38 @@
   background: transparent !important;
 }
 
+/* ───────── replay card hover shimmer ───────── */
+.replay-card {
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+}
+.replay-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(139, 125, 255, 0.04),
+    transparent
+  );
+  transition: none;
+  pointer-events: none;
+}
+.replay-card:hover {
+  border-color: var(--border-strong);
+}
+.replay-card:hover::after {
+  animation: replay-shimmer 0.8s ease forwards;
+}
+@keyframes replay-shimmer {
+  to { left: 150%; }
+}
+
 /* ───────── social proof ticker ───────── */
 @keyframes ticker-left {
   from { transform: translateX(0); }
