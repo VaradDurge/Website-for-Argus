@@ -5,6 +5,7 @@ import { Pipeline } from "./components/Pipeline";
 import { Replay } from "./components/Replay";
 import { Features } from "./components/Features";
 import { Stats } from "./components/Stats";
+import { Comparison } from "./components/Comparison";
 import { FAQ } from "./components/FAQ";
 import { Footer } from "./components/Footer";
 
@@ -19,6 +20,7 @@ export default function Home() {
         <Replay />
         <Features />
         <Stats />
+        <Comparison />
         <FAQ />
       </main>
       <Footer />
