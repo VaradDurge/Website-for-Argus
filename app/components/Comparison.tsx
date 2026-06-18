@@ -38,13 +38,13 @@ export function Comparison() {
     <section className="relative py-20 lg:py-24">
       <div className="mx-auto max-w-[960px] px-6 lg:px-10">
         {/* Header */}
-        <div className="mb-14 lg:mb-16">
+        <div className="mb-14 lg:mb-16 text-center">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="eyebrow"
+            className="eyebrow inline-block"
           >
             Why Argus
           </motion.div>
