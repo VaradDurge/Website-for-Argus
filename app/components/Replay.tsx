@@ -283,15 +283,15 @@ export function Replay() {
             </motion.div>
           </motion.div>
 
-          {/* ─── 2. Before / After comparison ─── */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {/* Before — slides in from left */}
+          {/* ─── 2. Before / After comparison — centered, fit content ─── */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            {/* Before */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              className="replay-card rounded-xl border border-[var(--border)] p-4"
+              className="replay-card rounded-xl border border-[var(--border)] p-4 w-full sm:w-auto sm:min-w-[320px]"
               style={{ background: "#0a0a0f" }}
             >
               <div className="flex items-center gap-2 mb-3">
@@ -304,13 +304,13 @@ export function Replay() {
               <StaggeredRow label="output" value='"placeholder text"' status="fail" delay={0.25} last />
             </motion.div>
 
-            {/* After — slides in from right */}
+            {/* After */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-              className="replay-card rounded-xl border border-[var(--border)] p-4"
+              className="replay-card rounded-xl border border-[var(--border)] p-4 w-full sm:w-auto sm:min-w-[320px]"
               style={{ background: "#0a0a0f" }}
             >
               <div className="flex items-center gap-2 mb-3">
@@ -324,22 +324,22 @@ export function Replay() {
             </motion.div>
           </div>
 
-          {/* ─── 3. Reused / Ran ─── */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, delay: 0.05, type: "spring", stiffness: 100 }}
-              className="replay-card rounded-xl border border-[var(--border)] p-4"
-              style={{ background: "#0a0a0f" }}
-            >
-              <div className="flex items-center gap-2 mb-1.5">
+          {/* ─── 3. Reused / Ran — inline horizontal breakdown ─── */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 pt-2"
+          >
+            {/* Reused indicator */}
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1.5">
                 <Database size={13} className="text-[var(--accent-soft)]" />
-                <span className="text-[13px] font-medium text-white">Reused</span>
+                <span className="text-[12px] text-[var(--text-dim)] uppercase tracking-[0.1em]">Reused</span>
               </div>
-              <p className="text-[12px] text-[var(--text-muted)] mb-2.5">States & outputs from completed steps</p>
-              <div className="flex items-center gap-2 flex-wrap">
+              <div className="w-px h-4 bg-[var(--border)]" />
+              <div className="flex items-center gap-1.5">
                 <motion.div
                   initial={{ opacity: 0, scale: 0 }}
                   whileInView={{ opacity: 1, scale: 1 }}
@@ -356,52 +356,47 @@ export function Replay() {
                 >
                   <Badge status="ok" icon={<Check size={9} />} small>enrich</Badge>
                 </motion.div>
-                <motion.span
-                  className="text-[11px] text-[var(--signal-ok)] ml-1"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.5, duration: 0.4 }}
-                >
-                  2.47s saved
-                </motion.span>
               </div>
-            </motion.div>
+              <motion.span
+                className="text-[11px] text-[var(--signal-ok)]"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.5, duration: 0.4 }}
+              >
+                2.47s saved
+              </motion.span>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, delay: 0.15, type: "spring", stiffness: 100 }}
-              className="replay-card rounded-xl border border-[var(--border)] p-4"
-              style={{ background: "#0a0a0f" }}
-            >
-              <div className="flex items-center gap-2 mb-1.5">
+            {/* Divider */}
+            <div className="hidden sm:block w-px h-5 bg-[var(--border)]" />
+
+            {/* Ran indicator */}
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1.5">
                 <Zap size={13} className="text-[var(--signal-warn)]" />
-                <span className="text-[13px] font-medium text-white">Ran</span>
+                <span className="text-[12px] text-[var(--text-dim)] uppercase tracking-[0.1em]">Ran</span>
               </div>
-              <p className="text-[12px] text-[var(--text-muted)] mb-2.5">Only steps after the selected point</p>
-              <div className="flex items-center gap-2 flex-wrap">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.4, type: "spring", stiffness: 300, damping: 15 }}
-                >
-                  <Badge status="warn" icon={<AlertTriangle size={9} />} small>summarize</Badge>
-                </motion.div>
-                <motion.span
-                  className="text-[11px] text-[var(--signal-warn)] ml-1"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.5, duration: 0.4 }}
-                >
-                  1.34s compute
-                </motion.span>
-              </div>
-            </motion.div>
-          </div>
+              <div className="w-px h-4 bg-[var(--border)]" />
+              <motion.div
+                initial={{ opacity: 0, scale: 0 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4, type: "spring", stiffness: 300, damping: 15 }}
+              >
+                <Badge status="warn" icon={<AlertTriangle size={9} />} small>summarize</Badge>
+              </motion.div>
+              <motion.span
+                className="text-[11px] text-[var(--signal-warn)]"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.5, duration: 0.4 }}
+              >
+                1.34s compute
+              </motion.span>
+            </div>
+          </motion.div>
         </div>
 
         {/* ─── Stats with counter animation ─── */}
