@@ -49,7 +49,7 @@ export function Features() {
 
   return (
     <section id="features" className="relative py-24 lg:py-32">
-      <div className="mx-auto max-w-[1280px] px-6 lg:px-10 grid lg:grid-cols-[0.9fr_1.1fr] gap-12 lg:gap-20 items-start">
+      <div className="mx-auto max-w-[1280px] px-6 lg:px-10 grid lg:grid-cols-[1.2fr_0.8fr] gap-12 lg:gap-24 items-start">
         {/* Left — sticky heading */}
         <div className="lg:sticky lg:top-28 lg:self-start">
           <motion.div
