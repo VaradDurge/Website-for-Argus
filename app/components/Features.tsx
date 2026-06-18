@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ShieldOff,
   Crosshair,
@@ -14,7 +15,7 @@ const FEATURES = [
   {
     icon: ShieldOff,
     title: "Silent failure detection",
-    body: "Catches issues that look successful but are actually wrong — empty arrays, placeholder text, hallucinated outputs that pass every schema check.",
+    body: "Catches issues that look successful but are actually wrong — empty arrays, placeholder text, hallucinated outputs.",
   },
   {
     icon: Crosshair,
@@ -24,26 +25,28 @@ const FEATURES = [
   {
     icon: Activity,
     title: "Semantic degradation",
-    body: "Understands meaning, not just errors. Collapsed confidence, weak summaries, missing reasoning — caught before they propagate.",
+    body: "Understands meaning, not just errors. Collapsed confidence, weak summaries, missing reasoning.",
   },
   {
     icon: GitCompareArrows,
     title: "Replay + diff",
-    body: "Re-run any node with frozen upstream state. Compare original vs replayed output. Verify fixes before shipping.",
+    body: "Re-run any node with frozen upstream state. Compare original vs replayed output. Verify before shipping.",
   },
   {
     icon: GitMerge,
     title: "Multi-agent tracing",
-    body: "Follow degradation across agent boundaries, not just within a single graph. See how bad state fans out.",
+    body: "Follow degradation across agent boundaries. See how bad state fans out through branches.",
   },
   {
     icon: Layers,
     title: "Framework agnostic",
-    body: "Works with LangGraph, plain Python DAGs, and any multi-step pipeline. Wrap your graph — keep your logic.",
+    body: "Works with LangGraph, plain Python DAGs, and any multi-step pipeline.",
   },
 ];
 
 export function Features() {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
   return (
     <section id="features" className="relative pt-24 lg:pt-32 pb-10 lg:pb-14">
       <div className="mx-auto max-w-[1280px] px-6 lg:px-10">
@@ -73,50 +76,70 @@ export function Features() {
           </motion.h2>
         </div>
 
-        {/* Cards */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {FEATURES.map((f, i) => (
-            <motion.div
-              key={f.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{
-                duration: 0.5,
-                delay: i * 0.07,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              className="group relative rounded-xl p-6 lg:p-7 transition-all duration-300 hover:-translate-y-0.5"
-              style={{ background: "var(--surface)" }}
-            >
-              {/* Icon */}
-              <div
-                className="w-9 h-9 rounded-lg flex items-center justify-center mb-5 transition-colors duration-300 group-hover:text-[var(--accent-soft)]"
-                style={{
-                  background: "rgba(109,92,255,0.06)",
-                  color: "var(--text-dim)",
+        {/* Feature names — inline with tooltip */}
+        <div className="flex flex-wrap gap-2 sm:gap-3">
+          {FEATURES.map((f, i) => {
+            const isActive = activeIndex === i;
+            return (
+              <motion.div
+                key={f.title}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  duration: 0.4,
+                  delay: i * 0.06,
+                  ease: [0.22, 1, 0.36, 1],
                 }}
+                className="relative"
+                onMouseEnter={() => setActiveIndex(i)}
+                onMouseLeave={() => setActiveIndex(null)}
+                onClick={() => setActiveIndex(isActive ? null : i)}
               >
-                <f.icon size={17} strokeWidth={1.5} />
-              </div>
+                <button
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-[14px] sm:text-[15px] font-medium transition-all duration-200 cursor-default select-none"
+                  style={{
+                    color: isActive ? "white" : "var(--text-muted)",
+                    background: isActive
+                      ? "rgba(109,92,255,0.1)"
+                      : "rgba(255,255,255,0.03)",
+                  }}
+                >
+                  <f.icon
+                    size={15}
+                    strokeWidth={1.5}
+                    className="transition-colors duration-200"
+                    style={{
+                      color: isActive
+                        ? "var(--accent-soft)"
+                        : "var(--text-dim)",
+                    }}
+                  />
+                  {f.title}
+                </button>
 
-              {/* Text */}
-              <h3 className="text-[15px] text-white font-medium leading-[1.3] mb-2">
-                {f.title}
-              </h3>
-              <p className="text-[13.5px] leading-[1.65] text-[var(--text-muted)]">
-                {f.body}
-              </p>
-
-              {/* Hover glow — very subtle */}
-              <div
-                className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                style={{
-                  boxShadow: "inset 0 0 0 1px rgba(109,92,255,0.1), 0 4px 24px -8px rgba(109,92,255,0.08)",
-                }}
-              />
-            </motion.div>
-          ))}
+                {/* Tooltip — inline, pushes content down on mobile */}
+                <AnimatePresence>
+                  {isActive && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -4, scale: 0.97 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -4, scale: 0.97 }}
+                      transition={{ duration: 0.15, ease: "easeOut" }}
+                      className="absolute left-0 top-full mt-2 z-20 w-[260px] sm:w-[280px] px-4 py-3 rounded-lg text-[13px] leading-[1.6] text-[var(--text-muted)]"
+                      style={{
+                        background: "var(--surface-2)",
+                        border: "1px solid var(--border)",
+                        boxShadow: "0 8px 32px -8px rgba(0,0,0,0.6)",
+                      }}
+                    >
+                      {f.body}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
