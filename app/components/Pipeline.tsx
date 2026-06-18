@@ -64,9 +64,23 @@ export function Pipeline() {
 
       <div className="mx-auto max-w-[1280px] px-6 lg:px-10">
         <div className="text-center mb-10">
-          <div className="eyebrow inline-block">▸ Watch ARGUS catch a failure</div>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="eyebrow inline-block"
+          >
+            ▸ Watch ARGUS catch a failure
+          </motion.div>
 
-          <h2 className="mt-5 text-[36px] sm:text-[46px] lg:text-[54px] leading-[1.05] tracking-[-0.03em] font-medium">
+          <motion.h2
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-5 text-[36px] sm:text-[46px] lg:text-[54px] leading-[1.05] tracking-[-0.03em] font-medium"
+          >
             Every node, traced.
             <br />
             <span
@@ -81,13 +95,19 @@ export function Pipeline() {
             >
               Every silence, surfaced.
             </span>
-          </h2>
+          </motion.h2>
 
-          <p className="mt-5 text-[14.5px] leading-[1.65] text-[var(--text-muted)] max-w-xl mx-auto">
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="mt-5 text-[14.5px] leading-[1.65] text-[var(--text-muted)] max-w-xl mx-auto"
+          >
             ARGUS watches every step of your agent pipeline during development and testing,
             <br className="hidden sm:block" />
             catching silent failures before they ever reach production.
-          </p>
+          </motion.p>
         </div>
 
         {/* node strip — desktop */}
@@ -95,10 +115,10 @@ export function Pipeline() {
           {NODES.map((n, i) => (
             <div key={n.name} className="flex items-start flex-1 min-w-0">
               <div className="flex-1 min-w-0">
-                <NodeCard node={n} delay={i * 0.12} />
+                <NodeCard node={n} delay={i * 0.2} index={i} />
               </div>
               {i < NODES.length - 1 && (
-                <DashConnector delay={i * 0.12 + 0.08} />
+                <DashConnector delay={i * 0.2 + 0.15} status={n.status} />
               )}
             </div>
           ))}
@@ -109,14 +129,17 @@ export function Pipeline() {
           {NODES.map((n, i) => (
             <div key={n.name} className="flex flex-col items-start gap-2">
               {n.rootCause ? (
-                /* summarize node + root cause side by side */
                 <div className="flex items-start gap-3 w-full">
                   <div className="flex-1 min-w-0">
-                    <NodeCard node={n} delay={i * 0.1} />
+                    <NodeCard node={n} delay={i * 0.1} index={i} />
                   </div>
-                  {/* horizontal connector + callout */}
-                  <div className="shrink-0 flex items-center self-center gap-0">
-                    {/* horizontal dashed line pointing from card to badge */}
+                  <motion.div
+                    className="shrink-0 flex items-center self-center gap-0"
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: i * 0.1 + 0.3, type: "spring", stiffness: 150 }}
+                  >
                     <svg width="24" height="2" className="shrink-0" aria-hidden>
                       <line x1="0" y1="1" x2="24" y2="1" stroke="var(--signal-warn)" strokeWidth="1" strokeDasharray="3 3" opacity="0.5" />
                     </svg>
@@ -133,10 +156,10 @@ export function Pipeline() {
                         </p>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
               ) : (
-                <NodeCard node={n} delay={i * 0.1} />
+                <NodeCard node={n} delay={i * 0.1} index={i} />
               )}
               {i < NODES.length - 1 && (
                 <div className="ml-7 h-6 w-px bg-[var(--border)]" />
@@ -153,21 +176,28 @@ export function Pipeline() {
 function NodeCard({
   node,
   delay,
+  index,
 }: {
   node: PipelineNode;
   delay: number;
+  index: number;
 }) {
   const cls = statusClasses(node.status);
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 16, scale: 0.9 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.5, ease: "easeOut", delay }}
+      transition={{
+        duration: 0.5,
+        ease: [0.22, 1, 0.36, 1],
+        delay,
+        scale: { type: "spring", stiffness: 200, damping: 20, delay },
+      }}
       className="relative z-10"
     >
       <div
-        className={`relative panel-tight px-3.5 py-3 ${
+        className={`relative panel-tight pipeline-node px-3.5 py-3 ${
           node.status === "warn" ? "glow-warn" : ""
         }`}
         style={{
@@ -176,11 +206,20 @@ function NodeCard({
       >
         {/* header row */}
         <div className="flex items-center gap-2.5">
-          <span
+          <motion.span
             className={`flex items-center justify-center w-6 h-6 rounded-md ${cls.iconBg}`}
+            initial={{ scale: 0, rotate: -45 }}
+            whileInView={{ scale: 1, rotate: 0 }}
+            viewport={{ once: true }}
+            transition={{
+              delay: delay + 0.2,
+              type: "spring",
+              stiffness: 300,
+              damping: 15,
+            }}
           >
             <StatusIcon status={node.status} />
-          </span>
+          </motion.span>
           <span className="text-[13px] text-white font-medium truncate">
             {node.name}
           </span>
@@ -203,39 +242,28 @@ function NodeCard({
         </p>
       </div>
 
-      {/* root cause callout — below on desktop, right side on mobile */}
+      {/* root cause callout — desktop */}
       {node.rootCause && (
-        <>
-          {/* desktop: below the card */}
-          <div className="hidden md:flex mt-3 flex-col items-center">
-            <span className="w-px h-3 bg-[var(--signal-warn)]/50" />
-            <span className="px-2 py-0.5 rounded-[4px] border border-[var(--signal-warn)]/60 bg-[rgba(245,177,60,0.06)] text-[10px] tracking-[0.18em] uppercase text-[var(--signal-warn)]">
-              Root Cause
-            </span>
-            <svg
-              width="2"
-              height="10"
-              className="mt-0.5"
-              aria-hidden
-            >
-              <line
-                x1="1"
-                y1="0"
-                x2="1"
-                y2="10"
-                stroke="var(--signal-warn)"
-                strokeWidth="1"
-                strokeDasharray="2 2"
-                opacity="0.4"
-              />
-            </svg>
-            <div className="mt-1 max-w-[180px] rounded-md border border-[var(--signal-warn)]/30 bg-[rgba(245,177,60,0.04)] px-3 py-2">
-              <p className="text-[10.5px] leading-[1.5] text-[var(--signal-warn)] text-center">
-                ARGUS detected this failure before it degraded downstream nodes
-              </p>
-            </div>
+        <motion.div
+          className="hidden md:flex mt-3 flex-col items-center"
+          initial={{ opacity: 0, y: -10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: delay + 0.4, duration: 0.4, type: "spring", stiffness: 150 }}
+        >
+          <span className="w-px h-3 bg-[var(--signal-warn)]/50" />
+          <span className="px-2 py-0.5 rounded-[4px] border border-[var(--signal-warn)]/60 bg-[rgba(245,177,60,0.06)] text-[10px] tracking-[0.18em] uppercase text-[var(--signal-warn)]">
+            Root Cause
+          </span>
+          <svg width="2" height="10" className="mt-0.5" aria-hidden>
+            <line x1="1" y1="0" x2="1" y2="10" stroke="var(--signal-warn)" strokeWidth="1" strokeDasharray="2 2" opacity="0.4" />
+          </svg>
+          <div className="mt-1 max-w-[180px] rounded-md border border-[var(--signal-warn)]/30 bg-[rgba(245,177,60,0.04)] px-3 py-2">
+            <p className="text-[10.5px] leading-[1.5] text-[var(--signal-warn)] text-center">
+              ARGUS detected this failure before it degraded downstream nodes
+            </p>
           </div>
-        </>
+        </motion.div>
       )}
     </motion.div>
   );
@@ -244,21 +272,13 @@ function NodeCard({
 function statusClasses(s: NodeStatus) {
   switch (s) {
     case "ok":
-      return {
-        iconBg: "bg-[rgba(0,240,168,0.1)] text-[var(--signal-ok)]",
-      };
+      return { iconBg: "bg-[rgba(0,240,168,0.1)] text-[var(--signal-ok)]" };
     case "warn":
-      return {
-        iconBg: "bg-[rgba(245,177,60,0.12)] text-[var(--signal-warn)]",
-      };
+      return { iconBg: "bg-[rgba(245,177,60,0.12)] text-[var(--signal-warn)]" };
     case "fail":
-      return {
-        iconBg: "bg-[rgba(255,90,106,0.12)] text-[var(--signal-fail)]",
-      };
+      return { iconBg: "bg-[rgba(255,90,106,0.12)] text-[var(--signal-fail)]" };
     default:
-      return {
-        iconBg: "bg-[rgba(255,255,255,0.04)] text-[var(--text-dim)]",
-      };
+      return { iconBg: "bg-[rgba(255,255,255,0.04)] text-[var(--text-dim)]" };
   }
 }
 
@@ -275,7 +295,7 @@ function StatusIcon({ status }: { status: NodeStatus }) {
   }
 }
 
-function DashConnector({ delay }: { delay: number }) {
+function DashConnector({ delay, status }: { delay: number; status: NodeStatus }) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -292,13 +312,14 @@ function DashConnector({ delay }: { delay: number }) {
           y1="4"
           x2="22"
           y2="4"
-          stroke="var(--border-strong)"
+          stroke={status === "ok" ? "rgba(0,240,168,0.3)" : "var(--border-strong)"}
           strokeWidth="1.2"
           strokeDasharray="2 3"
+          className="arrow-flow"
         />
         <path
           d="M20 1 L26 4 L20 7"
-          stroke="var(--border-strong)"
+          stroke={status === "ok" ? "rgba(0,240,168,0.3)" : "var(--border-strong)"}
           strokeWidth="1.2"
           fill="none"
           strokeLinecap="round"
@@ -308,4 +329,3 @@ function DashConnector({ delay }: { delay: number }) {
     </motion.div>
   );
 }
-

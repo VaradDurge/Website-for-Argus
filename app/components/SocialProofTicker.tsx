@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { motion } from "framer-motion";
 import { RiTwitterXFill, RiDiscordFill, RiRedditFill, RiInstagramFill } from "@remixicon/react";
 
 // ═══════════════════════════════════════
@@ -153,7 +154,7 @@ function CardComponent({ card }: { card: ProofCard }) {
   const avatarUrl = `https://api.dicebear.com/9.x/notionists/svg?seed=${card.avatar}&backgroundColor=transparent`;
 
   return (
-    <div className="shrink-0 w-[380px] rounded-2xl bg-[var(--surface)] border border-[var(--border)] p-6 hover:border-[var(--border-strong)] transition-colors flex flex-col justify-between">
+    <div className="proof-card shrink-0 w-[380px] rounded-2xl bg-[var(--surface)] border border-[var(--border)] p-6 flex flex-col justify-between">
       {/* Quote */}
       <p className="text-[14px] leading-[1.7] text-[var(--text-muted)] mb-6">
         &ldquo;{card.text}&rdquo;
@@ -238,17 +239,37 @@ export function SocialProofTicker() {
       }}
     >
       {/* Section header */}
-      <div className="text-center mb-12 px-6">
+      <motion.div
+        className="text-center mb-12 px-6"
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      >
         <p className="text-[22px] sm:text-[28px] lg:text-[32px] font-medium text-white leading-[1.3] max-w-[600px] mx-auto">
           The internet has been complaining about this for years.
           <br />
           <span className="text-[var(--text-muted)]">We&apos;re just building the fix.</span>
         </p>
-      </div>
+      </motion.div>
 
       <div className="space-y-5">
-        <TickerRow cards={ROW_1} direction="left" speed={40} />
-        <TickerRow cards={ROW_2} direction="right" speed={45} />
+        <motion.div
+          initial={{ opacity: 0, x: -30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          <TickerRow cards={ROW_1} direction="left" speed={40} />
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+        >
+          <TickerRow cards={ROW_2} direction="right" speed={45} />
+        </motion.div>
       </div>
     </section>
   );

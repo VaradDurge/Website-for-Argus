@@ -496,6 +496,70 @@
   to { left: 150%; }
 }
 
+/* ───────── nav/footer link hover underline ───────── */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--accent-soft);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.25s ease;
+}
+.nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+/* ───────── feature card hover ───────── */
+.feature-cell {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.feature-cell:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -8px rgba(109, 92, 255, 0.15);
+}
+.feature-cell:hover .feature-icon {
+  transform: rotate(6deg) scale(1.1);
+}
+.feature-icon {
+  transition: transform 0.3s ease;
+}
+
+/* ───────── social proof card lift ───────── */
+.proof-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.proof-card:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.5);
+  border-color: var(--border-strong);
+}
+
+/* ───────── copy button pulse ───────── */
+@keyframes copy-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(0, 240, 168, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(0, 240, 168, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 240, 168, 0); }
+}
+.copy-pulse {
+  animation: copy-pulse 0.5s ease-out;
+}
+
+/* ───────── pipeline node hover ───────── */
+.pipeline-node {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.pipeline-node:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 16px -4px rgba(109, 92, 255, 0.2);
+}
+
 /* ───────── social proof ticker ───────── */
 @keyframes ticker-left {
   from { transform: translateX(0); }

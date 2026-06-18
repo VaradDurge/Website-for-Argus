@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { motion } from "framer-motion";
 import { Check, Copy } from "lucide-react";
 import { ButtonColorful } from "@/components/ui/button-colorful";
 import { StarButton } from "@/components/ui/star-button";
@@ -20,6 +21,7 @@ const HERO_VERBS = [
 export function Hero() {
   const [betaOpen, setBetaOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const copyRef = useRef<HTMLButtonElement>(null);
 
   return (
     <section className="relative">
@@ -39,29 +41,62 @@ export function Hero() {
       <div className="mx-auto max-w-[1280px] px-6 lg:px-10 pt-20 lg:pt-28 pb-0">
         {/* Centered stack */}
         <div className="text-center max-w-[800px] mx-auto">
-          <div className="eyebrow inline-block">
+          {/* Eyebrow — fade up + blur */}
+          <motion.div
+            initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="eyebrow inline-block"
+          >
             ❍ Forensic Observability for AI Agents
-          </div>
+          </motion.div>
 
+          {/* H1 — staggered lines */}
           <h1 className="mt-6 font-medium text-[36px] sm:text-[64px] lg:text-[80px] xl:text-[92px] leading-[1.05] tracking-[-0.04em]">
-            Your agent finished.
+            <motion.span
+              className="inline-block"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            >
+              Your agent finished.
+            </motion.span>
             <br />
-            But did it actually{" "}
-            <MorphingText
-              words={HERO_VERBS}
-              interval={2800}
-              gradient
-              className="font-serif-italic"
-            />
+            <motion.span
+              className="inline-block"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            >
+              But did it actually{" "}
+              <MorphingText
+                words={HERO_VERBS}
+                interval={2800}
+                gradient
+                className="font-serif-italic"
+              />
+            </motion.span>
           </h1>
 
-          <p className="mt-6 mx-auto max-w-[480px] text-[15px] sm:text-[17px] leading-[1.65] text-[var(--text-muted)]">
+          {/* Subtitle — fade + blur */}
+          <motion.p
+            initial={{ opacity: 0, y: 12, filter: "blur(4px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{ duration: 0.6, delay: 0.45, ease: "easeOut" }}
+            className="mt-6 mx-auto max-w-[480px] text-[15px] sm:text-[17px] leading-[1.65] text-[var(--text-muted)]"
+          >
             ARGUS catches silent failures and traces root causes{" "}
             <span className="text-white font-medium">before you deploy</span> —
             so broken pipelines never reach production.
-          </p>
+          </motion.p>
 
-          <div className="mt-8 flex items-center justify-center gap-3 flex-wrap">
+          {/* CTA buttons — scale in */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.6, type: "spring", stiffness: 150, damping: 20 }}
+            className="mt-8 flex items-center justify-center gap-3 flex-wrap"
+          >
             <button onClick={() => setBetaOpen(true)}>
               <ButtonColorful label="Book a Call" />
             </button>
@@ -73,16 +108,27 @@ export function Hero() {
                 Read the docs
               </StarButton>
             </a>
-          </div>
+          </motion.div>
 
-          {/* pip install line */}
-          <div className="mt-5 inline-flex items-center gap-2 font-mono text-[11px] sm:text-[12px] text-[var(--text-dim)]">
+          {/* pip install line — fade in */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.75 }}
+            className="mt-5 inline-flex items-center gap-2 font-mono text-[11px] sm:text-[12px] text-[var(--text-dim)]"
+          >
             <span className="text-[var(--accent-soft)]">$</span>
             <span className="text-[var(--text-muted)]">pip install argus-agents</span>
             <button
+              ref={copyRef}
               onClick={() => {
                 navigator.clipboard.writeText("pip install argus-agents");
                 setCopied(true);
+                if (copyRef.current) {
+                  copyRef.current.classList.remove("copy-pulse");
+                  void copyRef.current.offsetWidth;
+                  copyRef.current.classList.add("copy-pulse");
+                }
                 setTimeout(() => setCopied(false), 1400);
               }}
               className="shrink-0 inline-flex items-center justify-center w-6 h-6 rounded-md border border-[var(--border)] text-[var(--text-muted)] hover:text-white hover:border-[var(--border-strong)] transition-colors"
@@ -93,13 +139,18 @@ export function Hero() {
             <span className="text-[var(--text-dim)]/60 hidden sm:inline">
               · 4 lines to integrate
             </span>
-          </div>
+          </motion.div>
         </div>
 
-        {/* Trial UI — full width like Linear */}
-        <div className="mt-14 lg:mt-20 max-w-[1200px] mx-auto">
+        {/* Trial UI — the big reveal */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-14 lg:mt-20 max-w-[1200px] mx-auto"
+        >
           <TrialUI />
-        </div>
+        </motion.div>
       </div>
     </section>
   );
