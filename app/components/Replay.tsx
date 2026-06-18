@@ -152,13 +152,13 @@ export function Replay() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-5"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-3"
           >
             {/* Before */}
-            <div className="panel p-5">
-              <div className="flex items-center gap-2.5 mb-5">
+            <div className="panel p-4">
+              <div className="flex items-center gap-2 mb-3">
                 <Badge status="fail" icon={<X size={10} />}>Before</Badge>
-                <span className="ml-auto text-[12px] text-[var(--text-dim)]">step 3: summarize</span>
+                <span className="ml-auto text-[11px] text-[var(--text-dim)]">step 3: summarize</span>
               </div>
               <Row label="confidence" value="0.42" status="fail" />
               <Row label="key_points" value="[]" status="fail" />
@@ -167,10 +167,10 @@ export function Replay() {
             </div>
 
             {/* After */}
-            <div className="panel p-5">
-              <div className="flex items-center gap-2.5 mb-5">
+            <div className="panel p-4">
+              <div className="flex items-center gap-2 mb-3">
                 <Badge status="ok" icon={<Check size={10} />}>After</Badge>
-                <span className="ml-auto text-[12px] text-[var(--text-dim)]">replayed</span>
+                <span className="ml-auto text-[11px] text-[var(--text-dim)]">replayed</span>
               </div>
               <Row label="confidence" value="0.93" status="ok" />
               <Row label="key_points" value='["safety", "transparency"]' status="ok" />
@@ -185,30 +185,30 @@ export function Replay() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.5, delay: 0.15 }}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-5"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-3"
           >
-            <div className="panel p-5">
-              <div className="flex items-center gap-2.5 mb-3">
-                <Database size={14} className="text-[var(--accent-soft)]" />
-                <span className="text-[14px] font-medium text-white">Reused</span>
+            <div className="panel p-4">
+              <div className="flex items-center gap-2 mb-1.5">
+                <Database size={13} className="text-[var(--accent-soft)]" />
+                <span className="text-[13px] font-medium text-white">Reused</span>
               </div>
-              <p className="text-[13px] text-[var(--text-muted)] mb-3">States & outputs from completed steps</p>
+              <p className="text-[12px] text-[var(--text-muted)] mb-2.5">States & outputs from completed steps</p>
               <div className="flex items-center gap-2 flex-wrap">
                 <Badge status="ok" icon={<Check size={9} />} small>extract</Badge>
                 <Badge status="ok" icon={<Check size={9} />} small>enrich</Badge>
-                <span className="text-[12px] text-[var(--signal-ok)] ml-1">2.47s saved</span>
+                <span className="text-[11px] text-[var(--signal-ok)] ml-1">2.47s saved</span>
               </div>
             </div>
 
-            <div className="panel p-5">
-              <div className="flex items-center gap-2.5 mb-3">
-                <Zap size={14} className="text-[var(--signal-warn)]" />
-                <span className="text-[14px] font-medium text-white">Ran</span>
+            <div className="panel p-4">
+              <div className="flex items-center gap-2 mb-1.5">
+                <Zap size={13} className="text-[var(--signal-warn)]" />
+                <span className="text-[13px] font-medium text-white">Ran</span>
               </div>
-              <p className="text-[13px] text-[var(--text-muted)] mb-3">Only steps after the selected point</p>
+              <p className="text-[12px] text-[var(--text-muted)] mb-2.5">Only steps after the selected point</p>
               <div className="flex items-center gap-2 flex-wrap">
                 <Badge status="warn" icon={<AlertTriangle size={9} />} small>summarize</Badge>
-                <span className="text-[12px] text-[var(--signal-warn)] ml-1">1.34s compute</span>
+                <span className="text-[11px] text-[var(--signal-warn)] ml-1">1.34s compute</span>
               </div>
             </div>
           </motion.div>
@@ -249,9 +249,9 @@ function Badge({ status, children, icon, small }: { status: StepStatus; children
 
 function Row({ label, value, status, last }: { label: string; value: string; status: "ok" | "fail"; last?: boolean }) {
   return (
-    <div className={`flex items-center justify-between py-3 ${last ? "" : "border-b border-[var(--border)]/40"}`}>
-      <span className="text-[13px] text-[var(--text-dim)]">{label}</span>
-      <span className="text-[13px] font-medium truncate ml-4 text-right" style={{ color: CLR[status] }}>{value}</span>
+    <div className={`flex items-center justify-between py-2 ${last ? "" : "border-b border-[var(--border)]/40"}`}>
+      <span className="text-[12px] text-[var(--text-dim)]">{label}</span>
+      <span className="text-[12px] font-medium truncate ml-4 text-right" style={{ color: CLR[status] }}>{value}</span>
     </div>
   );
 }
