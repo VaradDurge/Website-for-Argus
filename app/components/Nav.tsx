@@ -109,6 +109,14 @@ export function Nav() {
               Features
             </a>
           </li>
+          <li>
+            <a
+              href="/pricing"
+              className="nav-link px-3.5 py-2 text-[13.5px] text-[var(--text-muted)] hover:text-white transition-colors rounded-md"
+            >
+              Pricing
+            </a>
+          </li>
         </ul>
 
         {/* ── DESKTOP: right CTA buttons ── */}
@@ -158,6 +166,7 @@ export function Nav() {
                 { type: "link" as const, label: "Docs", href: "/docs" },
                 { type: "link" as const, label: "Replay", href: "#replay" },
                 { type: "link" as const, label: "Features", href: "#features" },
+                { type: "link" as const, label: "Pricing", href: "/pricing" },
               ].map((item, i) => (
                 <motion.div
                   key={item.label}
