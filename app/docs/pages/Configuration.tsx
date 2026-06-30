@@ -6,56 +6,118 @@ import { ParamTable } from "../components/ParamTable";
 export default function Configuration() {
   return (
     <>
-      <Heading level={2} id="config-file">
-        Config File
+      <Heading level={2} id="constructor">
+        Constructor Parameters
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        ARGUS looks for <code>argus.yaml</code> in your project root. Every setting has a sensible
-        default — you only need a config file to override them.
+        Everything is optional. Pass to the <code>ArgusWatcher</code> constructor to customize
+        behavior per run.
       </p>
 
+      <ParamTable
+        groups={[
+          {
+            label: "Core",
+            params: [
+              {
+                name: "graph",
+                type: "StateGraph",
+                default: "None",
+                description: "LangGraph graph to monitor. If passed, watch() is called automatically.",
+              },
+              {
+                name: "max_field_size",
+                type: "int",
+                default: "50_000",
+                description: "Max characters per field before truncation in stored outputs.",
+              },
+              {
+                name: "strict",
+                type: "bool",
+                default: "False",
+                description: "Enable extra checks: nested error keys, rate-limit responses, empty lists, type mismatches. Recommended for CI/staging.",
+              },
+              {
+                name: "investigate",
+                type: 'bool | "always"',
+                default: "True",
+                description: 'LLM root-cause investigation. True = on failure only, "always" = every node, False = off.',
+              },
+            ],
+          },
+          {
+            label: "Security",
+            params: [
+              {
+                name: "redact_keys",
+                type: "set[str]",
+                default: "None",
+                description: 'Field names to redact from stored outputs (e.g. {"password", "api_key"}).',
+              },
+              {
+                name: "validators",
+                type: "dict",
+                default: "None",
+                description: 'Per-node semantic validators. Use "*" as key to run on every node. Each validator is a (bool, str) callable.',
+              },
+            ],
+          },
+          {
+            label: "Replay & Evaluation",
+            params: [
+              {
+                name: "persist_state",
+                type: "bool",
+                default: "True",
+                description: "Save run records to .argus/runs/. Set False for ephemeral monitoring.",
+              },
+              {
+                name: "record_http",
+                type: "bool",
+                default: "True",
+                description: "Record all external HTTP/API calls for deterministic replay.",
+              },
+              {
+                name: "semantic_judge",
+                type: "bool",
+                default: "False",
+                description: "LLM-powered quality judge on every node output. Requires OPENAI_API_KEY.",
+              },
+              {
+                name: "judge_model",
+                type: "str",
+                default: '"gpt-4o"',
+                description: "Model for the semantic judge and investigation.",
+              },
+            ],
+          },
+        ]}
+      />
+
+      <Heading level={2} id="example">
+        Full Example
+      </Heading>
+
       <CodeBlock
-        language="yaml"
-        filename="argus.yaml"
-        code={`# Core watcher settings
-watcher:
-  strict: false
-  investigate: true
-  max_field_size: 50000
-
-# Detection layer configuration
-detection:
-  statistical:
-    enabled: true
-    z_threshold: 2.5
-  semantic:
-    enabled: true
-    similarity_threshold: 0.7
-  behavioral:
-    enabled: true
-    max_loop_count: 10
-  structural:
-    enabled: true
-
-# Storage
-storage:
-  backend: sqlite
-  path: .argus/traces.db
-
-# Security
-security:
-  redact_keys:
-    - api_key
-    - password
-    - secret
-    - token`}
+        language="python"
+        code={`watcher = ArgusWatcher(
+    graph,
+    semantic_judge=True,
+    judge_model="gpt-4o-mini",
+    strict=True,
+    record_http=True,
+    redact_keys={"api_key", "token"},
+    validators={
+        "summarize": lambda o: (len(o.get("summary", "")) > 10, "Summary too short"),
+    },
+)`}
       />
 
       <Heading level={2} id="environment-variables">
         Environment Variables
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        All config values can be set via environment variables with the <code>ARGUS_</code> prefix.
+        Configuration can also be set via environment variables with the <code>ARGUS_</code> prefix.
         Environment variables override config file values.
       </p>
 
@@ -80,35 +142,24 @@ security:
                 name: "ARGUS_MAX_FIELD_SIZE",
                 type: "int",
                 default: "50000",
-                description: "Maximum character length for captured state fields. Larger values give more context but use more storage.",
+                description: "Maximum character length for captured state fields.",
               },
             ],
           },
           {
-            label: "Semantic detection",
+            label: "Semantic",
             params: [
               {
                 name: "ARGUS_SEMANTIC_JUDGE",
                 type: "bool",
                 default: "false",
-                description: "Enable LLM-as-judge for semantic detection. Requires an API key for the judge model.",
+                description: "Enable LLM-as-judge for semantic detection. Requires OPENAI_API_KEY.",
               },
               {
                 name: "ARGUS_JUDGE_MODEL",
                 type: "str",
                 default: '"gpt-4o"',
-                description: "Model to use for LLM-as-judge semantic evaluation.",
-              },
-            ],
-          },
-          {
-            label: "Storage",
-            params: [
-              {
-                name: "ARGUS_STORAGE_PATH",
-                type: "str",
-                default: '".argus/traces.db"',
-                description: "Path to the SQLite database file for trace storage.",
+                description: "Model to use for LLM-as-judge evaluation.",
               },
             ],
           },
@@ -133,53 +184,44 @@ security:
         settings (dev vs prod), and the config file for project-wide defaults.
       </Callout>
 
-      <Heading level={2} id="example-config">
-        Example Config
+      <Heading level={2} id="validators">
+        Validators
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        A production-ready configuration with semantic judging enabled and sensitive keys redacted:
+        Validators catch semantic failures — when the structure is fine but the value is wrong.
+        Each validator is a callable that returns <code>(bool, str)</code>.
       </p>
 
       <CodeBlock
-        language="yaml"
-        filename="argus.yaml"
-        code={`watcher:
-  strict: true
-  investigate: "always"
-  max_field_size: 100000
+        language="python"
+        code={`watcher = ArgusWatcher(graph, validators={
+    "classify": lambda o: (o.get("label") in ["yes", "no"], "unexpected label"),
+    "*":        lambda o: ("error" not in o, "error key present"),
+})`}
+      />
 
-detection:
-  statistical:
-    enabled: true
-    z_threshold: 2.0
-  semantic:
-    enabled: true
-    similarity_threshold: 0.75
-    judge: true
-    judge_model: "gpt-4o"
-  behavioral:
-    enabled: true
-    max_loop_count: 5
-  structural:
-    enabled: true
+      <p className="mt-2 text-[13px] text-[var(--text-dim)]">
+        <code>&quot;*&quot;</code> runs on every node.
+      </p>
 
-security:
-  redact_keys:
-    - api_key
-    - password
-    - secret
-    - token
-    - authorization
-    - x-api-key
+      <Heading level={2} id="strict-mode">
+        Strict Mode
+      </Heading>
+      <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        Strict mode enables additional detection patterns beyond the defaults: nested error keys,
+        rate limit responses, empty required lists, and <code>list[int]</code> vs{" "}
+        <code>list[str]</code> type mismatches.
+      </p>
 
-storage:
-  backend: sqlite
-  path: /var/argus/traces.db`}
+      <CodeBlock
+        language="python"
+        code={`# Recommended for CI/staging
+watcher = ArgusWatcher(graph, strict=True)`}
       />
 
       <Callout type="warning" title="Security">
         Always add sensitive field names to <code>redact_keys</code>. ARGUS captures full state at
-        every step — without redaction, API keys and secrets will appear in your traces.
+        every step — without redaction, API keys and secrets will appear in your stored runs.
       </Callout>
     </>
   );

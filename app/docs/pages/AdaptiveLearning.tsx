@@ -10,14 +10,14 @@ export default function AdaptiveLearning() {
         Overview
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        ARGUS doesn&apos;t just detect failures — it <span className="text-white font-medium">learns from them</span>.
-        When the semantic judge (LLM) identifies a new failure pattern during a run, it proposes a
-        candidate signature. You review and approve it in the Approvals page, and the heuristic engine
-        uses it for all future runs — <span className="text-white font-medium">without needing an LLM call</span>.
+        ARGUS learns from your runs. When the semantic judge discovers a new failure pattern, it
+        proposes a candidate signature. You review it in the{" "}
+        <span className="text-white font-medium">Approvals</span> page and choose: Private (local
+        only) or Shared (synced to all ARGUS users via cloud).
       </p>
       <p className="mt-4 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        This creates a feedback loop: expensive LLM analysis discovers patterns once, and cheap
-        heuristic matching catches them forever after.
+        Expensive LLM analysis discovers patterns once. Cheap heuristic matching catches them
+        forever after.
       </p>
 
       <Heading level={2} id="how-it-works">
@@ -26,14 +26,14 @@ export default function AdaptiveLearning() {
       <ol className="mt-3 space-y-3 text-[15px] leading-[1.75] text-[var(--text-muted)] list-decimal list-inside">
         <li>
           <span className="text-white font-medium">Discovery</span> — the LLM investigator analyzes
-          a failure and extracts a reusable pattern (regex, substring match, etc.)
+          a failure and extracts a reusable pattern
         </li>
         <li>
           <span className="text-white font-medium">Proposal</span> — the pattern is saved as a
           candidate in <code>.argus/candidates.json</code> with confidence, evidence, and reasoning
         </li>
         <li>
-          <span className="text-white font-medium">Review</span> — you open <code>argus ui</code> and
+          <span className="text-white font-medium">Review</span> — open <code>argus ui</code>,
           go to the Approvals page. Each candidate shows the pattern, match strategy, severity,
           confidence score, and source evidence
         </li>
@@ -86,7 +86,6 @@ export default function AdaptiveLearning() {
           <span>
             <span className="text-white font-medium">Bundled</span> — ships with ARGUS. Core patterns
             for placeholder outputs, semantic degradation markers, corrupted JSON, and repeated filler text.
-            Stored in <code>data/signatures.json</code> inside the package.
           </span>
         </li>
         <li className="flex gap-3">
@@ -101,9 +100,8 @@ export default function AdaptiveLearning() {
           <span className="text-[var(--signal-warn)] shrink-0">&#8227;</span>
           <span>
             <span className="text-white font-medium">Shared</span> — community-contributed patterns
-            synced from the cloud. Stored in <code>.argus/shared_signatures_cache.json</code>.
-            When you approve a pattern as &quot;Shared&quot;, it gets pushed to the cloud database
-            and becomes available to every ARGUS user.
+            synced from the cloud. When you approve a pattern as &quot;Shared&quot;, it gets pushed
+            to the cloud database and becomes available to every ARGUS user.
           </span>
         </li>
       </ul>
@@ -122,24 +120,11 @@ export default function AdaptiveLearning() {
         trigger the &quot;I cannot&quot; refusal pattern, even though it&apos;s a legitimate response.
       </p>
       <p className="mt-4 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        When <code>semantic_judge=True</code>, the LLM judge runs <span className="text-white font-medium">after</span>{" "}
-        heuristic detection and can override false positives. If a node failed <em>only</em> due to
-        heuristic signals (no structural issues, no validator failures, no tool errors), the judge
-        reviews the full input/output context and can clear the flag.
+        When <code>semantic_judge=True</code>, the LLM judge runs{" "}
+        <span className="text-white font-medium">after</span> heuristic detection and can override
+        false positives. It reviews the full input/output context and clears flags that don&apos;t
+        hold up under semantic analysis.
       </p>
-
-      <CodeBlock
-        language="python"
-        code={`# The judge overrides heuristic false positives automatically
-watcher = ArgusWatcher(semantic_judge=True)
-
-# Detection pipeline:
-# 1. Tool failure scan
-# 2. Structural inspection (missing fields, type mismatches)
-# 3. Heuristic signature scan (pattern matching)
-# 4. Behavioral anomaly detection
-# 5. Semantic judge (LLM) — can override step 3 if it's a false positive`}
-      />
 
       <Heading level={2} id="approvals-ui">
         Approvals UI
@@ -152,22 +137,20 @@ watcher = ArgusWatcher(semantic_judge=True)
           <span className="text-[var(--signal-warn)] shrink-0">&#8227;</span>
           <span>
             <span className="text-white font-medium">Pending</span> — candidates discovered by the
-            LLM investigator, awaiting your review. Each card shows pattern, strategy, severity,
-            confidence, evidence, and source runs.
+            LLM investigator, awaiting your review
           </span>
         </li>
         <li className="flex gap-3">
           <span className="text-[var(--signal-ok)] shrink-0">&#8227;</span>
           <span>
-            <span className="text-white font-medium">Private</span> — your locally approved patterns.
-            You can remove patterns from here if they turn out to cause false positives.
+            <span className="text-white font-medium">Private</span> — your locally approved patterns
           </span>
         </li>
         <li className="flex gap-3">
           <span className="text-[var(--accent-soft)] shrink-0">&#8227;</span>
           <span>
             <span className="text-white font-medium">Shared</span> — community patterns synced from
-            the cloud. Click &quot;Sync&quot; to pull the latest shared signatures.
+            the cloud
           </span>
         </li>
       </ul>
@@ -183,7 +166,7 @@ argus login`}
 
       <Callout type="info" title="Human-in-the-loop">
         No pattern enters the detection engine without your explicit approval. The LLM proposes,
-        you decide. This prevents the system from auto-adopting bad patterns.
+        you decide.
       </Callout>
     </>
   );

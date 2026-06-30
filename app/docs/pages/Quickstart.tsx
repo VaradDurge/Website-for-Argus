@@ -29,62 +29,59 @@ export default function Quickstart() {
       </p>
 
       <Heading level={2} id="instrument-your-graph">
-        Instrument Your Graph
+        Setup — Pick Whichever Fits Your Code
       </Heading>
-      <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Wrap your LangGraph pipeline with ARGUS in three lines:
-      </p>
 
-      <StepList
-        steps={[
-          {
-            title: "Import and create a watcher",
-            content: (
-              <CodeBlock
-                language="python"
-                code={`from argus import ArgusWatcher
+      <Heading level={3} id="option-a">
+        Option A — Pass graph to constructor (recommended)
+      </Heading>
+      <CodeBlock
+        language="python"
+        code={`from argus import ArgusWatcher
 
-watcher = ArgusWatcher()`}
-              />
-            ),
-          },
-          {
-            title: "Attach it to your graph",
-            content: (
-              <>
-                <p className="mb-2">
-                  Call <code>watch()</code> before compiling. ARGUS hooks into the graph&apos;s
-                  execution callbacks automatically.
-                </p>
-                <CodeBlock
-                  language="python"
-                  code={`watcher.watch(graph)
-app = graph.compile()`}
-                />
-              </>
-            ),
-          },
-          {
-            title: "Run and finalize",
-            content: (
-              <>
-                <p className="mb-2">
-                  Run your pipeline normally. When it&apos;s done, call <code>finalize()</code> to
-                  trigger detection and generate the trace.
-                </p>
-                <CodeBlock
-                  language="python"
-                  code={`result = app.invoke({"messages": [("user", "What's the weather?")]})
-watcher.finalize()`}
-                />
-              </>
-            ),
-          },
-        ]}
+watcher = ArgusWatcher(graph)      # attaches monitoring automatically
+app = graph.compile()
+result = app.invoke(initial_state) # run auto-saves when the last node finishes
+print(watcher.run_id)              # access the run ID directly`}
       />
 
+      <Heading level={3} id="option-b">
+        Option B — Separate watch call
+      </Heading>
+      <CodeBlock
+        language="python"
+        code={`from argus import ArgusWatcher
+
+watcher = ArgusWatcher()
+watcher.watch(graph)       # before graph.compile()
+app = graph.compile()
+result = app.invoke(initial_state)`}
+      />
+
+      <Heading level={3} id="option-c">
+        Option C — After compile
+      </Heading>
+      <CodeBlock
+        language="python"
+        code={`from argus import ArgusWatcher
+
+watcher = ArgusWatcher()
+app = graph.compile(checkpointer=memory)
+app = watcher.watch_compiled(app)   # works on already-compiled graphs
+result = app.invoke(initial_state)`}
+      />
+
+      <p className="mt-4 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        All three work. No changes to your node functions.
+      </p>
+
+      <Callout type="info" title="When is finalize() needed?">
+        Runs are saved automatically for linear and fan-out/fan-in graphs. Only cyclic graphs
+        (with back-edges) need a manual <code>watcher.finalize()</code> call.
+      </Callout>
+
       <Heading level={2} id="run-your-pipeline">
-        Run Your Pipeline
+        Full Example
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
         Here&apos;s a complete example — a simple LangGraph pipeline with ARGUS instrumentation:
@@ -94,12 +91,12 @@ watcher.finalize()`}
         language="python"
         filename="example.py"
         showLineNumbers
-        highlights={[1, 4, 5, 11]}
+        highlights={[1, 4, 11]}
         code={`from argus import ArgusWatcher
 from langgraph.graph import StateGraph
 
-# 1. Create the watcher
-watcher = ArgusWatcher()
+# 1. Create the watcher with graph (recommended)
+watcher = ArgusWatcher(graph)
 
 # 2. Define your graph (your existing code)
 graph = StateGraph(AgentState)
@@ -107,42 +104,38 @@ graph.add_node("agent", call_model)
 graph.add_node("tools", tool_node)
 # ... add edges ...
 
-# 3. Instrument and run
-watcher.watch(graph)
+# 3. Compile and run
 app = graph.compile()
 result = app.invoke(initial_state)
 
-# 4. Finalize — triggers detection
-watcher.finalize()`}
+# Run auto-saves for linear/fan-out graphs
+# For cyclic graphs, call watcher.finalize()`}
       />
-
-      <Callout type="warning" title="Important">
-        Always call <code>watcher.finalize()</code> after your pipeline completes. This is what
-        triggers the detection layers and generates the trace. If you skip it, ARGUS collects
-        raw data but doesn&apos;t analyze it.
-      </Callout>
 
       <Heading level={2} id="view-results">
         View Results
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        After <code>finalize()</code>, you can view results in several ways:
+        After your run completes, you can view results in several ways:
       </p>
 
       <CodeBlock
         language="bash"
-        code={`# View the latest trace in your terminal
-argus trace --last
+        code={`# List all runs
+argus list
 
-# Launch the replay UI
-argus ui
+# View the most recent run
+argus show last
 
-# Generate a report
-argus report --format html`}
+# View a specific run by ID (or 8-char prefix)
+argus show run abc12345
+
+# Launch the web dashboard
+argus ui`}
       />
 
       <VideoPlaceholder
-        title="Running argus trace and viewing results in the terminal"
+        title="Running argus show and viewing results in the terminal"
         caption="Quick walkthrough of the ARGUS CLI trace viewer"
       />
 

@@ -11,15 +11,17 @@ export default function Introduction() {
         What is ARGUS?
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        ARGUS is a <span className="text-white font-medium">forensic observability layer</span> for
+        ARGUS is a <span className="text-white font-medium">production readiness platform</span> for
         AI agent pipelines. It wraps your LangGraph (or any Python-based) workflow and watches
         every node execution, state transition, and tool call — then runs a multi-layered detection
         system to catch the failures that don&apos;t throw exceptions.
       </p>
       <p className="mt-4 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Think of it as a flight recorder for your AI pipeline. When something goes wrong — and in
-        agent systems, it&apos;s almost always <span className="text-white font-medium">silent</span> —
-        ARGUS gives you the trace, the root cause, and the replay ability to fix it.
+        Your LangGraph pipeline runs. No exception. But three nodes later something crashes with
+        a <code>KeyError</code>. The node that crashed didn&apos;t cause it — some node upstream
+        returned a dict with a missing field, and nothing caught it. ARGUS sits between your nodes
+        and catches silent failures, semantic degradation, and contract violations before they
+        reach production.
       </p>
 
       <Heading level={2} id="the-problem">
@@ -50,27 +52,38 @@ export default function Introduction() {
         language="python"
         code={`from argus import ArgusWatcher
 
-watcher = ArgusWatcher(
-    max_field_size=50_000,       # max chars per captured state field
-    strict=False,                # True = raise on detection (useful for CI)
-    investigate=True,            # run root cause analysis on failures
-    redact_keys=["api_key"],     # scrub sensitive fields from traces
-    persist_state=True,          # save state at each step for replay
-    record_http=False,           # record HTTP calls for mocked replay
-    semantic_judge=False,        # enable LLM-as-judge evaluation
-    judge_model="gpt-4o",       # model for semantic judging
-)
-
-watcher.watch(graph)             # instrument your LangGraph
+# Option A — pass graph to constructor (recommended)
+watcher = ArgusWatcher(graph)      # attaches monitoring automatically
 app = graph.compile()
-result = app.invoke(state)
-watcher.finalize()               # run detectors, generate trace`}
+result = app.invoke(initial_state) # run auto-saves when the last node finishes
+print(watcher.run_id)              # access the run ID directly`}
       />
 
       <p className="mt-4 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        After <code>finalize()</code>, ARGUS has captured every node&apos;s input/output, timed each
-        step, and run four layers of detection against the trace. If something went wrong — even
-        something subtle — you&apos;ll know about it.
+        All parameters are optional. Here&apos;s a full example with customization:
+      </p>
+
+      <CodeBlock
+        language="python"
+        code={`watcher = ArgusWatcher(
+    graph,                           # LangGraph graph to monitor
+    max_field_size=50_000,           # max chars per captured state field
+    strict=False,                    # True = raise on detection (useful for CI)
+    investigate=True,                # run root cause analysis on failures
+    redact_keys={"api_key", "token"},# scrub sensitive fields from traces
+    persist_state=True,              # save state at each step for replay
+    record_http=True,                # record HTTP calls for mocked replay
+    semantic_judge=False,            # enable LLM-as-judge evaluation
+    judge_model="gpt-4o",           # model for semantic judging
+    validators={
+        "summarize": lambda o: (len(o.get("summary", "")) > 10, "Summary too short"),
+    },
+)`}
+      />
+
+      <p className="mt-4 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        Runs are saved automatically for linear and fan-out/fan-in graphs. Only cyclic graphs
+        (with back-edges) need a manual <code>watcher.finalize()</code> call.
       </p>
 
       <figure className="my-6 max-w-[480px]">
@@ -108,15 +121,15 @@ watcher.finalize()               # run detectors, generate trace`}
         <li className="flex gap-3">
           <span className="text-[var(--signal-ok)] mt-1 shrink-0">&#8227;</span>
           <span>
-            <span className="text-white font-medium">Execution replay</span> — re-run any trace
-            from any step with modified inputs to test fixes
+            <span className="text-white font-medium">Execution replay</span> — re-run any node
+            with frozen upstream state. Only the target node onward re-executes with your fixed code.
           </span>
         </li>
         <li className="flex gap-3">
           <span className="text-[var(--signal-ok)] mt-1 shrink-0">&#8227;</span>
           <span>
-            <span className="text-white font-medium">Four detection layers</span> — statistical,
-            semantic, behavioral, and structural analysis working together
+            <span className="text-white font-medium">Four detection layers</span> — heuristic engine
+            (150+ signatures), anomaly detector, correlator, and LLM investigator
           </span>
         </li>
         <li className="flex gap-3">
@@ -136,10 +149,15 @@ watcher.finalize()               # run detectors, generate trace`}
         building with LangGraph, LangChain, or any Python-based agent framework and you need to
         know when your pipeline is silently producing bad output — ARGUS is for you.
       </p>
+      <p className="mt-4 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        ARGUS also works <span className="text-white font-medium">without LangGraph</span> — use{" "}
+        <code>ArgusSession</code> to wrap plain Python functions, Prefect tasks, or Temporal workflows.
+      </p>
 
       <Callout type="info" title="Beta">
-        ARGUS is currently in beta. The core API is stable, but some detection layers and CLI
-        commands are still being refined. Join the{" "}
+        ARGUS is currently in beta (v0.6.18). The core API is stable, but some detection layers and CLI
+        commands are still being refined. Requires Python 3.9+. LangGraph 0.2+ only needed for{" "}
+        <code>ArgusWatcher</code>. Join the{" "}
         <a href="https://discord.gg/nhbdZkcG" target="_blank" rel="noopener noreferrer" className="text-[var(--accent-soft)] underline decoration-dotted underline-offset-2 hover:text-white hover:decoration-solid">
           Discord
         </a>{" "}

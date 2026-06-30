@@ -10,8 +10,7 @@ export default function APIReference() {
         ArgusWatcher
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        The main class for instrumenting and monitoring pipeline executions. Import from the
-        top-level package:
+        The main class for instrumenting LangGraph pipelines. Import from the top-level package:
       </p>
 
       <CodeBlock
@@ -25,58 +24,64 @@ export default function APIReference() {
             label: "Constructor parameters",
             params: [
               {
-                name: "strict",
-                type: "bool",
-                default: "False",
-                description: "Raise an exception during finalize() if any detector fires.",
-              },
-              {
-                name: "investigate",
-                type: 'bool | "always"',
-                default: "True",
-                description: 'Run forensic analysis on detected failures. "always" runs forensics even without detections.',
+                name: "graph",
+                type: "StateGraph",
+                default: "None",
+                description: "LangGraph graph to monitor. If passed, watch() is called automatically.",
               },
               {
                 name: "max_field_size",
                 type: "int",
                 default: "50_000",
-                description: "Maximum characters per captured state field before truncation.",
-              },
-              {
-                name: "redact_keys",
-                type: "list[str] | None",
-                default: "None",
-                description: "Field names to redact from traces. Supports glob patterns (e.g., \"*.secret\").",
+                description: "Max characters per captured state field before truncation.",
               },
               {
                 name: "validators",
                 type: "dict | None",
                 default: "None",
-                description: "Custom validation functions keyed by field name. fn(value) → bool.",
+                description: 'Per-node semantic validators. Use "*" as key to run on every node. Each validator is a (bool, str) callable.',
+              },
+              {
+                name: "strict",
+                type: "bool",
+                default: "False",
+                description: "Enable extra checks: nested error keys, rate-limit responses, empty lists, type mismatches. Recommended for CI/staging.",
+              },
+              {
+                name: "investigate",
+                type: 'bool | "always"',
+                default: "True",
+                description: 'LLM root-cause investigation. True = on failure only, "always" = every node, False = off.',
+              },
+              {
+                name: "redact_keys",
+                type: "set[str] | None",
+                default: "None",
+                description: 'Field names to redact from stored outputs (e.g. {"password", "api_key"}).',
               },
               {
                 name: "persist_state",
                 type: "bool",
                 default: "True",
-                description: "Save full state at each step for replay capability.",
+                description: "Save run records to .argus/runs/. Set False for ephemeral monitoring.",
               },
               {
                 name: "record_http",
                 type: "bool",
-                default: "False",
-                description: "Record HTTP requests made during execution for mocked replay.",
+                default: "True",
+                description: "Record all external HTTP/API calls for deterministic replay.",
               },
               {
                 name: "semantic_judge",
                 type: "bool",
                 default: "False",
-                description: "Enable LLM-as-judge semantic evaluation.",
+                description: "LLM-powered quality judge on every node output. Requires OPENAI_API_KEY.",
               },
               {
                 name: "judge_model",
                 type: "str",
                 default: '"gpt-4o"',
-                description: "Model to use for semantic judging.",
+                description: "Model for the semantic judge and investigation.",
               },
             ],
           },
@@ -91,7 +96,8 @@ export default function APIReference() {
         .watch()
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Instrument a graph for monitoring. Must be called before <code>graph.compile()</code>.
+        Instrument a graph for monitoring. Call before <code>graph.compile()</code>.
+        Not needed if you passed <code>graph</code> to the constructor.
       </p>
 
       <CodeBlock
@@ -99,32 +105,31 @@ export default function APIReference() {
         code={`watcher.watch(graph: StateGraph) -> None`}
       />
 
-      <ParamTable
-        groups={[
-          {
-            label: "Parameters",
-            params: [
-              {
-                name: "graph",
-                type: "StateGraph",
-                description: "The LangGraph StateGraph instance to instrument. ARGUS patches the graph's node callbacks to intercept execution data.",
-              },
-            ],
-          },
-        ]}
-      />
-
       <Callout type="warning">
         Call <code>watch()</code> before <code>graph.compile()</code>. If you compile first,
-        ARGUS won&apos;t be able to instrument the nodes.
+        ARGUS can&apos;t instrument the nodes.
       </Callout>
+
+      <Heading level={3} id="watch-compiled">
+        .watch_compiled()
+      </Heading>
+      <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        Instrument an already-compiled graph. Use when you can&apos;t call{" "}
+        <code>watch()</code> before compilation (e.g. when using a checkpointer).
+      </p>
+
+      <CodeBlock
+        language="python"
+        code={`app = graph.compile(checkpointer=memory)
+app = watcher.watch_compiled(app) -> CompiledGraph`}
+      />
 
       <Heading level={3} id="finalize">
         .finalize()
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Complete the trace, run all detection layers, execute forensic analysis if needed, and
-        persist results to storage.
+        Run all detection layers, execute forensic analysis, and persist results.
+        Only needed for cyclic graphs — linear and fan-out graphs auto-save.
       </p>
 
       <CodeBlock
@@ -133,7 +138,7 @@ export default function APIReference() {
       />
 
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Returns the completed <code>Trace</code> object. If <code>strict=True</code> and any
+        Returns the completed <code>Trace</code> object. If <code>strict=True</code> and
         detections fire, raises <code>DetectionError</code> after storing the trace.
       </p>
 
@@ -141,7 +146,7 @@ export default function APIReference() {
         .get_trace()
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Retrieve the trace after finalization. Returns the same object as <code>finalize()</code>.
+        Retrieve the trace after the run. Returns the same object as <code>finalize()</code>.
       </p>
 
       <CodeBlock
@@ -157,6 +162,47 @@ trace.detections        # list[Detection]
 trace.forensics         # Forensics | None
 trace.summary           # str — human-readable summary`}
       />
+
+      <Heading level={3} id="run-id">
+        .run_id
+      </Heading>
+      <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        Access the run ID directly after execution.
+      </p>
+
+      <CodeBlock
+        language="python"
+        code={`print(watcher.run_id)   # e.g. "run-abc12345"`}
+      />
+
+      <Heading level={2} id="argus-session">
+        ArgusSession (without LangGraph)
+      </Heading>
+      <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        For plain Python functions, Prefect, Temporal, or any non-LangGraph pipeline:
+      </p>
+
+      <CodeBlock
+        language="python"
+        code={`from argus import ArgusSession
+
+session = ArgusSession()
+session.set_edges({"fetch": ["classify"], "classify": ["process"]})
+
+fetch    = session.wrap("fetch",    fetch_fn)
+classify = session.wrap("classify", classify_fn)
+process  = session.wrap("process",  process_fn)
+
+state = fetch(initial_state)
+state = classify(state)
+state = process(state)
+session.finalize()`}
+      />
+
+      <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        Works with any Python callable. <code>ArgusWatcher</code> requires LangGraph 0.2+;{" "}
+        <code>ArgusSession</code> has no framework dependency.
+      </p>
 
       <Heading level={2} id="data-models">
         Data Models
@@ -192,8 +238,8 @@ class Forensics:
       />
 
       <Callout type="info" title="Type hints">
-        All data models are fully typed with Python type hints. If you&apos;re using an IDE with
-        type checking, you&apos;ll get autocomplete and type validation throughout.
+        All data models are fully typed. Your IDE will give you autocomplete and type
+        validation throughout.
       </Callout>
     </>
   );

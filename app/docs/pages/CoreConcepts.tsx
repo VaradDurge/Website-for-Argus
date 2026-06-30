@@ -25,12 +25,10 @@ export default function CoreConcepts() {
         language="python"
         code={`from argus import ArgusWatcher
 
-watcher = ArgusWatcher(
-    strict=False,           # don't halt on detection
-    investigate=True,       # run root cause analysis
-    persist_state=True,     # save state for replay
-)
-watcher.watch(graph)`}
+watcher = ArgusWatcher(graph)      # attaches monitoring automatically
+app = graph.compile()
+result = app.invoke(initial_state) # run auto-saves when the last node finishes
+print(watcher.run_id)              # access the run ID directly`}
       />
 
       <Callout type="info">
@@ -38,51 +36,48 @@ watcher.watch(graph)`}
         create separate Watcher instances per run.
       </Callout>
 
-      <Heading level={2} id="detectors">
-        Detectors
+      <Heading level={2} id="detection-layers">
+        Detection Layers
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        <span className="text-white font-medium">Detectors</span> are the analysis engines that
-        examine a trace after execution. ARGUS runs four detection layers, each looking for
-        different categories of failure:
+        ARGUS doesn&apos;t throw everything at an LLM. Detection runs in four layers, each more
+        expensive than the last, and each only fires when needed:
       </p>
-      <ul className="mt-3 space-y-2 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+      <ul className="mt-3 space-y-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
         <li className="flex gap-3">
           <span className="text-[var(--signal-warn)] shrink-0">1.</span>
           <span>
-            <span className="text-white font-medium">Statistical</span> — anomalies in timing,
-            output length, token counts, and other numerical signals
+            <span className="text-white font-medium">Heuristic engine</span> — pattern matching
+            against 150+ known failure signatures (placeholder outputs, empty results, error keys,
+            semantic degradation markers). Deterministic, zero cost, catches ~80% of failures.
           </span>
         </li>
         <li className="flex gap-3">
           <span className="text-[var(--signal-warn)] shrink-0">2.</span>
           <span>
-            <span className="text-white font-medium">Semantic</span> — meaning drift, relevance
-            loss, and hallucination patterns using embedding similarity and LLM-as-judge
+            <span className="text-white font-medium">Anomaly detector</span> — statistical checks
+            for suspicious patterns (unexpected field types, output size anomalies, timing outliers).
+            Still deterministic.
           </span>
         </li>
         <li className="flex gap-3">
           <span className="text-[var(--signal-warn)] shrink-0">3.</span>
           <span>
-            <span className="text-white font-medium">Behavioral</span> — unexpected node
-            transitions, infinite loops, skipped steps, and state corruption
+            <span className="text-white font-medium">Correlator</span> — traces failure propagation
+            across nodes. If node 3 dropped a field and node 5 crashed because of it, the correlator
+            builds the causal chain and points you at node 3, not node 5.
           </span>
         </li>
         <li className="flex gap-3">
           <span className="text-[var(--signal-warn)] shrink-0">4.</span>
           <span>
-            <span className="text-white font-medium">Structural</span> — schema violations,
-            missing required fields, type mismatches, and contract breaches
+            <span className="text-white font-medium">LLM investigator</span> — only triggers on
+            ambiguous failures or when explicitly enabled. Generates root cause explanations,
+            causal hypotheses, and debugging suggestions. Also proposes new heuristic signatures
+            so the same failure gets caught deterministically next time.
           </span>
         </li>
       </ul>
-      <p className="mt-4 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Detectors run automatically when you call <code>watcher.finalize()</code>. You can
-        configure sensitivity thresholds and enable/disable individual layers through the{" "}
-        <Link href="/docs/configuration" className="text-[var(--accent-soft)] underline decoration-dotted underline-offset-2 hover:text-white hover:decoration-solid">
-          configuration
-        </Link>.
-      </p>
 
       <Heading level={2} id="traces">
         Traces
@@ -94,7 +89,7 @@ watcher.watch(graph)`}
       <ul className="mt-3 space-y-1.5 text-[15px] leading-[1.75] text-[var(--text-muted)]">
         <li>Every node that executed, in order</li>
         <li>Input and output state at each node</li>
-        <li>Wall clock and CPU timing per step</li>
+        <li>Wall clock timing per step</li>
         <li>Tool calls and their results</li>
         <li>Detection results from all four layers</li>
         <li>Forensic analysis if failures were detected</li>
@@ -102,22 +97,22 @@ watcher.watch(graph)`}
 
       <CodeBlock
         language="bash"
-        code={`# View the latest trace
-argus trace --last
+        code={`# View the latest run
+argus show last
 
-# View a specific trace by ID
-argus trace abc123
+# View a specific run by ID (or 8-char prefix)
+argus show run abc12345
 
-# List all traces
-argus trace --list`}
+# List all runs
+argus list`}
       />
 
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Traces are stored locally in SQLite by default. See{" "}
+        Runs are stored locally in <code>.argus/runs/</code> by default. See{" "}
         <Link href="/docs/storage" className="text-[var(--accent-soft)] underline decoration-dotted underline-offset-2 hover:text-white hover:decoration-solid">
           Storage
         </Link>{" "}
-        for details on schema and export options.
+        for details.
       </p>
 
       <Heading level={2} id="forensics">
@@ -170,16 +165,18 @@ argus trace --list`}
         </figcaption>
       </figure>
 
-      <p className="mt-4 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        The flow is linear and deterministic:
-      </p>
       <ol className="mt-3 space-y-2 text-[15px] leading-[1.75] text-[var(--text-muted)] list-decimal list-inside">
         <li>You create a <span className="text-white">Watcher</span> and attach it to your graph</li>
         <li>Your pipeline runs normally — the Watcher records a <span className="text-white">Trace</span></li>
-        <li>You call <code>finalize()</code> — <span className="text-white">Detectors</span> analyze the trace</li>
+        <li><span className="text-white">Detectors</span> analyze the trace (auto-runs for linear/fan-out graphs)</li>
         <li>If failures are found — <span className="text-white">Forensics</span> traces back to root cause</li>
         <li>You view results via CLI, UI, or programmatic API</li>
       </ol>
+
+      <Callout type="info" title="Finalize">
+        Runs are saved automatically for linear and fan-out/fan-in graphs. Only cyclic graphs
+        (with back-edges) need a manual <code>watcher.finalize()</code> call.
+      </Callout>
     </>
   );
 }

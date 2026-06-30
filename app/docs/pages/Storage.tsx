@@ -9,141 +9,129 @@ export default function Storage() {
         Overview
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        ARGUS stores all trace data locally in a SQLite database at <code>.argus/traces.db</code>{" "}
-        by default. This keeps everything self-contained — no external database required, no
-        cloud dependency for core functionality.
+        ARGUS stores all run data locally in <code>.argus/runs/</code> inside your project
+        directory. No external database required, no cloud dependency for core functionality.
       </p>
 
-      <Heading level={2} id="sqlite-schema">
-        SQLite Schema
-      </Heading>
-
-      <Heading level={3} id="trace-storage">
-        Trace Storage
+      <Heading level={2} id="what-gets-stored">
+        What Gets Stored
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Each pipeline execution creates one trace record with associated step records.
+        Each pipeline execution creates a run record containing:
       </p>
+      <ul className="mt-3 space-y-1.5 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        <li>Node inputs and outputs at each step</li>
+        <li>Timing data per node</li>
+        <li>Detection results from all four layers</li>
+        <li>Forensic analysis (root cause, causal chain)</li>
+        <li>Recorded HTTP calls (when <code>record_http=True</code>)</li>
+      </ul>
 
-      <CodeBlock
-        language="text"
-        filename="schema"
-        code={`traces
-├── id              TEXT PRIMARY KEY
-├── created_at      TIMESTAMP
-├── pipeline_name   TEXT
-├── status          TEXT (ok | warning | failed)
-├── duration_ms     INTEGER
-├── node_count      INTEGER
-├── detection_count INTEGER
-└── metadata        JSON
-
-trace_steps
-├── id              TEXT PRIMARY KEY
-├── trace_id        TEXT REFERENCES traces(id)
-├── step_number     INTEGER
-├── node_name       TEXT
-├── input_state     JSON
-├── output_state    JSON
-├── duration_ms     INTEGER
-├── timestamp       TIMESTAMP
-└── metadata        JSON`}
-      />
-
-      <Heading level={3} id="detection-storage">
-        Detection Storage
+      <Heading level={2} id="persist-state">
+        Controlling Storage
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Detection results are stored separately, linked to both the trace and the specific
-        step that triggered them.
-      </p>
-
-      <CodeBlock
-        language="text"
-        filename="schema"
-        code={`detections
-├── id              TEXT PRIMARY KEY
-├── trace_id        TEXT REFERENCES traces(id)
-├── step_id         TEXT REFERENCES trace_steps(id)
-├── layer           TEXT (statistical | semantic | behavioral | structural)
-├── severity        TEXT (info | warning | critical)
-├── message         TEXT
-├── details         JSON
-└── created_at      TIMESTAMP
-
-forensics
-├── id              TEXT PRIMARY KEY
-├── trace_id        TEXT REFERENCES traces(id)
-├── root_cause_step TEXT REFERENCES trace_steps(id)
-├── detection_ids   JSON (array of detection IDs)
-├── explanation     TEXT
-├── causal_chain    JSON
-└── created_at      TIMESTAMP`}
-      />
-
-      <Heading level={2} id="querying">
-        Querying Data
-      </Heading>
-      <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        You can query traces programmatically through the Python API or directly via SQLite.
+        Storage is on by default. To disable it for ephemeral monitoring:
       </p>
 
       <CodeBlock
         language="python"
-        code={`from argus import ArgusWatcher
-
-# Get the most recent trace
-watcher = ArgusWatcher()
-trace = watcher.get_trace()
-
-# Access trace data
-print(trace.id)
-print(trace.status)           # "ok", "warning", or "failed"
-print(trace.duration_ms)
-print(trace.detection_count)
-
-# Iterate over steps
-for step in trace.steps:
-    print(f"{step.node_name}: {step.duration_ms}ms")
-
-# Access detections
-for detection in trace.detections:
-    print(f"[{detection.layer}] {detection.message}")
-
-# Access forensics
-if trace.forensics:
-    print(trace.forensics.explanation)
-    print(trace.forensics.causal_chain)`}
+        code={`watcher = ArgusWatcher(graph, persist_state=False)`}
       />
 
-      <Callout type="info" title="Direct SQLite access">
-        You can also query <code>.argus/traces.db</code> directly with any SQLite client. The schema
-        is stable across minor versions — ARGUS uses migrations to evolve it without breaking queries.
+      <Callout type="warning" title="Replay requires persist_state">
+        Replay only works on runs recorded with <code>persist_state=True</code>{" "}
+        (the default). Without stored state, ARGUS doesn&apos;t have the intermediate data
+        needed to replay from a specific node.
       </Callout>
 
-      <Heading level={2} id="export">
-        Export Formats
+      <Heading level={2} id="http-recording">
+        HTTP Recording
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Export trace data for integration with external tools:
+        All external HTTP calls (OpenAI, search tools, databases) are{" "}
+        <span className="text-white font-medium">recorded by default</span>. Every API response
+        is saved to disk alongside the run. During replay, the recorded responses are served back —
+        same data, zero extra cost, fully reproducible.
+      </p>
+
+      <CodeBlock
+        language="python"
+        code={`# Disable HTTP recording for lightweight monitoring
+watcher = ArgusWatcher(graph, record_http=False)`}
+      />
+
+      <Heading level={2} id="redaction">
+        Redaction
+      </Heading>
+      <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        ARGUS captures full state at every step. Use <code>redact_keys</code> to scrub sensitive
+        fields from stored outputs:
+      </p>
+
+      <CodeBlock
+        language="python"
+        code={`watcher = ArgusWatcher(
+    graph,
+    redact_keys={"api_key", "token", "password", "authorization"},
+)`}
+      />
+
+      <Callout type="warning" title="Security">
+        Without redaction, API keys and secrets will appear in your stored runs.
+        Always add sensitive field names to <code>redact_keys</code> before using ARGUS
+        with production credentials.
+      </Callout>
+
+      <Heading level={2} id="viewing-runs">
+        Viewing Runs
+      </Heading>
+      <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        Access stored runs through the CLI or the web dashboard:
       </p>
 
       <CodeBlock
         language="bash"
-        code={`# Export as JSON
-argus report --last --format json --output trace.json
+        code={`# List all runs
+argus list
 
-# Export as HTML report
-argus report --last --format html --output trace.html
+# View the most recent run
+argus show last
 
-# Export as Markdown
-argus report --last --format markdown --output trace.md`}
+# View a specific run by ID (or 8-char prefix)
+argus show run abc12345
+
+# Inspect raw input/output for a specific node
+argus inspect <id> --step <node>
+
+# Launch the web dashboard
+argus ui`}
       />
 
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        JSON exports include the full trace data including all steps, detections, and forensic
-        analysis. Use this for CI/CD integration or feeding into your own analysis pipelines.
+        The web dashboard at <code>http://localhost:7842</code> serves runs from{" "}
+        <code>.argus/runs/</code> in your current directory — no account needed.
       </p>
+
+      <Heading level={2} id="programmatic-access">
+        Programmatic Access
+      </Heading>
+      <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        Access trace data directly from Python:
+      </p>
+
+      <CodeBlock
+        language="python"
+        code={`trace = watcher.get_trace()
+
+trace.id                # unique trace identifier
+trace.status            # "ok" | "warning" | "failed"
+trace.duration_ms       # total execution time
+trace.steps             # list[TraceStep]
+trace.detections        # list[Detection]
+trace.forensics         # Forensics | None
+trace.summary           # human-readable summary`}
+      />
     </>
   );
 }

@@ -10,270 +10,222 @@ export default function CLIReference() {
         Overview
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        The ARGUS CLI is your interface for viewing traces, replaying executions, generating reports,
+        The ARGUS CLI is your interface for viewing runs, replaying executions, generating reports,
         and managing your workspace. Install it with <code>pip install argus-agents</code> — the
         CLI ships with the Python package.
       </p>
 
       <CodeBlock
         language="bash"
-        code={`# Check installation
-argus --version
-
-# Get help on any command
-argus --help
-argus watch --help`}
+        code={`argus list                          # all runs
+argus show last                     # most recent run
+argus show run <id>                 # by full id or 8-char prefix
+argus replay <id> <node>            # re-run from a node
+argus replay <id> <node> --only     # re-run just that one node
+argus inspect <id> --step <node>    # raw input/output for a node
+argus diff <id>                     # rerun vs original
+argus diff <id-a> <id-b>            # any two runs
+argus ui                            # open web dashboard
+argus doctor                        # check your setup
+argus login                         # sign in for cloud sync
+argus logout                        # clear credentials
+argus whoami                        # check login status
+argus update                        # check for new release`}
       />
 
-      <Heading level={2} id="argus-watch">
-        argus watch
+      <Heading level={2} id="argus-list">
+        argus list
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Start a watched execution from the CLI. This runs a Python script with ARGUS instrumentation
-        attached automatically.
+        List all stored runs.
       </p>
 
       <CodeBlock
         language="bash"
-        code={`# Watch a script execution
-argus watch run.py
-
-# Watch with strict mode (fail on detection)
-argus watch run.py --strict
-
-# Watch with custom config
-argus watch run.py --config custom-argus.yaml`}
+        code={`# List all runs
+argus list`}
       />
 
-      <ParamTable
-        groups={[
-          {
-            label: "Flags",
-            params: [
-              {
-                name: "--strict",
-                type: "flag",
-                description: "Exit with non-zero code if any detection fires. Useful for CI/CD.",
-              },
-              {
-                name: "--config",
-                type: "path",
-                default: '"argus.yaml"',
-                description: "Path to config file. Overrides auto-discovery.",
-              },
-              {
-                name: "--no-persist",
-                type: "flag",
-                description: "Don't save the trace to storage. Useful for quick checks.",
-              },
-              {
-                name: "--verbose",
-                type: "flag",
-                description: "Print detection results to stdout as they run.",
-              },
-            ],
-          },
-        ]}
-      />
-
-      <Heading level={2} id="argus-trace">
-        argus trace
+      <Heading level={2} id="argus-show">
+        argus show
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        View and inspect execution traces.
+        View a specific run in your terminal. Shows the full trace with node statuses,
+        timing, detections, and root cause analysis.
       </p>
 
       <CodeBlock
         language="bash"
-        code={`# View the most recent trace
-argus trace --last
+        code={`# View the most recent run
+argus show last
 
-# View a specific trace by ID
-argus trace abc123def
-
-# List all stored traces
-argus trace --list
-
-# List traces with detections only
-argus trace --list --failed
-
-# Show trace with full state dumps
-argus trace --last --verbose`}
+# View a specific run by ID (full or 8-char prefix)
+argus show run abc12345`}
       />
 
-      <ParamTable
-        groups={[
-          {
-            label: "Flags",
-            params: [
-              {
-                name: "--last",
-                type: "flag",
-                description: "Show the most recent trace.",
-              },
-              {
-                name: "--list",
-                type: "flag",
-                description: "List all stored traces with summary info.",
-              },
-              {
-                name: "--failed",
-                type: "flag",
-                description: "Filter to only traces that have detections.",
-              },
-              {
-                name: "--verbose",
-                type: "flag",
-                description: "Include full state snapshots at each step.",
-              },
-              {
-                name: "--json",
-                type: "flag",
-                description: "Output as JSON for programmatic use.",
-              },
-            ],
-          },
-        ]}
+      <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        Example output:
+      </p>
+
+      <CodeBlock
+        language="text"
+        code={`argus  run-abc12345  ·  2024-04-05 12:30  ·  1243 ms
+status  ●  silent_failure
+
+   1  fetch       43 ms    ✓  pass
+   2  validate    12 ms    ⚠  silent failure
+      └─  Field "score" is missing
+      └─  process received bad state
+   3  process    891 ms    ✗  crashed
+      └─  KeyError: 'score'
+      └─  Field 'score' was absent from the incoming state
+
+root cause   validate`}
+      />
+
+      <Heading level={3} id="node-statuses">
+        Node Statuses
+      </Heading>
+      <ul className="mt-3 space-y-1.5 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        <li><code className="text-[var(--signal-ok)]">✓</code> — pass</li>
+        <li><code className="text-[var(--signal-warn)]">~</code> — pass with warnings (empty optional fields)</li>
+        <li><code className="text-[var(--signal-warn)]">⚠</code> — silent failure (missing required fields)</li>
+        <li><code className="text-[var(--signal-fail)]">⊗</code> — semantic fail (validator returned False)</li>
+        <li><code className="text-[var(--text-muted)]">⏸</code> — interrupted (human-in-the-loop pause)</li>
+        <li><code className="text-[var(--signal-fail)]">✗</code> — crashed</li>
+      </ul>
+
+      <Heading level={2} id="argus-inspect">
+        argus inspect
+      </Heading>
+      <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        View the raw input/output state for a specific node in a run.
+      </p>
+
+      <CodeBlock
+        language="bash"
+        code={`# Inspect a specific node's raw data
+argus inspect <id> --step <node>`}
       />
 
       <Heading level={2} id="argus-replay">
         argus replay
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Re-execute a pipeline from a specific step in a saved trace. This lets you test fixes
-        without re-running the entire pipeline from scratch.
+        Re-execute a pipeline from a specific node. ARGUS restores the exact state at that node
+        from disk and runs from there. Upstream outputs stay frozen — only the target node onward
+        re-executes with your fixed code.
       </p>
 
       <CodeBlock
         language="bash"
-        code={`# Replay the last trace from step 3
-argus replay --last --from-step 3
+        code={`# Replay from a specific node
+argus replay <run-id> node_7
 
-# Replay a specific trace from a named node
-argus replay abc123 --from-node "retriever"
-
-# Replay with modified input state
-argus replay abc123 --from-step 2 --patch '{"query": "updated question"}'`}
+# Re-run just one node in isolation
+argus replay <run-id> node_7 --only`}
       />
 
-      <ParamTable
-        groups={[
-          {
-            label: "Flags",
-            params: [
-              {
-                name: "--from-step",
-                type: "int",
-                description: "Step number to replay from (1-indexed).",
-              },
-              {
-                name: "--from-node",
-                type: "str",
-                description: "Node name to replay from.",
-              },
-              {
-                name: "--patch",
-                type: "json",
-                description: "JSON patch to apply to the input state at the replay point.",
-              },
-              {
-                name: "--last",
-                type: "flag",
-                description: "Use the most recent trace.",
-              },
-              {
-                name: "--diff",
-                type: "flag",
-                description: "Show a diff between original and replayed outputs.",
-              },
-            ],
-          },
-        ]}
-      />
+      <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        All external HTTP calls (OpenAI, search tools, databases) are recorded by default.
+        During replay, the recorded responses are served back — same data, zero extra cost,
+        fully reproducible.
+      </p>
 
       <Callout type="info" title="Replay requires persist_state">
-        Replay only works on traces that were recorded with <code>persist_state=True</code>{" "}
+        Replay only works on runs recorded with <code>persist_state=True</code>{" "}
         (the default). If state persistence was disabled, ARGUS doesn&apos;t have the intermediate
         states needed to replay.
       </Callout>
 
-      <Heading level={2} id="argus-report">
-        argus report
+      <Heading level={2} id="argus-diff">
+        argus diff
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Generate a formatted report from a trace.
+        Compare two runs side by side. When a replay finishes, ARGUS automatically compares it
+        against the original using an LLM — showing per-node diffs of what changed, what improved,
+        and whether the fix actually worked.
       </p>
 
       <CodeBlock
         language="bash"
-        code={`# HTML report (opens in browser)
-argus report --last --format html
+        code={`# Compare a rerun against its original
+argus diff <rerun-id>
 
-# JSON report (for CI/CD)
-argus report --last --format json
-
-# Markdown report
-argus report --last --format markdown --output report.md`}
-      />
-
-      <ParamTable
-        groups={[
-          {
-            label: "Flags",
-            params: [
-              {
-                name: "--format",
-                type: "str",
-                default: '"html"',
-                description: "Output format: html, json, or markdown.",
-              },
-              {
-                name: "--output",
-                type: "path",
-                description: "Write report to a file instead of stdout/browser.",
-              },
-              {
-                name: "--last",
-                type: "flag",
-                description: "Use the most recent trace.",
-              },
-            ],
-          },
-        ]}
-      />
-
-      <Heading level={2} id="argus-login">
-        argus login
-      </Heading>
-      <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Authenticate with the ARGUS cloud workspace. Required for syncing traces to the
-        cloud dashboard and team collaboration features.
-      </p>
-
-      <CodeBlock
-        language="bash"
-        code={`# Interactive login (opens browser)
-argus login
-
-# Login with an API key
-argus login --key YOUR_API_KEY`}
+# Compare any two runs
+argus diff <id-a> <id-b>`}
       />
 
       <Heading level={2} id="argus-ui">
         argus ui
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Launch the local ARGUS dashboard in your browser. The UI provides a visual trace explorer,
-        detection timeline, and replay interface.
+        Launch the local web dashboard in your browser. Serves runs from{" "}
+        <code>.argus/runs/</code> in your current directory — no account needed.
       </p>
 
       <CodeBlock
         language="bash"
-        code={`# Launch on default port (8484)
-argus ui
+        code={`# Launch the dashboard
+argus ui`}
+      />
 
-# Launch on a custom port
-argus ui --port 9090`}
+      <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        Opens at <code>http://localhost:7842</code>. The UI includes:
+      </p>
+      <ul className="mt-3 space-y-1.5 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        <li>Runs List — all stored runs with status, timing, and detection counts</li>
+        <li>Run Detail — node-by-node trace with inputs, outputs, and detections</li>
+        <li>Compare Runs — side-by-side diff between any two runs</li>
+        <li>Approvals — review and approve AI-discovered failure signatures</li>
+        <li>Report Board — submit diagnostic reports for bugs or issues</li>
+        <li>Settings — configure Linear integration and cloud sync</li>
+      </ul>
+
+      <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        From the Run Detail page, hover any step and click <code>↺ Rerun From Here</code> to
+        trigger a replay. After rerun, the diff view opens automatically.
+      </p>
+
+      <Heading level={2} id="argus-doctor">
+        argus doctor
+      </Heading>
+      <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        Diagnose setup issues. Checks Python version, LangGraph compatibility, storage health,
+        rerun readiness, and optional dependencies.
+      </p>
+
+      <CodeBlock
+        language="bash"
+        code={`argus doctor`}
+      />
+
+      <CodeBlock
+        language="text"
+        code={`✓  python           Python 3.9.6
+✓  langgraph        langgraph 0.6.11
+✓  storage          312 runs stored, all healthy
+✓  replay           all 7 node functions importable for rerun
+✓  optional deps    openai (key set), dotenv`}
+      />
+
+      <Heading level={2} id="argus-login">
+        argus login / logout / whoami
+      </Heading>
+      <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        Manage authentication for cloud sync features (shared signatures, team collaboration).
+      </p>
+
+      <CodeBlock
+        language="bash"
+        code={`# Sign in for cloud sync
+argus login
+
+# Clear credentials
+argus logout
+
+# Check login status
+argus whoami`}
       />
 
       <Heading level={2} id="argus-update">
@@ -285,10 +237,7 @@ argus ui --port 9090`}
 
       <CodeBlock
         language="bash"
-        code={`# Check for updates
-argus update --check
-
-# Update to latest
+        code={`# Check for a new release
 argus update`}
       />
     </>
