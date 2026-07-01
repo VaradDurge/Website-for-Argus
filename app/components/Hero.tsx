@@ -7,6 +7,7 @@ import { ButtonColorful } from "@/components/ui/button-colorful";
 import { StarButton } from "@/components/ui/star-button";
 import { MorphingText } from "@/components/ui/morphing-text";
 import { BetaAccessModal } from "./BetaAccessModal";
+import { VideoModal } from "./VideoModal";
 import { TrialUI } from "./TrialUI";
 
 const HERO_VERBS = [
@@ -20,12 +21,14 @@ const HERO_VERBS = [
 
 export function Hero() {
   const [betaOpen, setBetaOpen] = useState(false);
+  const [videoOpen, setVideoOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const copyRef = useRef<HTMLButtonElement>(null);
 
   return (
     <section className="relative">
       <BetaAccessModal open={betaOpen} onClose={() => setBetaOpen(false)} />
+      <VideoModal open={videoOpen} onClose={() => setVideoOpen(false)} />
 
       {/* Background atmosphere */}
       <div
@@ -100,9 +103,17 @@ export function Hero() {
             <button onClick={() => setBetaOpen(true)}>
               <ButtonColorful label="Book a Call" />
             </button>
-            <span className="text-[11px] text-[var(--text-dim)] tracking-wide">
-              ~1 min setup
-            </span>
+            <button
+              onClick={() => setVideoOpen(true)}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-[var(--border)] text-[13px] font-medium text-[var(--text-muted)] hover:text-white hover:border-[var(--border-strong)] transition-colors"
+            >
+              <span className="flex items-center justify-center w-5 h-5 rounded-full bg-white/10">
+                <svg width="8" height="10" viewBox="0 0 8 10" fill="currentColor">
+                  <path d="M0 0l8 5-8 5V0z" />
+                </svg>
+              </span>
+              Watch Demo
+            </button>
             <a href="/docs">
               <StarButton lightColor="#8b7dff" backgroundColor="transparent">
                 Read the docs
