@@ -2,6 +2,7 @@ import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
 import { SocialProofTicker } from "./components/SocialProofTicker";
 import { Pipeline } from "./components/Pipeline";
+import { AgentSetup } from "./components/AgentSetup";
 import { Replay } from "./components/Replay";
 import { Features } from "./components/Features";
 import { Stats } from "./components/Stats";
@@ -17,6 +18,7 @@ export default function Home() {
         <Hero />
         <SocialProofTicker />
         <Pipeline />
+        <AgentSetup />
         <Replay />
         <Features />
         <Stats />

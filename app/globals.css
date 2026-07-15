@@ -551,6 +551,11 @@
   animation: copy-pulse 0.5s ease-out;
 }
 
+/* ───────── prompt block ───────── */
+.prompt-line:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
 /* ───────── pipeline node hover ───────── */
 .pipeline-node {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
