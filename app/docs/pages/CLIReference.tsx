@@ -92,6 +92,7 @@ root cause   validate`}
         <li><code className="text-[var(--signal-warn)]">⚠</code> — silent failure (missing required fields)</li>
         <li><code className="text-[var(--signal-fail)]">⊗</code> — semantic fail (validator returned False)</li>
         <li><code className="text-[var(--text-muted)]">⏸</code> — interrupted (human-in-the-loop pause)</li>
+        <li><code className="text-[var(--text-muted)]">○</code> — skipped (conditional branch not taken)</li>
         <li><code className="text-[var(--signal-fail)]">✗</code> — crashed</li>
       </ul>
 

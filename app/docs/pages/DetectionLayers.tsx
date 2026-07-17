@@ -80,6 +80,10 @@ export default function DetectionLayers() {
           <span className="text-[var(--accent-soft)] shrink-0">&#8227;</span>
           <span>Timing outliers — a node that usually takes 2s now takes 30s</span>
         </li>
+        <li className="flex gap-3">
+          <span className="text-[var(--accent-soft)] shrink-0">&#8227;</span>
+          <span>Latency degradation — near-timeout nodes (&#8805;95% of limit), suspiciously fast responses (likely cached/stale), and fast completions paired with quality failures</span>
+        </li>
       </ul>
 
       <Heading level={2} id="correlator">

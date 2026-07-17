@@ -63,6 +63,23 @@ export default function Configuration() {
             ],
           },
           {
+            label: "Latency",
+            params: [
+              {
+                name: "node_timeout_ms",
+                type: "float | None",
+                default: "None",
+                description: "Flag nodes that take ≥95% of this value as timeout-adjacent (likely truncated output). Pass via ArgusConfig.",
+              },
+              {
+                name: "min_expected_ms",
+                type: "float | None",
+                default: "None",
+                description: "Flag LLM nodes completing faster than this as suspiciously fast (likely cached/stale). Pass via ArgusConfig.",
+              },
+            ],
+          },
+          {
             label: "Replay & Evaluation",
             params: [
               {
