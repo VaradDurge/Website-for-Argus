@@ -1,17 +1,11 @@
 import { ImageResponse } from 'next/og'
-import { readFileSync } from 'fs'
-import path from 'path'
 
-export const runtime = 'nodejs'
+export const runtime = 'edge'
 export const alt = 'ARGUS — Forensic Observability for AI Agent Pipelines'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
 export default async function OGImage() {
-  const scriptFont = readFileSync(
-    path.join(process.cwd(), 'public/fonts/dancing-script.ttf')
-  )
-
   return new ImageResponse(
     (
       <div
@@ -86,12 +80,11 @@ export default async function OGImage() {
           <div
             style={{
               display: 'flex',
-              fontSize: '96px',
-              fontFamily: 'DancingScript',
-              fontWeight: 600,
-              color: '#666666',
-              letterSpacing: '0px',
-              marginTop: '4px',
+              fontSize: '82px',
+              fontStyle: 'italic',
+              fontWeight: 700,
+              color: '#555555',
+              letterSpacing: '-2px',
             }}
           >
             Silently.
@@ -127,16 +120,6 @@ export default async function OGImage() {
         </div>
       </div>
     ),
-    {
-      ...size,
-      fonts: [
-        {
-          name: 'DancingScript',
-          data: scriptFont,
-          style: 'normal',
-          weight: 600,
-        },
-      ],
-    }
+    { ...size }
   )
 }
