@@ -16,6 +16,7 @@ export default async function OGImage() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
+          alignItems: 'center',
           padding: '64px 80px',
           position: 'relative',
         }}
@@ -27,6 +28,8 @@ export default async function OGImage() {
             alignItems: 'center',
             gap: '12px',
             marginBottom: '40px',
+            width: '100%',
+            justifyContent: 'center',
           }}
         >
           <div
@@ -62,6 +65,7 @@ export default async function OGImage() {
           style={{
             display: 'flex',
             flexDirection: 'column',
+            alignItems: 'center',
             fontWeight: 700,
             lineHeight: 1.1,
             letterSpacing: '-2px',
@@ -93,6 +97,7 @@ export default async function OGImage() {
             color: '#777777',
             lineHeight: 1.5,
             maxWidth: '880px',
+            textAlign: 'center',
           }}
         >
           ARGUS detects silent failures, semantic drift, and contract violations in your LangGraph pipelines — before production.
