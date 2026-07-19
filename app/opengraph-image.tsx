@@ -1,23 +1,16 @@
 import { ImageResponse } from 'next/og'
+import { readFileSync } from 'fs'
+import path from 'path'
 
-export const runtime = 'edge'
+export const runtime = 'nodejs'
 export const alt = 'ARGUS — Forensic Observability for AI Agent Pipelines'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
 export default async function OGImage() {
-  const css = await fetch(
-    'https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600',
-    {
-      headers: {
-        'User-Agent':
-          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-      },
-    }
-  ).then((r) => r.text())
-
-  const woff2Url = css.match(/url\((https:\/\/fonts\.gstatic\.com[^)]+)\)/)?.[1] ?? ''
-  const scriptFont = woff2Url ? await fetch(woff2Url).then((r) => r.arrayBuffer()) : null
+  const scriptFont = readFileSync(
+    path.join(process.cwd(), 'public/fonts/dancing-script.woff2')
+  )
 
   return new ImageResponse(
     (
@@ -75,23 +68,30 @@ export default async function OGImage() {
           style={{
             display: 'flex',
             flexDirection: 'column',
-            fontWeight: 700,
             lineHeight: 1.1,
-            letterSpacing: '-2px',
             marginBottom: '32px',
           }}
         >
-          <div style={{ display: 'flex', fontSize: '82px', color: '#111111' }}>
+          <div
+            style={{
+              display: 'flex',
+              fontSize: '82px',
+              fontWeight: 700,
+              color: '#111111',
+              letterSpacing: '-2px',
+            }}
+          >
             Your Agents Are Failing.
           </div>
           <div
             style={{
               display: 'flex',
-              fontSize: '90px',
-              fontFamily: scriptFont ? 'DancingScript' : 'serif',
+              fontSize: '96px',
+              fontFamily: 'DancingScript',
               fontWeight: 600,
               color: '#666666',
               letterSpacing: '0px',
+              marginTop: '4px',
             }}
           >
             Silently.
@@ -129,18 +129,14 @@ export default async function OGImage() {
     ),
     {
       ...size,
-      ...(scriptFont
-        ? {
-            fonts: [
-              {
-                name: 'DancingScript',
-                data: scriptFont,
-                style: 'normal',
-                weight: 600,
-              },
-            ],
-          }
-        : {}),
+      fonts: [
+        {
+          name: 'DancingScript',
+          data: scriptFont,
+          style: 'normal',
+          weight: 600,
+        },
+      ],
     }
   )
 }
