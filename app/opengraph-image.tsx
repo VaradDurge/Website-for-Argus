@@ -6,13 +6,6 @@ export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
 export default async function OGImage() {
-  const css = await fetch(
-    'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1',
-    { headers: { 'User-Agent': 'Mozilla/5.0' } }
-  ).then((r) => r.text())
-  const fontUrl = css.match(/src: url\((.+?)\) format\('woff2'\)/)?.[1] ?? ''
-  const serifFont = await fetch(fontUrl).then((r) => r.arrayBuffer())
-
   return new ImageResponse(
     (
       <div
@@ -96,9 +89,9 @@ export default async function OGImage() {
                   display: 'flex',
                   fontSize: '88px',
                   fontStyle: 'italic',
-                  fontFamily: 'InstrumentSerif',
+                  fontWeight: 300,
                   color: '#aaaaaa',
-                  letterSpacing: '-1px',
+                  letterSpacing: '2px',
                 }}
               >
                 Silently.
@@ -136,16 +129,6 @@ export default async function OGImage() {
         </div>
       </div>
     ),
-    {
-      ...size,
-      fonts: [
-        {
-          name: 'InstrumentSerif',
-          data: serifFont,
-          style: 'italic',
-          weight: 400,
-        },
-      ],
-    }
+    { ...size }
   )
 }
