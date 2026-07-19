@@ -9,7 +9,7 @@ export const contentType = 'image/png'
 
 export default async function OGImage() {
   const scriptFont = readFileSync(
-    path.join(process.cwd(), 'public/fonts/dancing-script.woff2')
+    path.join(process.cwd(), 'public/fonts/dancing-script.ttf')
   )
 
   return new ImageResponse(
