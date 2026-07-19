@@ -1,6 +1,5 @@
 import { ImageResponse } from 'next/og'
 
-export const runtime = 'edge'
 export const alt = 'ARGUS — Forensic Observability for AI Agent Pipelines'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
@@ -83,7 +82,7 @@ export default async function OGImage() {
               fontSize: '96px',
               fontStyle: 'italic',
               fontWeight: 700,
-              color: '#555555',
+              color: '#b0b0b0',
               letterSpacing: '-3px',
             }}
           >
