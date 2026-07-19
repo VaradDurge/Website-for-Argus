@@ -69,10 +69,10 @@ export default async function OGImage() {
           <div
             style={{
               display: 'flex',
-              fontSize: '82px',
+              fontSize: '96px',
               fontWeight: 700,
               color: '#111111',
-              letterSpacing: '-2px',
+              letterSpacing: '-3px',
             }}
           >
             Your Agents Are Failing.
@@ -80,11 +80,11 @@ export default async function OGImage() {
           <div
             style={{
               display: 'flex',
-              fontSize: '82px',
+              fontSize: '96px',
               fontStyle: 'italic',
               fontWeight: 700,
               color: '#555555',
-              letterSpacing: '-2px',
+              letterSpacing: '-3px',
             }}
           >
             Silently.
