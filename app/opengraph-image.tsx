@@ -6,6 +6,19 @@ export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
 export default async function OGImage() {
+  const css = await fetch(
+    'https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600',
+    {
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      },
+    }
+  ).then((r) => r.text())
+
+  const woff2Url = css.match(/url\((https:\/\/fonts\.gstatic\.com[^)]+)\)/)?.[1] ?? ''
+  const scriptFont = woff2Url ? await fetch(woff2Url).then((r) => r.arrayBuffer()) : null
+
   return new ImageResponse(
     (
       <div
@@ -16,7 +29,6 @@ export default async function OGImage() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          alignItems: 'center',
           padding: '64px 80px',
           position: 'relative',
         }}
@@ -28,8 +40,6 @@ export default async function OGImage() {
             alignItems: 'center',
             gap: '12px',
             marginBottom: '40px',
-            width: '100%',
-            justifyContent: 'center',
           }}
         >
           <div
@@ -65,7 +75,6 @@ export default async function OGImage() {
           style={{
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center',
             fontWeight: 700,
             lineHeight: 1.1,
             letterSpacing: '-2px',
@@ -78,11 +87,11 @@ export default async function OGImage() {
           <div
             style={{
               display: 'flex',
-              fontSize: '82px',
-              fontStyle: 'italic',
-              fontWeight: 700,
-              color: '#555555',
-              letterSpacing: '-2px',
+              fontSize: '90px',
+              fontFamily: scriptFont ? 'DancingScript' : 'serif',
+              fontWeight: 600,
+              color: '#666666',
+              letterSpacing: '0px',
             }}
           >
             Silently.
@@ -97,7 +106,6 @@ export default async function OGImage() {
             color: '#777777',
             lineHeight: 1.5,
             maxWidth: '880px',
-            textAlign: 'center',
           }}
         >
           ARGUS detects silent failures, semantic drift, and contract violations in your LangGraph pipelines — before production.
@@ -119,6 +127,20 @@ export default async function OGImage() {
         </div>
       </div>
     ),
-    { ...size }
+    {
+      ...size,
+      ...(scriptFont
+        ? {
+            fonts: [
+              {
+                name: 'DancingScript',
+                data: scriptFont,
+                style: 'normal',
+                weight: 600,
+              },
+            ],
+          }
+        : {}),
+    }
   )
 }
