@@ -3,7 +3,7 @@
 import { liquidMetalFragmentShader, ShaderMount } from "@paper-design/shaders";
 import { Sparkles } from "lucide-react";
 import type React from "react";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 interface LiquidMetalButtonProps {
   label?: string;
@@ -110,6 +110,13 @@ export function LiquidMetalButton({
     }
   }, []);
 
+  // Start shader on mount so border animation is visible immediately
+  useEffect(() => {
+    startShader();
+    shaderMount.current?.setSpeed?.(0.6);
+    return () => stopShader();
+  }, [startShader, stopShader]);
+
   const handleMouseEnter = () => {
     setIsHovered(true);
     startShader();
@@ -119,7 +126,8 @@ export function LiquidMetalButton({
   const handleMouseLeave = () => {
     setIsHovered(false);
     setIsPressed(false);
-    stopShader();
+    // Keep shader running at idle speed instead of stopping
+    shaderMount.current?.setSpeed?.(0.6);
   };
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -130,10 +138,6 @@ export function LiquidMetalButton({
       setTimeout(() => {
         if (shaderMount.current?.setSpeed) {
           shaderMount.current.setSpeed(isHovered ? 1 : 0.6);
-        }
-        // If not hovered, stop shader after click animation
-        if (!isHovered) {
-          setTimeout(stopShader, 400);
         }
       }, 300);
     }
@@ -157,13 +161,11 @@ export function LiquidMetalButton({
 
   return (
     <div className="relative inline-block">
-      <div style={{ perspective: "1000px", perspectiveOrigin: "50% 50%" }}>
         <div
           style={{
             position: "relative",
             width: `${dimensions.width}px`,
             height: `${dimensions.height}px`,
-            transformStyle: "preserve-3d",
             transition:
               "all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), width 0.4s ease, height 0.4s ease",
           }}
@@ -177,7 +179,6 @@ export function LiquidMetalButton({
               alignItems: "center",
               justifyContent: "center",
               gap: "6px",
-              transform: "translateZ(20px)",
               zIndex: 30,
               pointerEvents: "none",
               transition: "all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)",
@@ -219,7 +220,7 @@ export function LiquidMetalButton({
             style={{
               position: "absolute",
               inset: 0,
-              transform: `translateZ(10px) ${isPressed ? "translateY(1px) scale(0.98)" : "scale(1)"}`,
+              transform: isPressed ? "translateY(1px) scale(0.98)" : "scale(1)",
               zIndex: 20,
               transition:
                 "all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.15s ease",
@@ -245,7 +246,7 @@ export function LiquidMetalButton({
             style={{
               position: "absolute",
               inset: 0,
-              transform: `translateZ(0px) ${isPressed ? "translateY(1px) scale(0.98)" : "scale(1)"}`,
+              transform: isPressed ? "translateY(1px) scale(0.98)" : "scale(1)",
               zIndex: 10,
               transition:
                 "all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.15s ease",
@@ -294,7 +295,6 @@ export function LiquidMetalButton({
               cursor: "pointer",
               outline: "none",
               zIndex: 40,
-              transform: "translateZ(25px)",
               overflow: "hidden",
               borderRadius: "100px",
             }}
@@ -319,7 +319,6 @@ export function LiquidMetalButton({
             ))}
           </button>
         </div>
-      </div>
     </div>
   );
 }
