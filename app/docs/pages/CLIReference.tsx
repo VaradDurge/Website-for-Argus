@@ -26,8 +26,11 @@ argus inspect <id> --step <node>    # raw input/output for a node
 argus diff <id>                     # rerun vs original
 argus diff <id-a> <id-b>            # any two runs
 argus ui                            # open web dashboard
-argus doctor                        # check your setup
-argus login                         # sign in for cloud sync
+argus doctor                        # check setup + LLM mode (BYOK/hosted/heuristic)
+argus key set                       # save your OpenAI key locally (BYOK)
+argus key show                      # show the active key (masked) + source
+argus key clear                     # remove the saved key
+argus login                         # (optional) sign in for hosted cloud sync
 argus logout                        # clear credentials
 argus whoami                        # check login status
 argus update                        # check for new release`}
@@ -210,11 +213,39 @@ argus ui`}
 ✓  optional deps    openai (key set), dotenv`}
       />
 
+      <Heading level={2} id="argus-key">
+        argus key set / show / clear
+      </Heading>
+      <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        Bring your own key (BYOK). Save your OpenAI key once and it&apos;s reused every
+        session — AI-powered detection (semantic judge, LLM investigator, learned trends)
+        runs entirely on your key, fully local. Resolution order:{" "}
+        <code>OPENAI_API_KEY</code> env var → saved key → hosted proxy (cloud tier) →
+        heuristic-only.
+      </p>
+
+      <CodeBlock
+        language="bash"
+        code={`# Save your key (prompts with hidden input, stored at ~/.argus/config.json)
+argus key set
+
+# Or pass it directly / use an env var
+argus key set sk-...
+export OPENAI_API_KEY=sk-...
+
+# Inspect and remove
+argus key show      # masked key + where it came from
+argus key clear`}
+      />
+
       <Heading level={2} id="argus-login">
         argus login / logout / whoami
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Manage authentication for cloud sync features (shared signatures, team collaboration).
+        <strong>Optional — hosted/enterprise tier only.</strong> Authentication for hosted
+        cloud sync and the shared trends registry. The open-source package is fully local
+        and needs no login; <code>argus login</code> reports a hosted-only message unless a
+        hosted backend is configured.
       </p>
 
       <CodeBlock

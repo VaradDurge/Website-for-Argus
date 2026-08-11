@@ -24,9 +24,25 @@ export default function Quickstart() {
       </Heading>
       <CodeBlock language="bash" code="pip install argus-agents" />
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        That&apos;s it. No extra dependencies, no config files needed to start. ARGUS ships with
-        sensible defaults that work out of the box.
+        That&apos;s it. No account, no config files, no cloud. ARGUS runs fully local — runs
+        are stored in <code>.argus/runs/</code> and heuristic detection works out of the box.
       </p>
+
+      <Heading level={2} id="bring-your-own-key">
+        Bring Your Own Key (BYOK)
+      </Heading>
+      <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        AI-powered detection (semantic judge, LLM investigator, learned trends) uses your own
+        OpenAI key. Set it once — it&apos;s saved locally and reused every session. No key is
+        fine too: ARGUS falls back to heuristic-only detection.
+      </p>
+      <CodeBlock
+        language="bash"
+        code={`argus key set             # prompts (hidden), saved to ~/.argus/config.json
+# or:  argus key set sk-...   |   export OPENAI_API_KEY=sk-...
+
+argus doctor              # confirms BYOK / hosted / heuristic-only mode`}
+      />
 
       <Heading level={2} id="instrument-your-graph">
         Setup — Pick Whichever Fits Your Code
