@@ -22,10 +22,14 @@ export default function Quickstart() {
       <Heading level={2} id="installation">
         Installation
       </Heading>
-      <CodeBlock language="bash" code="pip install argus-agents" />
+      <CodeBlock language="bash" code={`pip install "argus-agents[all]"`} />
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        That&apos;s it. No account, no config files, no cloud. ARGUS runs fully local — runs
-        are stored in <code>.argus/runs/</code> and heuristic detection works out of the box.
+        This installs the full product — the <code>argus</code> CLI, the LangGraph adapter,
+        and AI-powered detection. No account, no config files, no cloud: ARGUS runs fully
+        local, runs are stored in <code>.argus/runs/</code>, and heuristic detection works out
+        of the box. (The zero-dependency library alone is <code>pip install argus-agents</code>;
+        add <code>[cli]</code>, <code>[langgraph]</code>, or <code>[llm]</code> for just the
+        piece you need.)
       </p>
 
       <Heading level={2} id="bring-your-own-key">
