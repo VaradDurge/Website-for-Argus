@@ -27,9 +27,10 @@ argus diff <id>                     # rerun vs original
 argus diff <id-a> <id-b>            # any two runs
 argus ui                            # open web dashboard
 argus doctor                        # check setup + LLM mode (BYOK/hosted/heuristic)
-argus key set                       # save your OpenAI key locally (BYOK)
-argus key show                      # show the active key (masked) + source
-argus key clear                     # remove the saved key
+argus key set [--provider ...]      # save a provider key locally — OpenAI/Anthropic/Google (BYOK)
+argus key use <provider>            # switch the active provider
+argus key show                      # list configured providers (masked); * marks active
+argus key clear [--provider ...]    # remove one provider's key, or all
 argus login                         # (optional) sign in for hosted cloud sync
 argus logout                        # clear credentials
 argus whoami                        # check login status
@@ -217,25 +218,30 @@ argus ui`}
         argus key set / show / clear
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Bring your own key (BYOK). Save your OpenAI key once and it&apos;s reused every
-        session — AI-powered detection (semantic judge, LLM investigator, learned trends)
-        runs entirely on your key, fully local. Resolution order:{" "}
-        <code>OPENAI_API_KEY</code> env var → saved key → hosted proxy (cloud tier) →
-        heuristic-only.
+        Bring your own key (BYOK). Pick your provider — OpenAI, Anthropic (Claude), or
+        Google (Gemini) — save the key once and it&apos;s reused every session. AI-powered
+        detection (semantic judge, LLM investigator, learned trends) runs entirely on your
+        key, fully local; ARGUS picks a sensible model per call. Per-provider resolution
+        order: env var ({" "}
+        <code>OPENAI_API_KEY</code> / <code>ANTHROPIC_API_KEY</code> / <code>GEMINI_API_KEY</code>)
+        → saved key → hosted proxy (cloud tier) → heuristic-only.
       </p>
 
       <CodeBlock
         language="bash"
-        code={`# Save your key (prompts with hidden input, stored at ~/.argus/config.json)
+        code={`# Save a key (prompts hidden, stored at ~/.argus/config.json). OpenAI by default:
 argus key set
+argus key set --provider anthropic     # or Anthropic (Claude)
+argus key set --provider google        # or Google (Gemini)
 
 # Or pass it directly / use an env var
-argus key set sk-...
-export OPENAI_API_KEY=sk-...
+argus key set sk-... --provider openai
+export OPENAI_API_KEY=sk-...           # or ANTHROPIC_API_KEY / GEMINI_API_KEY
 
-# Inspect and remove
-argus key show      # masked key + where it came from
-argus key clear`}
+# Switch, inspect, remove
+argus key use anthropic   # activate a provider you already configured
+argus key show            # list configured providers (masked); * marks active
+argus key clear           # remove all (or --provider <name> for one)`}
       />
 
       <Heading level={2} id="argus-login">

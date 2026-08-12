@@ -98,7 +98,7 @@ export default function Configuration() {
                 name: "semantic_judge",
                 type: "bool",
                 default: "False",
-                description: "LLM-powered quality judge on every node output. Requires OPENAI_API_KEY.",
+                description: "LLM-powered quality judge on every node output. Requires a provider key (OpenAI, Anthropic, or Google).",
               },
               {
                 name: "judge_model",
@@ -170,7 +170,7 @@ export default function Configuration() {
                 name: "ARGUS_SEMANTIC_JUDGE",
                 type: "bool",
                 default: "false",
-                description: "Enable LLM-as-judge for semantic detection. Requires OPENAI_API_KEY.",
+                description: "Enable LLM-as-judge for semantic detection. Requires a provider key (OpenAI, Anthropic, or Google).",
               },
               {
                 name: "ARGUS_JUDGE_MODEL",

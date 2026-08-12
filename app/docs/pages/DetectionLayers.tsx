@@ -174,7 +174,8 @@ watcher = ArgusWatcher(
         ambiguous.
       </p>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Requires <code>OPENAI_API_KEY</code> in your environment.
+        Requires a provider key (OpenAI, Anthropic, or Google) — set via{" "}
+        <code>argus key set</code> or an env var.
       </p>
 
       <p className="mt-4 text-[15px] leading-[1.75] text-[var(--text-muted)]">

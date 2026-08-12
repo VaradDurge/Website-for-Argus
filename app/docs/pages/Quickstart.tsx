@@ -37,15 +37,17 @@ export default function Quickstart() {
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
         AI-powered detection (semantic judge, LLM investigator, learned trends) uses your own
-        OpenAI key. Set it once — it&apos;s saved locally and reused every session. No key is
-        fine too: ARGUS falls back to heuristic-only detection.
+        key from the provider of your choice — OpenAI, Anthropic (Claude), or Google (Gemini).
+        Set it once — it&apos;s saved locally and reused every session. No key is fine too:
+        ARGUS falls back to heuristic-only detection.
       </p>
       <CodeBlock
         language="bash"
-        code={`argus key set             # prompts (hidden), saved to ~/.argus/config.json
-# or:  argus key set sk-...   |   export OPENAI_API_KEY=sk-...
+        code={`argus key set                       # OpenAI by default — prompts (hidden), saved to ~/.argus/config.json
+argus key set --provider anthropic  # or Anthropic / --provider google for Gemini
+# or an env var:  export OPENAI_API_KEY=sk-...  (ANTHROPIC_API_KEY / GEMINI_API_KEY)
 
-argus doctor              # confirms BYOK / hosted / heuristic-only mode`}
+argus key use anthropic   # switch active provider   ·   argus doctor  # confirm mode`}
       />
 
       <Heading level={2} id="instrument-your-graph">
