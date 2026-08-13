@@ -146,7 +146,7 @@ watcher = ArgusWatcher(graph, validators={
                 name: "semantic_judge",
                 type: "bool",
                 default: "False",
-                description: "LLM-powered quality judge on every node output. Requires OPENAI_API_KEY.",
+                description: "LLM-powered quality judge on every node output. Requires a provider key (OpenAI, Anthropic, or Google).",
               },
               {
                 name: "judge_model",
