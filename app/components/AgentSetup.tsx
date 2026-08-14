@@ -35,10 +35,7 @@ def search(state):
 def search(state: AgentState) -> dict:
     return {"results": [...]}
 
-3. GRAPH STRUCTURE: Check if the graph is:
-  - Linear (A → B → C) — auto-finalize works, no extra code needed
-  - Fan-out/fan-in (DAG) — auto-finalize works
-  - Cyclic (has loops / back-edges) — will need watcher.finalize() after invoke
+3. GRAPH STRUCTURE: Linear, fan-out/fan-in (DAG), and cyclic (loops / back-edges) all persist automatically after invoke() — no finalize() call needed.
 
 4. ASYNC CHECK: If node functions are async (async def), ARGUS handles both — just make sure you're using await app.ainvoke() not app.invoke().
 
@@ -56,31 +53,22 @@ If you found issues in Step 1, fix them now:
 
 STEP 3 — INTEGRATE ARGUS
 
-Install with all features:
-
-pip install argus-agents[all]
-
-Or install only what you need:
-
-pip install argus-agents                    # core only (zero dependencies)
-pip install argus-agents[langgraph]         # + LangGraph adapter
-pip install argus-agents[cli]               # + argus CLI commands
-pip install argus-agents[llm]               # + LLM investigation & semantic judge
-pip install argus-agents[langgraph,cli]     # LangGraph + CLI (no LLM features)
+Install: pip install argus-agents
+(The PyPI package is argus-agents, not argus. Default install includes the CLI, LangGraph adapter, and UI. Do not add [cli] or [langgraph] extras. LLM judge is optional: pip install argus-agents[llm])
 
 Add ArgusWatcher to the file where the graph is built:
 
 from argus import ArgusWatcher
 
-watcher = ArgusWatcher(graph)          # pass StateGraph before compile()
-app = graph.compile()
-result = app.invoke(initial_state)
+watcher = ArgusWatcher()
+app = watcher.attach(graph)            # StateGraph OR already-compiled app
+result = app.invoke(initial_state)     # run persists automatically
 print(watcher.run_id)
 
-If the graph is already compiled elsewhere, use watch_compiled():
+If you prefer compiling yourself:
 
-watcher = ArgusWatcher()
-app = watcher.watch_compiled(app)
+watcher = ArgusWatcher(graph)          # uncompiled StateGraph
+app = graph.compile()
 result = app.invoke(initial_state)
 
 STEP 4 — PICK THE RIGHT CONFIG
@@ -99,12 +87,12 @@ watcher = ArgusWatcher(graph,
         "*": lambda o: ("error" not in o, "error key present"),
     },
 
-    # --- LLM investigation (needs argus login) ---
-    investigate=True,         # LLM root-cause analysis on failures (default: True)
+    # --- LLM investigation (default: True) ---
+    investigate=True,         # LLM root-cause analysis on failures
                               # set to "always" to investigate every run, False to disable
 
-    # --- LLM semantic judge (needs argus login) ---
-    semantic_judge=True,      # LLM reviews every node's output for subtle issues (default: True)
+    # --- LLM semantic judge (default: True) ---
+    semantic_judge=True,      # LLM reviews every node's output for subtle issues
     judge_model="gpt-4o",     # or "gpt-4o-mini" for cheaper runs
 
     # --- Deterministic rerun ---
@@ -135,10 +123,9 @@ watcher = ArgusWatcher(graph,
     validators={...},
 )
 
-If the graph has cycles (loops / back-edges), call finalize after invoke:
-
+app = watcher.attach(graph)
 result = app.invoke(initial_state)
-watcher.finalize()    # required for cyclic graphs, safe to call on any graph
+# persisted automatically — finalize() is optional
 
 After running the pipeline:
 

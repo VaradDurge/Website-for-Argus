@@ -8,7 +8,7 @@ import { Logo } from "./Logo";
 export function Footer() {
   const [copied, setCopied] = useState(false);
   const copyRef = useRef<HTMLButtonElement>(null);
-  const cmd = "pip install argus-agent";
+  const cmd = "pip install argus-agents";
 
   return (
     <footer id="footer" className="relative border-t border-[var(--border)] mt-16">

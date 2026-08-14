@@ -27,7 +27,7 @@ export default function APIReference() {
                 name: "graph",
                 type: "StateGraph",
                 default: "None",
-                description: "LangGraph graph to monitor. If passed, watch() is called automatically.",
+                description: "Uncompiled StateGraph to monitor. Or omit and call attach() on a StateGraph or compiled app.",
               },
               {
                 name: "max_field_size",
@@ -92,12 +92,29 @@ export default function APIReference() {
         Methods
       </Heading>
 
+      <Heading level={3} id="attach">
+        .attach()
+      </Heading>
+      <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        One call for a StateGraph or an already-compiled app. Returns a compiled app with
+        monitoring. <code>invoke()</code> / <code>ainvoke()</code> persist the run when they
+        return. Prefer this for new code.
+      </p>
+
+      <CodeBlock
+        language="python"
+        code={`watcher = ArgusWatcher()
+app = watcher.attach(graph)         # StateGraph or compiled app
+result = app.invoke(initial_state)  # persisted automatically`}
+      />
+
       <Heading level={3} id="watch">
         .watch()
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Instrument a graph for monitoring. Call before <code>graph.compile()</code>.
-        Not needed if you passed <code>graph</code> to the constructor.
+        Thin wrapper around <code>attach()</code> for an uncompiled StateGraph. Prefer{" "}
+        <code>attach()</code> for new code. Not needed if you passed <code>graph</code> to
+        the constructor.
       </p>
 
       <CodeBlock
@@ -105,41 +122,36 @@ export default function APIReference() {
         code={`watcher.watch(graph: StateGraph) -> None`}
       />
 
-      <Callout type="warning">
-        Call <code>watch()</code> before <code>graph.compile()</code>. If you compile first,
-        ARGUS can&apos;t instrument the nodes.
-      </Callout>
-
       <Heading level={3} id="watch-compiled">
         .watch_compiled()
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Instrument an already-compiled graph. Use when you can&apos;t call{" "}
-        <code>watch()</code> before compilation (e.g. when using a checkpointer).
+        Thin wrapper around <code>attach()</code> for an already-compiled graph. Prefer{" "}
+        <code>attach()</code> for new code.
       </p>
 
       <CodeBlock
         language="python"
-        code={`app = graph.compile(checkpointer=memory)
-app = watcher.watch_compiled(app) -> CompiledGraph`}
+        code={`app = watcher.attach(compiled_app)  # preferred
+app = watcher.watch_compiled(app)   # equivalent thin wrapper`}
       />
 
       <Heading level={3} id="finalize">
         .finalize()
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Run all detection layers, execute forensic analysis, and persist results.
-        Only needed for cyclic graphs — linear and fan-out graphs auto-save.
+        Optional idempotent flush. Not required after <code>invoke()</code> — including cyclic
+        graphs. Safe to call; a second call is a no-op.
       </p>
 
       <CodeBlock
         language="python"
-        code={`watcher.finalize() -> Trace`}
+        code={`watcher.finalize()  # optional`}
       />
 
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Returns the completed <code>Trace</code> object. If <code>strict=True</code> and
-        detections fire, raises <code>DetectionError</code> after storing the trace.
+        If <code>strict=True</code> and detections fire, raises <code>DetectionError</code> after
+        storing the run.
       </p>
 
       <Heading level={3} id="get-trace">

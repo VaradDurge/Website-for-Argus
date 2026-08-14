@@ -22,14 +22,13 @@ export default function Quickstart() {
       <Heading level={2} id="installation">
         Installation
       </Heading>
-      <CodeBlock language="bash" code={`pip install "argus-agents[all]"`} />
+      <CodeBlock language="bash" code={`pip install argus-agents`} />
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        This installs the full product — the <code>argus</code> CLI, the LangGraph adapter,
-        and AI-powered detection. No account, no config files, no cloud: ARGUS runs fully
+        This is the full product — the <code>argus</code> CLI, the LangGraph adapter, and the
+        local UI (<code>argus ui</code>). No account, no config files, no cloud: ARGUS runs fully
         local, runs are stored in <code>.argus/runs/</code>, and heuristic detection works out
-        of the box. (The zero-dependency library alone is <code>pip install argus-agents</code>;
-        add <code>[cli]</code>, <code>[langgraph]</code>, or <code>[llm]</code> for just the
-        piece you need.)
+        of the box. LLM-powered features (semantic judge, investigator) stay optional:{" "}
+        <code>pip install &quot;argus-agents[llm]&quot;</code>.
       </p>
 
       <Heading level={2} id="bring-your-own-key">
@@ -55,51 +54,38 @@ argus key use anthropic   # switch active provider   ·   argus doctor  # confir
       </Heading>
 
       <Heading level={3} id="option-a">
-        Option A — Pass graph to constructor (recommended)
+        One call — attach (recommended)
       </Heading>
       <CodeBlock
         language="python"
         code={`from argus import ArgusWatcher
 
-watcher = ArgusWatcher(graph)      # attaches monitoring automatically
-app = graph.compile()
-result = app.invoke(initial_state) # run auto-saves when the last node finishes
-print(watcher.run_id)              # access the run ID directly`}
+watcher = ArgusWatcher()
+app = watcher.attach(graph)         # StateGraph or already-compiled app
+result = app.invoke(initial_state)  # run is persisted automatically
+print(watcher.run_id)`}
       />
 
       <Heading level={3} id="option-b">
-        Option B — Separate watch call
+        Constructor form
       </Heading>
       <CodeBlock
         language="python"
         code={`from argus import ArgusWatcher
 
-watcher = ArgusWatcher()
-watcher.watch(graph)       # before graph.compile()
+watcher = ArgusWatcher(graph)       # uncompiled StateGraph
 app = graph.compile()
-result = app.invoke(initial_state)`}
-      />
-
-      <Heading level={3} id="option-c">
-        Option C — After compile
-      </Heading>
-      <CodeBlock
-        language="python"
-        code={`from argus import ArgusWatcher
-
-watcher = ArgusWatcher()
-app = graph.compile(checkpointer=memory)
-app = watcher.watch_compiled(app)   # works on already-compiled graphs
-result = app.invoke(initial_state)`}
+result = app.invoke(initial_state)  # persisted automatically`}
       />
 
       <p className="mt-4 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        All three work. No changes to your node functions.
+        Both work. No changes to your node functions.
       </p>
 
-      <Callout type="info" title="When is finalize() needed?">
-        Runs are saved automatically for linear and fan-out/fan-in graphs. Only cyclic graphs
-        (with back-edges) need a manual <code>watcher.finalize()</code> call.
+      <Callout type="info" title="finalize() is optional">
+        <code>attach()</code> wraps <code>invoke()</code> / <code>ainvoke()</code> so the run is
+        written when the call returns — including cyclic graphs.{" "}
+        <code>watcher.finalize()</code> is an optional idempotent flush, not required.
       </Callout>
 
       <Heading level={2} id="run-your-pipeline">
@@ -113,25 +99,21 @@ result = app.invoke(initial_state)`}
         language="python"
         filename="example.py"
         showLineNumbers
-        highlights={[1, 4, 11]}
+        highlights={[1, 13, 14]}
         code={`from argus import ArgusWatcher
 from langgraph.graph import StateGraph
 
-# 1. Create the watcher with graph (recommended)
-watcher = ArgusWatcher(graph)
-
-# 2. Define your graph (your existing code)
+# 1. Define your graph (your existing code)
 graph = StateGraph(AgentState)
 graph.add_node("agent", call_model)
 graph.add_node("tools", tool_node)
 # ... add edges ...
 
-# 3. Compile and run
-app = graph.compile()
+# 2. Attach ARGUS and run
+watcher = ArgusWatcher()
+app = watcher.attach(graph)
 result = app.invoke(initial_state)
-
-# Run auto-saves for linear/fan-out graphs
-# For cyclic graphs, call watcher.finalize()`}
+# persisted automatically`}
       />
 
       <Heading level={2} id="view-results">

@@ -21,7 +21,7 @@ const ROWS = [
   },
   {
     capability: "Setup",
-    argus: "argus.wrap(graph) — 2 lines, no account needed",
+    argus: "ArgusWatcher().attach(graph) — 2 lines, no account needed",
     others: "SDK + cloud platform + dashboard config",
   },
   {

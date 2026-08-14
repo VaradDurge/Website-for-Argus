@@ -19,34 +19,26 @@ export default function Watchers() {
         Basic Usage
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Three ways to set up. Pick whichever fits your code:
+        One call covers StateGraph and already-compiled apps:
       </p>
 
       <CodeBlock
         language="python"
         code={`from argus import ArgusWatcher
 
-# Option A — pass graph to constructor (recommended)
-watcher = ArgusWatcher(graph)
-app = graph.compile()
-result = app.invoke(initial_state)
-
-# Option B — separate watch call
 watcher = ArgusWatcher()
-watcher.watch(graph)
-app = graph.compile()
-result = app.invoke(initial_state)
+app = watcher.attach(graph)         # StateGraph or compiled app
+result = app.invoke(initial_state)  # persisted automatically
 
-# Option C — after compile
-watcher = ArgusWatcher()
-app = graph.compile(checkpointer=memory)
-app = watcher.watch_compiled(app)
+# Constructor form still works if you compile yourself:
+watcher = ArgusWatcher(graph)       # uncompiled StateGraph
+app = graph.compile()
 result = app.invoke(initial_state)`}
       />
 
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Runs save automatically for linear and fan-out graphs. Cyclic graphs need
-        a manual <code>watcher.finalize()</code> call.
+        Runs persist when <code>invoke()</code> returns, including cyclic graphs.{" "}
+        <code>finalize()</code> is an optional idempotent flush, not required.
       </p>
 
       <Heading level={2} id="parameters">
@@ -66,7 +58,7 @@ result = app.invoke(initial_state)`}
                 name: "graph",
                 type: "StateGraph",
                 default: "None",
-                description: "LangGraph graph to monitor. If passed, watch() is called automatically.",
+                description: "Uncompiled StateGraph to monitor. Or omit and call attach() on a StateGraph or compiled app.",
               },
               {
                 name: "max_field_size",
@@ -201,10 +193,8 @@ watcher = ArgusWatcher(
         </li>
       </ol>
 
-      <Callout type="danger" title="Single-use">
-        A Watcher instance is single-use. After finalize, create a new Watcher for the next
-        run. Calling <code>watch()</code> on a finalized Watcher raises{" "}
-        <code>WatcherStateError</code>.
+      <Callout type="info" title="One run per Watcher">
+        A Watcher instance tracks one execution run. Create a new Watcher for the next run.
       </Callout>
     </>
   );

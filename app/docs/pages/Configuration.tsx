@@ -23,7 +23,7 @@ export default function Configuration() {
                 name: "graph",
                 type: "StateGraph",
                 default: "None",
-                description: "LangGraph graph to monitor. If passed, watch() is called automatically.",
+                description: "Uncompiled StateGraph to monitor. Or omit and call attach() on a StateGraph or compiled app.",
               },
               {
                 name: "max_field_size",

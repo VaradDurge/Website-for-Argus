@@ -52,11 +52,10 @@ export default function Introduction() {
         language="python"
         code={`from argus import ArgusWatcher
 
-# Option A — pass graph to constructor (recommended)
-watcher = ArgusWatcher(graph)      # attaches monitoring automatically
-app = graph.compile()
-result = app.invoke(initial_state) # run auto-saves when the last node finishes
-print(watcher.run_id)              # access the run ID directly`}
+watcher = ArgusWatcher()
+app = watcher.attach(graph)         # StateGraph or already-compiled app
+result = app.invoke(initial_state)  # persisted automatically
+print(watcher.run_id)`}
       />
 
       <p className="mt-4 text-[15px] leading-[1.75] text-[var(--text-muted)]">
@@ -82,8 +81,8 @@ print(watcher.run_id)              # access the run ID directly`}
       />
 
       <p className="mt-4 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Runs are saved automatically for linear and fan-out/fan-in graphs. Only cyclic graphs
-        (with back-edges) need a manual <code>watcher.finalize()</code> call.
+        Runs persist when <code>invoke()</code> returns, including cyclic graphs.{" "}
+        <code>finalize()</code> is optional and idempotent — not required in the happy path.
       </p>
 
       <figure className="my-6 max-w-[480px]">

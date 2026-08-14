@@ -25,10 +25,10 @@ export default function CoreConcepts() {
         language="python"
         code={`from argus import ArgusWatcher
 
-watcher = ArgusWatcher(graph)      # attaches monitoring automatically
-app = graph.compile()
-result = app.invoke(initial_state) # run auto-saves when the last node finishes
-print(watcher.run_id)              # access the run ID directly`}
+watcher = ArgusWatcher()
+app = watcher.attach(graph)         # StateGraph or already-compiled app
+result = app.invoke(initial_state)  # persisted automatically
+print(watcher.run_id)`}
       />
 
       <Callout type="info">
@@ -173,9 +173,9 @@ argus list`}
         <li>You view results via CLI, UI, or programmatic API</li>
       </ol>
 
-      <Callout type="info" title="Finalize">
-        Runs are saved automatically for linear and fan-out/fan-in graphs. Only cyclic graphs
-        (with back-edges) need a manual <code>watcher.finalize()</code> call.
+      <Callout type="info" title="Persistence">
+        Runs persist when <code>invoke()</code> returns, including cyclic graphs.{" "}
+        <code>finalize()</code> is an optional idempotent flush, not required.
       </Callout>
     </>
   );

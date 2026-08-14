@@ -162,6 +162,7 @@ export const DOCS_REGISTRY: Record<string, DocPage> = {
     toc: [
       { id: "arguswatcher", label: "ArgusWatcher", level: 2 },
       { id: "methods", label: "Methods", level: 2 },
+      { id: "attach", label: ".attach()", level: 3 },
       { id: "watch", label: ".watch()", level: 3 },
       { id: "finalize", label: ".finalize()", level: 3 },
       { id: "get-trace", label: ".get_trace()", level: 3 },

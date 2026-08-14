@@ -63,8 +63,8 @@ export default function Architecture() {
       </ol>
 
       <Callout type="info" title="Auto-save">
-        For linear and fan-out/fan-in graphs, detection and storage happen automatically when the
-        last node finishes. Only cyclic graphs need a manual <code>watcher.finalize()</code> call.
+        Detection and storage happen when <code>invoke()</code> / <code>ainvoke()</code> returns,
+        including cyclic graphs. <code>finalize()</code> is optional and idempotent.
       </Callout>
 
       <Heading level={2} id="two-entry-points">
