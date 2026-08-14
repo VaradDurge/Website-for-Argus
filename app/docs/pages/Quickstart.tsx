@@ -8,6 +8,64 @@ import Link from "next/link";
 export default function Quickstart() {
   return (
     <>
+      <Heading level={2} id="how-to-use">
+        How to use ARGUS
+      </Heading>
+      <StepList
+        steps={[
+          {
+            title: "Install",
+            content: (
+              <>
+                <p>
+                  <code>pip install argus-agents</code>
+                </p>
+                <p className="mt-2">
+                  CLI, LangGraph adapter, and UI. Fully local. Package name is{" "}
+                  <code>argus-agents</code>, not <code>argus</code>.
+                </p>
+              </>
+            ),
+          },
+          {
+            title: "Paste the AI setup prompt",
+            content: (
+              <>
+                <p>
+                  Go to the{" "}
+                  <Link
+                    href="/"
+                    className="text-[var(--accent-soft)] underline decoration-dotted underline-offset-2 hover:text-white hover:decoration-solid"
+                  >
+                    homepage
+                  </Link>
+                  , copy <span className="text-white">AI Setup Prompt</span>, paste it into
+                  Cursor / Claude / ChatGPT. It wires <code>attach()</code> into your graph.
+                </p>
+              </>
+            ),
+          },
+          {
+            title: "Run your pipeline",
+            content: <p>Same as always. ARGUS watches in the background and saves the run.</p>,
+          },
+          {
+            title: "See what it caught",
+            content: (
+              <>
+                <p>
+                  <code>argus ui</code> or <code>argus show last</code>
+                </p>
+              </>
+            ),
+          },
+        ]}
+      />
+      <Callout type="info" title="Optional — smarter detection">
+        Run <code>argus key set</code> if you want the LLM judge. Skip it and you still get
+        heuristics.
+      </Callout>
+
       <Heading level={2} id="prerequisites">
         Prerequisites
       </Heading>

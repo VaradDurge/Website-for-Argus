@@ -49,6 +49,7 @@ export const DOCS_REGISTRY: Record<string, DocPage> = {
     description:
       "Install ARGUS and run your first trace in under 5 minutes.",
     toc: [
+      { id: "how-to-use", label: "How to use ARGUS", level: 2 },
       { id: "prerequisites", label: "Prerequisites", level: 2 },
       { id: "installation", label: "Installation", level: 2 },
       { id: "instrument-your-graph", label: "Instrument Your Graph", level: 2 },

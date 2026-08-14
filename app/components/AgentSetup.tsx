@@ -134,9 +134,10 @@ argus ui              # open the web dashboard
 argus doctor          # check environment and optional deps`;
 
 const STEPS = [
-  { num: "1", label: "Copy the prompt" },
-  { num: "2", label: "Paste into your AI" },
-  { num: "3", label: "Pipeline monitored" },
+  { num: "1", label: "pip install argus-agents" },
+  { num: "2", label: "Paste the AI prompt" },
+  { num: "3", label: "Run your pipeline" },
+  { num: "4", label: "argus ui" },
 ];
 
 function PromptLine({ line, num }: { line: string; num: number }) {
@@ -231,13 +232,13 @@ export function AgentSetup() {
           </motion.p>
         </div>
 
-        {/* 3-step row */}
+        {/* 4-step row */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.15 }}
-          className="flex items-center justify-center gap-2 sm:gap-3 mb-8 font-mono text-[11px] sm:text-[12px]"
+          className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-8 font-mono text-[11px] sm:text-[12px]"
         >
           {STEPS.map((step, i) => (
             <div key={step.num} className="flex items-center gap-2 sm:gap-3">
