@@ -27,8 +27,8 @@ export default function Quickstart() {
         This is the full product — the <code>argus</code> CLI, the LangGraph adapter, and the
         local UI (<code>argus ui</code>). No account, no config files, no cloud: ARGUS runs fully
         local, runs are stored in <code>.argus/runs/</code>, and heuristic detection works out
-        of the box. LLM-powered features (semantic judge, investigator) stay optional:{" "}
-        <code>pip install &quot;argus-agents[llm]&quot;</code>.
+        of the box. LLM-powered features stay optional: run{" "}
+        <code>argus key set</code> when you want the semantic judge.
       </p>
 
       <Heading level={2} id="bring-your-own-key">
