@@ -15,14 +15,14 @@ const ROWS = [
     others: "Manual trace inspection",
   },
   {
-    capability: "Replay",
-    argus: "Re-run any node with frozen inputs and recorded state",
-    others: "Not available",
+    capability: "Setup",
+    argus: "argus init, then ArgusWatcher().attach(graph) — no account needed",
+    others: "SDK + cloud platform + dashboard config",
   },
   {
-    capability: "Setup",
-    argus: "ArgusWatcher().attach(graph) — 2 lines, no account needed",
-    others: "SDK + cloud platform + dashboard config",
+    capability: "Fix prompt",
+    argus: "argus fix writes a paste-ready prompt for the root-cause node",
+    others: "Write the prompt yourself",
   },
   {
     capability: "CI/CD gating",
@@ -57,11 +57,19 @@ export function Comparison() {
               delay: 0.1,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="heading-3 mt-5 text-[var(--ink)]"
+            className="heading-1 mt-5 text-[var(--ink)]"
           >
-            They trace.{" "}
-            <span className="text-[var(--ink-3)]">We detect.</span>
+            Catch failures before production
           </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.18 }}
+            className="mt-4 text-[14px] tracking-[-0.01em] text-[var(--ink-3)] md:text-[16px]"
+          >
+            so no users are affected.
+          </motion.p>
         </div>
 
         {/* Column labels */}

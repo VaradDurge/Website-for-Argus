@@ -14,6 +14,8 @@ export interface FeatureBleedProps {
   preset: DemoPreset;
   label: string;
   glow?: boolean;
+  /** Taller panel so the execution graph reads like the dashboard. */
+  tall?: boolean;
 }
 
 const WASH =
@@ -37,6 +39,7 @@ export function FeatureBleed({
   preset,
   label,
   glow = false,
+  tall = false,
 }: FeatureBleedProps) {
   const copyFirst = align === "start";
 
@@ -58,7 +61,8 @@ export function FeatureBleed({
 
           <div
             className={cn(
-              "relative aspect-[15/8] md:aspect-auto md:h-[640px]",
+              "relative aspect-[15/8] md:aspect-auto",
+              tall ? "md:h-[760px]" : "md:h-[640px]",
               !copyFirst && "md:order-1"
             )}
           >
@@ -82,7 +86,12 @@ export function FeatureBleed({
                 className="relative h-full overflow-hidden rounded-[var(--radius-panel)] border-[length:var(--hairline)] border-[var(--line)] shadow-[var(--shadow-demo)]"
               >
                 <div aria-hidden className="absolute inset-0" style={{ background: WASH }} />
-                <div className="absolute inset-[6%] overflow-hidden rounded-[12px] border border-black/10 bg-[var(--panel)] shadow-[0_40px_80px_-24px_rgba(0,0,0,0.35)]">
+                <div
+                  className={cn(
+                    "absolute overflow-hidden rounded-[12px] border border-black/10 bg-[var(--panel)] shadow-[0_40px_80px_-24px_rgba(0,0,0,0.35)]",
+                    tall ? "inset-[3%]" : "inset-[6%]"
+                  )}
+                >
                   <ArgusDemo preset={preset} frozen />
                 </div>
               </div>

@@ -30,10 +30,11 @@ import { OverviewScreen } from "./screens/OverviewScreen";
 import { PipelineScreen } from "./screens/PipelineScreen";
 import { StateScreen } from "./screens/StateScreen";
 import { CompareScreen } from "./screens/CompareScreen";
+import { GraphScreen } from "./screens/GraphScreen";
 import type { ExplorerRun, ExplorerTone, RailId, WorkspaceTab } from "./types";
 import "./instrument.css";
 
-export type DemoPreset = "overview" | "pipeline" | "state" | "compare";
+export type DemoPreset = "overview" | "pipeline" | "state" | "compare" | "graph";
 
 const COMPARE_TAB = {
   id: COMPARE_ID,
@@ -159,6 +160,7 @@ export function ArgusDemo({
   return (
     <div
       className="argus-instrument"
+      data-preset={preset}
       aria-hidden={frozen || undefined}
       style={frozen ? { pointerEvents: "none" } : undefined}
     >
@@ -381,6 +383,11 @@ export function ArgusDemo({
                 </div>
                 {showCompare ? (
                   <CompareScreen />
+                ) : preset === "graph" ? (
+                  <GraphScreen
+                    selectedNode={selectedNode}
+                    onSelectNode={setSelectedNode}
+                  />
                 ) : inner === "overview" ? (
                   <OverviewScreen
                     runId={runId}

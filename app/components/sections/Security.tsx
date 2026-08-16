@@ -4,15 +4,15 @@ import { Container } from "@/components/ui/section";
 const BLOCKS = [
   {
     title: "Your traces stay yours",
-    body: "ARGUS runs inside your environment. Execution state, prompts and tool payloads are written to storage you control — nothing is shipped to us by default.",
+    body: "Runs in your environment. Nothing ships to us by default.",
   },
   {
     title: "Redaction before persistence",
-    body: "Configurable field-level redaction runs before any state snapshot is written, so secrets and PII never land in a trace you later share with your team.",
+    body: "Secrets and PII are stripped before any snapshot is written.",
   },
   {
     title: "Never trained on your code",
-    body: "Customer pipelines, prompts and outputs are never used to train models. Investigator calls are scoped to the run being analysed and nothing else.",
+    body: "Your pipelines and prompts are never used to train models.",
   },
 ];
 
