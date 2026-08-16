@@ -233,9 +233,7 @@ export function AgentSetup() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="mt-4 text-[14px] sm:text-[16px] text-[var(--text-muted)] max-w-[480px] mx-auto leading-[1.6]"
           >
-            Run argus init, then ask your editor agent to wire ARGUS. The
-            skill already contains the setup prompt — paste below only as a
-            fallback.
+            argus init, then ask your agent. Paste below is a fallback.
           </motion.p>
         </div>
 
