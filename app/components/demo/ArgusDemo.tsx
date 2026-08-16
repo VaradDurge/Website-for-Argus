@@ -18,6 +18,7 @@ import {
   X,
 } from "lucide-react";
 import {
+  COMPARE_ID,
   CRASHED_ID,
   FAILING,
   INITIAL_TABS,
@@ -28,8 +29,24 @@ import {
 import { OverviewScreen } from "./screens/OverviewScreen";
 import { PipelineScreen } from "./screens/PipelineScreen";
 import { StateScreen } from "./screens/StateScreen";
+import { CompareScreen } from "./screens/CompareScreen";
 import type { ExplorerRun, ExplorerTone, RailId, WorkspaceTab } from "./types";
 import "./instrument.css";
+
+export type DemoPreset = "overview" | "pipeline" | "state" | "compare";
+
+const COMPARE_TAB = {
+  id: COMPARE_ID,
+  kind: "compare" as const,
+  label: "2e8a3c ↔ 8917b9",
+  tone: "plain" as const,
+};
+
+function innerFromPreset(preset: DemoPreset): WorkspaceTab {
+  if (preset === "pipeline") return "pipeline";
+  if (preset === "state") return "state";
+  return "overview";
+}
 
 const RAIL: { id: RailId; label: string; icon: typeof Activity }[] = [
   { id: "runs", label: "Runs", icon: Activity },
@@ -67,7 +84,13 @@ function toneClass(tone: ExplorerTone) {
   return `fg ${tone}`;
 }
 
-export function ArgusDemo() {
+export function ArgusDemo({
+  preset = "overview",
+  frozen = false,
+}: {
+  preset?: DemoPreset;
+  frozen?: boolean;
+} = {}) {
   const [rail, setRail] = useState<RailId>("runs");
   const [live, setLive] = useState(true);
   const [noteOpen, setNoteOpen] = useState(true);
@@ -79,11 +102,14 @@ export function ArgusDemo() {
     pipelines: true,
     saved: false,
   });
-  const tabs = INITIAL_TABS;
-  const [activeId, setActiveId] = useState(CRASHED_ID);
-  const [inner, setInner] = useState<WorkspaceTab>("overview");
+  const tabs = preset === "compare" ? [...INITIAL_TABS, COMPARE_TAB] : INITIAL_TABS;
+  const [activeId, setActiveId] = useState(preset === "compare" ? COMPARE_ID : CRASHED_ID);
+  const [inner, setInner] = useState<WorkspaceTab>(innerFromPreset(preset));
   const [selectedNode, setSelectedNode] = useState<string | null>("enrich_account");
-  const [replayPhase, setReplayPhase] = useState<"idle" | "running" | "done">("idle");
+  const [replayPhase, setReplayPhase] = useState<"idle" | "running" | "done">(
+    preset === "compare" ? "done" : "idle"
+  );
+  const showCompare = preset === "compare";
 
   const runId = CRASHED_ID;
   const meta = RUN_META[CRASHED_ID];
@@ -102,6 +128,7 @@ export function ArgusDemo() {
   }, [replayPhase]);
 
   useEffect(() => {
+    if (frozen) return;
     function onKey(e: KeyboardEvent) {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
@@ -114,7 +141,7 @@ export function ArgusDemo() {
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [frozen]);
 
   function onExplorer(item: ExplorerRun) {
     if (item.id !== CRASHED_ID) return;
@@ -130,7 +157,11 @@ export function ArgusDemo() {
     });
 
   return (
-    <div className="argus-instrument">
+    <div
+      className="argus-instrument"
+      aria-hidden={frozen || undefined}
+      style={frozen ? { pointerEvents: "none" } : undefined}
+    >
       <div className="ide">
         <nav className="irail" aria-label="Instrument">
           <span className="irail-mark">
@@ -293,7 +324,11 @@ export function ArgusDemo() {
                 tabIndex={0}
                 aria-selected={tab.id === activeId}
               >
-                <FileText className={toneClass(tab.tone)} />
+                {tab.kind === "compare" ? (
+                  <GitCompare className={toneClass(tab.tone)} />
+                ) : (
+                  <FileText className={toneClass(tab.tone)} />
+                )}
                 <span className="lb">{tab.label}</span>
               </div>
             ))}
@@ -344,21 +379,26 @@ export function ArgusDemo() {
                     ))}
                   </div>
                 </div>
-                {inner === "overview" ? (
+                {showCompare ? (
+                  <CompareScreen />
+                ) : inner === "overview" ? (
                   <OverviewScreen
                     runId={runId}
                     selectedNode={selectedNode}
                     onSelectNode={setSelectedNode}
                     onOpenPipeline={() => setInner("pipeline")}
                   />
-                ) : null}
-                {inner === "pipeline" ? (
+                ) : inner === "pipeline" ? (
                   <PipelineScreen selectedStep={selectedNode} onSelectStep={setSelectedNode} />
+                ) : inner === "state" ? (
+                  <StateScreen />
+                ) : inner === "analysis" ? (
+                  <AnalysisPane />
+                ) : inner === "correlations" ? (
+                  <CorrelationsPane />
+                ) : inner === "logs" ? (
+                  <LogsPane />
                 ) : null}
-                {inner === "state" ? <StateScreen /> : null}
-                {inner === "analysis" ? <AnalysisPane /> : null}
-                {inner === "correlations" ? <CorrelationsPane /> : null}
-                {inner === "logs" ? <LogsPane /> : null}
               </>
             )}
           </div>
