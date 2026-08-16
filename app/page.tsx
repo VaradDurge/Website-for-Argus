@@ -4,7 +4,6 @@ import { HeroCradle } from "./components/sections/HeroCradle";
 import { SocialProofTicker } from "./components/SocialProofTicker";
 import { HowItWorks } from "./components/sections/HowItWorks";
 import { FeatureSections } from "./components/sections/FeatureSections";
-import { Comparison } from "./components/Comparison";
 import { Stats } from "./components/Stats";
 import { Testimonial } from "./components/sections/Testimonial";
 import { Security } from "./components/sections/Security";
@@ -30,10 +29,6 @@ export default function Home() {
 
         <div className="hairline-t">
           <FeatureSections />
-        </div>
-
-        <div className="hairline-t">
-          <Comparison />
         </div>
 
         <Stats />

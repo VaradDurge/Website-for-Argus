@@ -96,10 +96,10 @@
   /* ─── atmosphere (Interfere-structure rainbow, iris-terminated) ─── */
   --gradient-hero-orb: linear-gradient(
     90deg,
-    rgba(255, 59, 0, 0.22) 0%,
-    rgba(246, 0, 157, 0.18) 38%,
-    rgba(151, 62, 198, 0.16) 71%,
-    rgba(90, 70, 224, 0.22) 100%
+    rgba(255, 59, 0, 0.42) 0%,
+    rgba(246, 0, 157, 0.36) 38%,
+    rgba(151, 62, 198, 0.32) 71%,
+    rgba(90, 70, 224, 0.4) 100%
   );
   --gradient-section-glow: linear-gradient(
     90deg,

@@ -49,8 +49,9 @@ export function FeatureBleed({
         <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-2 md:gap-12">
           <div
             className={cn(
-              "reveal max-w-[480px] md:py-12",
-              !copyFirst && "md:order-2"
+              "reveal flex max-w-[480px] flex-col justify-center",
+              tall ? "md:min-h-[760px]" : "md:min-h-[640px]",
+              !copyFirst && "md:order-2 md:mx-auto"
             )}
           >
             <p className="step-num">{num}</p>
