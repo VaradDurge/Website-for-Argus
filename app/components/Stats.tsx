@@ -19,21 +19,23 @@ const STATS: { value: number; suffix: string; label: string; icon: typeof Activi
 
 export function Stats() {
   return (
-    <section id="stats" className="relative py-24 lg:py-32">
-      <div className="mx-auto max-w-[1280px] px-6 lg:px-10">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="eyebrow text-center mb-8"
-        >
-          By the numbers
-        </motion.div>
-        <div className="grid grid-cols-2 gap-4 sm:flex sm:items-center sm:justify-center sm:gap-10 lg:gap-14 sm:flex-wrap">
-          {STATS.map((s, i) => (
-            <Counter key={s.label} {...s} index={i} />
-          ))}
+    <section id="stats" className="relative py-16 md:py-20">
+      <div className="constrained">
+        <div className="flex flex-col gap-8 border-y-[length:var(--hairline)] border-[var(--line)] py-10 lg:flex-row lg:items-center lg:justify-between">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="eyebrow shrink-0"
+          >
+            By the numbers
+          </motion.div>
+          <div className="grid grid-cols-2 gap-x-8 gap-y-6 sm:grid-cols-4 lg:gap-x-14">
+            {STATS.map((s, i) => (
+              <Counter key={s.label} {...s} index={i} />
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -77,7 +79,7 @@ function Counter({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.5, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] }}
-      className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2.5"
+      className="flex flex-col gap-1.5"
     >
       <div className="flex items-center gap-2">
         <motion.div
@@ -91,24 +93,26 @@ function Counter({
             damping: 15,
           }}
         >
-          <Icon size={16} strokeWidth={1.6} className="text-[#f5b13c]" />
+          <Icon
+            size={15}
+            strokeWidth={1.6}
+            className="text-[var(--ink-3)]"
+          />
         </motion.div>
         <div className="flex items-baseline gap-0.5">
           <motion.span
-            className="text-[24px] sm:text-[32px] font-semibold tracking-[-0.02em] text-white tabular-nums"
+            className="text-[26px] sm:text-[32px] font-medium tracking-[-0.02em] text-[var(--ink)] tabular-nums"
             animate={done ? { scale: [1, 1.06, 1] } : {}}
             transition={{ duration: 0.3, ease: "easeOut" }}
           >
             {display}
           </motion.span>
-          <span className="text-[16px] sm:text-[18px] font-semibold text-[#f5b13c] tracking-[-0.01em]">
+          <span className="text-[16px] sm:text-[18px] font-medium text-[var(--iris-fg)] tracking-[-0.01em]">
             {suffix}
           </span>
         </div>
       </div>
-      <span className="font-mono text-[10px] tracking-[0.12em] uppercase text-[var(--text-dim)] sm:ml-0.5">
-        {label}
-      </span>
+      <span className="step-num">{label}</span>
     </motion.div>
   );
 }

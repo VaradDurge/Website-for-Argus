@@ -1,12 +1,14 @@
 import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
+import { HeroCradle } from "./components/sections/HeroCradle";
 import { SocialProofTicker } from "./components/SocialProofTicker";
-import { Pipeline } from "./components/Pipeline";
-import { AgentSetup } from "./components/AgentSetup";
-import { Replay } from "./components/Replay";
-import { Features } from "./components/Features";
-import { Stats } from "./components/Stats";
+import { HowItWorks } from "./components/sections/HowItWorks";
+import { FeatureSections } from "./components/sections/FeatureSections";
 import { Comparison } from "./components/Comparison";
+import { Stats } from "./components/Stats";
+import { Testimonial } from "./components/sections/Testimonial";
+import { Security } from "./components/sections/Security";
+import { Changelog } from "./components/sections/Changelog";
 import { FAQ } from "./components/FAQ";
 import { Footer } from "./components/Footer";
 
@@ -16,14 +18,35 @@ export default function Home() {
       <Nav />
       <main>
         <Hero />
-        <SocialProofTicker />
-        <Pipeline />
-        <AgentSetup />
-        <Replay />
-        <Features />
+        <HeroCradle />
+
+        <div className="hairline-t">
+          <SocialProofTicker />
+        </div>
+
+        <div className="hairline-t">
+          <HowItWorks />
+        </div>
+
+        <div className="hairline-t">
+          <FeatureSections />
+        </div>
+
+        <div className="hairline-t">
+          <Comparison />
+        </div>
+
         <Stats />
-        <Comparison />
-        <FAQ />
+        <Testimonial />
+        <Security />
+
+        <div className="hairline-t">
+          <Changelog />
+        </div>
+
+        <div className="hairline-t">
+          <FAQ />
+        </div>
       </main>
       <Footer />
     </>

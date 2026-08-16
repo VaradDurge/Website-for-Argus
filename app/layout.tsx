@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Inter, JetBrains_Mono, Instrument_Serif } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Instrument_Serif } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
@@ -15,7 +15,7 @@ const inter = Inter({
   display: "swap",
 });
 
-const mono = JetBrains_Mono({
+const mono = Geist_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
   display: "swap",
