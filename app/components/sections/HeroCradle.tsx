@@ -13,7 +13,7 @@ export function HeroCradle() {
         <div className="relative">
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-x-[-8%] top-[12%] h-[70%] rounded-[300px] opacity-90 blur-[50px]"
+            className="pointer-events-none absolute inset-x-[-14%] top-[4%] h-[88%] rounded-[300px] opacity-100 blur-[36px]"
             style={{ background: "var(--gradient-hero-orb)" }}
           />
           <div className="demo-cradle relative p-1.5 sm:p-2">
