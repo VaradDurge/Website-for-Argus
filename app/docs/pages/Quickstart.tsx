@@ -32,14 +32,9 @@ export default function Quickstart() {
             title: "Attach",
             content: (
               <p>
-                Ask your editor agent to wire ARGUS.{" "}
-                <Link
-                  href="/"
-                  className="text-[var(--accent-soft)] underline decoration-dotted underline-offset-2 hover:text-white hover:decoration-solid"
-                >
-                  AI Setup Prompt
-                </Link>{" "}
-                is a fallback. <code>ArgusWatcher.attach(graph)</code>
+                Ask your editor agent to wire ARGUS. (The skill already
+                contains this AI setup prompt; the homepage copy is just a
+                fallback.) <code>ArgusWatcher.attach(graph)</code>
               </p>
             ),
           },
