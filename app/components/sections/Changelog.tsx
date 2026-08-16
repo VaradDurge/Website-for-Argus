@@ -4,25 +4,25 @@ import { Container } from "@/components/ui/section";
 
 const ENTRIES = [
   {
+    date: "2026-08-16",
+    title: "argus init",
+    excerpt:
+      "Writes Cursor and Claude skills that attach ArgusWatcher and debug from .argus/runs. Commit them and ask your editor to wire ARGUS.",
+    href: "/docs/quickstart",
+  },
+  {
+    date: "2026-08-16",
+    title: "argus fix",
+    excerpt:
+      "Paste-ready prompt for the root-cause node — exact source line and why it failed.",
+    href: "/docs/cli-reference",
+  },
+  {
     date: "2026-08-04",
     title: "Strict mode for CI",
     excerpt:
-      "Fail a build when any detector fires above a configured severity. Ships with per-node overrides and a machine-readable report.",
+      "Fail a build when any detector fires above a configured severity.",
     href: "/docs/configuration",
-  },
-  {
-    date: "2026-07-22",
-    title: "HTTP record & mock",
-    excerpt:
-      "Tool calls made during a run are recorded and replayed deterministically, so a replay never re-hits a third-party API.",
-    href: "/docs/watchers",
-  },
-  {
-    date: "2026-07-09",
-    title: "Adaptive detection patterns",
-    excerpt:
-      "Approve a detection once and ARGUS reuses the pattern across runs — privately for your project or shared across your workspace.",
-    href: "/docs/adaptive-learning",
   },
 ];
 

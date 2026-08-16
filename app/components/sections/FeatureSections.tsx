@@ -35,29 +35,11 @@ const FEATURES: readonly FeatureBleedProps[] = [
     ],
     slotId: "feat-02-root-cause",
     align: "end",
-    preset: "overview",
-    label:
-      "ARGUS overview with root-cause walkback highlighting enrich_account and the execution graph for support-triage.",
-  },
-  {
-    num: "03",
-    title: "Replay and verify with confidence",
-    body: "Freeze upstream state, re-run only the node you changed, and diff the new output against the original. No recomputed LLM calls, no guessing whether the fix actually worked.",
-    capability: "Built for engineers who ship",
-    tags: [
-      "Frozen upstream state",
-      "Node replay",
-      "Output diff",
-      "HTTP record & mock",
-      "Replay history",
-      "Strict mode",
-    ],
-    slotId: "feat-03-replay-verify",
-    align: "start",
+    preset: "graph",
+    tall: true,
     glow: true,
-    preset: "compare",
     label:
-      "ARGUS replay compare showing the original placeholder body against a grounded replayed output.",
+      "ARGUS execution graph highlighting enrich_account as the root cause of the support-triage crash.",
   },
 ];
 

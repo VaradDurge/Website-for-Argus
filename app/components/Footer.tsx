@@ -124,13 +124,10 @@ export function Footer() {
         </div>
       </Container>
 
-      <Container className="overflow-hidden pb-6 select-none">
-        <h2
-          data-text="ARGUS LABS"
-          className="argus-wordmark text-center leading-[0.85] font-medium tracking-[-0.05em] whitespace-nowrap"
-        >
-          ARGUS LABS
-        </h2>
+      <Container className="overflow-hidden py-10 select-none md:py-14">
+        <p className="text-center text-[clamp(40px,9vw,112px)] font-medium leading-none tracking-[-0.06em] text-[var(--ink)] opacity-[0.07]">
+          ArgusLabs
+        </p>
       </Container>
 
       <div className="border-t-[length:var(--hairline)] border-[var(--line)]">

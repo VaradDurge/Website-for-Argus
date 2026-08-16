@@ -11,23 +11,22 @@ export function Testimonial() {
             style={{ background: "var(--gradient-section-glow)" }}
           />
           <div className="relative">
-            <p className="eyebrow">From an early design partner</p>
+            <p className="eyebrow">From a design partner</p>
 
-            <blockquote className="mx-auto mt-8 max-w-[720px]">
-              <p className="text-[24px] leading-[1.35] font-medium tracking-[-0.01em] text-[var(--ink)] md:text-[32px]">
-                &ldquo;We had a summarisation step quietly returning boilerplate
-                for eleven days. Every dashboard was green. ARGUS flagged it on
-                the first run and pointed at the enrichment node that dropped the
-                field.&rdquo;
+            <blockquote className="mx-auto mt-8 max-w-[640px]">
+              <p className="text-[22px] leading-[1.4] font-medium tracking-[-0.01em] text-[var(--ink)] md:text-[28px]">
+                &ldquo;The crash annotation is the best thing in the project.
+                Exact source line plus the upstream null beats most
+                observability tooling I&rsquo;ve used.&rdquo;
               </p>
             </blockquote>
 
             <figcaption className="mt-10 flex flex-col items-center gap-1">
               <span className="text-[14px] font-medium text-[var(--ink)]">
-                Platform engineering lead
+                Nikhil Jha
               </span>
               <span className="text-[13px] text-[var(--ink-3)]">
-                Series B logistics AI · design partner
+                SDE, Pune
               </span>
             </figcaption>
           </div>

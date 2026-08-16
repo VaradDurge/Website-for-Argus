@@ -5,7 +5,7 @@ import { Container } from "@/components/ui/section";
 import { DemoSlot } from "../demo/DemoSlot";
 import { DetectMini } from "../demo/mini/DetectMini";
 import { UnderstandMini } from "../demo/mini/UnderstandMini";
-import { ReplayMini } from "../demo/mini/ReplayMini";
+import { FixMini } from "../demo/mini/FixMini";
 
 const STEPS = [
   {
@@ -26,11 +26,11 @@ const STEPS = [
   },
   {
     num: "03",
-    clause: "replays",
-    slot: "hiw-03-replay",
-    title: "Replays until it is fixed",
-    body: "Re-run one node with upstream state frozen, diff the new output against the old, and gate the change in CI before it ships.",
-    Mini: ReplayMini,
+    clause: "fixes",
+    slot: "hiw-03-fix",
+    title: "Hands you the fix",
+    body: "argus fix writes a paste-ready prompt for the node that dropped the field — exact source line, no hunting through traces.",
+    Mini: FixMini,
   },
 ] as const;
 
@@ -120,7 +120,7 @@ export function HowItWorks() {
                 ? " silent failures in your agent pipeline"
                 : i === 1
                   ? " where the state actually broke"
-                  : " the broken node until the output is right."}
+                  : " the node that actually failed."}
             </span>
           ))}
         </h2>
