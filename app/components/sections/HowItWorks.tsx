@@ -3,6 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Container } from "@/components/ui/section";
 import { DemoSlot } from "../demo/DemoSlot";
+import { DetectMini } from "../demo/mini/DetectMini";
+import { UnderstandMini } from "../demo/mini/UnderstandMini";
+import { ReplayMini } from "../demo/mini/ReplayMini";
 
 const STEPS = [
   {
@@ -11,6 +14,7 @@ const STEPS = [
     slot: "hiw-01-detect",
     title: "Detects silent failures",
     body: "Heuristics, anomaly scoring and a semantic judge run on every node output — so a step that returns a placeholder instead of a summary gets flagged, not marked green.",
+    Mini: DetectMini,
   },
   {
     num: "02",
@@ -18,6 +22,7 @@ const STEPS = [
     slot: "hiw-02-understand",
     title: "Explains the root cause",
     body: "ARGUS walks the graph backwards to the node that actually introduced bad state, and shows the state diff that proves it.",
+    Mini: UnderstandMini,
   },
   {
     num: "03",
@@ -25,6 +30,7 @@ const STEPS = [
     slot: "hiw-03-replay",
     title: "Replays until it is fixed",
     body: "Re-run one node with upstream state frozen, diff the new output against the old, and gate the change in CI before it ships.",
+    Mini: ReplayMini,
   },
 ] as const;
 
@@ -131,7 +137,9 @@ export function HowItWorks() {
               style={{ opacity: active === i ? 1 : 0.6 }}
             >
               <div className="rounded-[var(--radius-panel)] border-[length:var(--hairline)] border-[var(--line)] bg-[var(--ex)] p-1">
-                <DemoSlot id={step.slot} aspect="mini" />
+                <DemoSlot id={step.slot} aspect="mini">
+                  <step.Mini />
+                </DemoSlot>
               </div>
               <p className="step-num mt-6">{step.num}</p>
               <h3 className="mt-3 text-[15px] font-medium text-[var(--ink)]">

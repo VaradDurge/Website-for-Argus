@@ -93,6 +93,22 @@
   --duration-ui: 200ms;
   --duration-reveal: 500ms;
 
+  /* ─── atmosphere (Interfere-structure rainbow, iris-terminated) ─── */
+  --gradient-hero-orb: linear-gradient(
+    90deg,
+    rgba(255, 59, 0, 0.22) 0%,
+    rgba(246, 0, 157, 0.18) 38%,
+    rgba(151, 62, 198, 0.16) 71%,
+    rgba(90, 70, 224, 0.22) 100%
+  );
+  --gradient-section-glow: linear-gradient(
+    90deg,
+    rgba(239, 95, 0, 0.22) 0%,
+    rgba(194, 0, 122, 0.16) 37.5%,
+    rgba(83, 0, 158, 0.14) 70.67%,
+    rgba(90, 70, 224, 0.2) 100%
+  );
+
   /* ─── legacy aliases ───
      Older components reference these names directly. Mapping them onto
      the token layer re-themes them without touching every call site. */
@@ -398,10 +414,11 @@
 /* Cradle for the primary demo. Neutral ground and a neutral shadow —
    elevation is depth, not hue. */
 .demo-cradle {
-  background: var(--ex);
+  background: color-mix(in srgb, var(--ex) 78%, transparent);
   border: var(--hairline) solid var(--line);
   border-radius: var(--radius-panel);
   box-shadow: var(--shadow-demo);
+  backdrop-filter: blur(20px);
 }
 
 .grid-bg {

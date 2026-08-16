@@ -92,7 +92,7 @@ export default function RootLayout({
       lang="en"
       className={`${geist.variable} ${inter.variable} ${mono.variable} ${serif.variable} antialiased`}
     >
-      <body className="min-h-screen bg-[var(--bg)] text-[var(--text)] selection:bg-[var(--accent)]/30 selection:text-white">
+      <body className="min-h-screen bg-[var(--void)] text-[var(--ink)]">
         {children}
         <Analytics />
       </body>

@@ -15,6 +15,13 @@ const FEATURES: readonly FeatureBleedProps[] = [
       "CI gating",
     ],
     slotId: "feat-01-detection-shell",
+    align: "start",
+    image: {
+      src: "/images/demo/feat-01-detection.png",
+      alt: "ARGUS detections list showing a silent failure on the summarize node of support-triage.",
+      width: 2400,
+      height: 1280,
+    },
   },
   {
     num: "02",
@@ -30,6 +37,13 @@ const FEATURES: readonly FeatureBleedProps[] = [
       "Multi-agent lineage",
     ],
     slotId: "feat-02-root-cause",
+    align: "end",
+    image: {
+      src: "/images/demo/feat-02-root-cause.png",
+      alt: "Execution graph walkback highlighting enrich as the root cause and summarize as the silent failure.",
+      width: 2400,
+      height: 1280,
+    },
   },
   {
     num: "03",
@@ -45,6 +59,14 @@ const FEATURES: readonly FeatureBleedProps[] = [
       "Strict mode",
     ],
     slotId: "feat-03-replay-verify",
+    align: "start",
+    glow: true,
+    image: {
+      src: "/images/demo/feat-03-replay.png",
+      alt: "Replay workspace comparing the original placeholder summary against a grounded replayed output.",
+      width: 2400,
+      height: 1280,
+    },
   },
 ];
 

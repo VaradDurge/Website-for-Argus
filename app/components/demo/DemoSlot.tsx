@@ -43,7 +43,11 @@ export function DemoSlot({
         className
       )}
     >
-      {children ?? <DemoPlaceholder id={id} aspect={aspect} />}
+      {children ? (
+        <div className="absolute inset-0 min-h-0">{children}</div>
+      ) : (
+        <DemoPlaceholder id={id} aspect={aspect} />
+      )}
     </div>
   );
 }
