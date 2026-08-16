@@ -32,10 +32,10 @@ const PLATFORM_ICON: Record<Platform, React.ComponentType<any>> = {
 };
 
 const PLATFORM_COLOR: Record<Platform, string> = {
-  x: "#fff",
-  reddit: "#FF4500",
-  discord: "#5865F2",
-  instagram: "#E1306C",
+  x: "var(--ink)",
+  reddit: "#d43900",
+  discord: "#4752c4",
+  instagram: "#c31f5c",
 };
 
 // ═══════════════════════════════════════
@@ -154,9 +154,9 @@ function CardComponent({ card }: { card: ProofCard }) {
   const avatarUrl = `https://api.dicebear.com/9.x/notionists/svg?seed=${card.avatar}&backgroundColor=transparent`;
 
   return (
-    <div className="proof-card shrink-0 w-[300px] sm:w-[380px] rounded-2xl bg-[var(--surface)] border border-[var(--border)] p-4 sm:p-6 flex flex-col justify-between">
+    <div className="proof-card shrink-0 w-[300px] sm:w-[380px] rounded-[var(--radius-panel)] bg-[var(--panel)] border-[length:var(--hairline)] border-[var(--line)] p-4 sm:p-6 flex flex-col justify-between">
       {/* Quote */}
-      <p className="text-[13px] sm:text-[14px] leading-[1.65] text-[var(--text-muted)] mb-4 sm:mb-6">
+      <p className="text-[13px] sm:text-[14px] leading-[1.65] text-[var(--ink-2)] mb-4 sm:mb-6">
         &ldquo;{card.text}&rdquo;
       </p>
 
@@ -169,12 +169,12 @@ function CardComponent({ card }: { card: ProofCard }) {
           width={36}
           height={36}
           className="w-9 h-9 rounded-full shrink-0"
-          style={{ background: "var(--surface-2)" }}
+          style={{ background: "var(--ex)" }}
           loading="lazy"
         />
         <div className="flex-1 min-w-0">
-          <div className="text-[13px] text-white font-medium truncate">{card.name}</div>
-          <div className="text-[11px] text-[var(--text-dim)]">{card.meta}</div>
+          <div className="text-[13px] text-[var(--ink)] font-medium truncate">{card.name}</div>
+          <div className="text-[11px] text-[var(--ink-3)]">{card.meta}</div>
         </div>
         <Icon size={16} className="shrink-0" style={{ color }} />
       </div>
@@ -230,7 +230,7 @@ function TickerRow({
 export function SocialProofTicker() {
   return (
     <section
-      className="relative py-24 lg:py-32 overflow-hidden"
+      className="relative py-16 md:py-24 overflow-hidden"
       style={{
         maskImage:
           "linear-gradient(to right, transparent, black 5%, black 95%, transparent)",
@@ -246,10 +246,12 @@ export function SocialProofTicker() {
         viewport={{ once: true }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       >
-        <p className="text-[22px] sm:text-[28px] lg:text-[32px] font-medium text-white leading-[1.3] max-w-[600px] mx-auto">
+        <p className="heading-4 text-[var(--ink)] max-w-[600px] mx-auto">
           The internet has been complaining about this for years.
           <br />
-          <span className="text-[var(--text-muted)]">We&apos;re just building the fix.</span>
+          <span className="text-[var(--ink-3)]">
+            We&apos;re just building the fix.
+          </span>
         </p>
       </motion.div>
 

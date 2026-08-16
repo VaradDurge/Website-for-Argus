@@ -51,7 +51,8 @@ export default function Quickstart() {
             title: "Inspect",
             content: (
               <p>
-                <code>argus show last</code> or <code>argus ui</code>
+                <code>argus show last</code>, <code>argus fix &lt;id&gt;</code>,
+                or <code>argus ui</code>
               </p>
             ),
           },

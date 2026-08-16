@@ -1,256 +1,171 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { ButtonColorful } from "@/components/ui/button-colorful";
-import { LiquidMetalButton } from "@/components/ui/liquid-metal-button";
+import { RiDiscordFill, RiGithubFill } from "@remixicon/react";
 import { Logo } from "./Logo";
 import { WaitlistModal } from "./WaitlistModal";
 import { BetaAccessModal } from "./BetaAccessModal";
 import { ContactModal } from "./ContactModal";
-import { RiGithubFill, RiDiscordFill, RiInstagramFill } from "@remixicon/react";
 
-const menuItemVariants = {
-  hidden: { opacity: 0, y: -8 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.05, duration: 0.3, ease: "easeOut" as const },
-  }),
-  exit: { opacity: 0, y: -8, transition: { duration: 0.15 } },
-};
+const LINKS = [
+  { label: "How it works", href: "/#how-it-works" },
+  { label: "Features", href: "/#features" },
+  { label: "Security", href: "/#security" },
+  { label: "Changelog", href: "/#changelog" },
+  { label: "Docs", href: "/docs" },
+  { label: "Pricing", href: "/pricing" },
+] as const;
 
 export function Nav() {
   const [waitlistOpen, setWaitlistOpen] = useState(false);
   const [betaOpen, setBetaOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50">
+    <header className="sticky top-0 z-50 border-b-[length:var(--hairline)] border-[var(--line)] bg-[var(--void)]/80 backdrop-blur-xl">
       <WaitlistModal open={waitlistOpen} onClose={() => setWaitlistOpen(false)} />
       <BetaAccessModal open={betaOpen} onClose={() => setBetaOpen(false)} />
       <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />
-      <div className="absolute inset-0 -z-10 backdrop-blur-xl bg-[rgba(7,7,10,0.6)] border-b border-[var(--border)]" />
 
-      <nav className="mx-auto flex max-w-[1280px] items-center justify-between px-4 sm:px-6 lg:px-10 h-14 md:h-16">
-        {/* ── LEFT: logo ── */}
-        <a href="/" className="flex items-center gap-2 shrink-0">
+      <nav className="constrained flex h-14 items-center justify-between gap-4">
+        <Link href="/" className="flex shrink-0 items-center gap-2">
           <Logo />
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-[var(--signal-warn)]/30 bg-[rgba(245,177,60,0.06)]">
-            <span className="font-mono text-[9px] tracking-[0.14em] uppercase text-[var(--signal-warn)]">Beta</span>
+          <span className="rounded-[5px] border-[length:var(--hairline)] border-[var(--line)] bg-[var(--ex)] px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-[var(--ink-3)]">
+            Beta
           </span>
-        </a>
+        </Link>
 
-        {/* ── DESKTOP: social icons ── */}
-        <div className="hidden md:flex items-center gap-1 ml-3">
-          <div className="w-px h-5 bg-[var(--border)] mx-1" />
-          <a
-            href="https://discord.gg/nhbdZkcG"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Discord"
-            className="flex items-center justify-center w-8 h-8 rounded-md text-[var(--text-muted)] hover:text-[#5865F2] hover:scale-110 transition-all duration-200"
-          >
-            <RiDiscordFill size={18} />
-          </a>
+        <ul className="hidden items-center gap-0.5 lg:flex">
+          {LINKS.map((link) => (
+            <li key={link.label}>
+              <Link href={link.href} className="btn-ghost">
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        <div className="hidden items-center gap-2 lg:flex">
           <a
             href="https://github.com/VaradDurge/ARGUS"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
-            className="flex items-center justify-center w-8 h-8 rounded-md text-[var(--text-muted)] hover:text-white hover:scale-110 transition-all duration-200"
+            className="btn-ghost px-1.5"
           >
-            <RiGithubFill size={18} />
+            <RiGithubFill size={16} />
           </a>
           <a
-            href="https://www.instagram.com/argus.in"
+            href="https://discord.gg/nhbdZkcG"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Instagram"
-            className="flex items-center justify-center w-8 h-8 rounded-md text-[var(--text-muted)] hover:text-[#E4405F] hover:scale-110 transition-all duration-200"
+            aria-label="Discord"
+            className="btn-ghost px-1.5"
           >
-            <RiInstagramFill size={18} />
+            <RiDiscordFill size={16} />
           </a>
-        </div>
-
-        {/* ── DESKTOP: center nav links with hover underlines ── */}
-        <ul className="hidden md:flex items-center gap-1 mx-auto">
-          <li>
-            <button
-              onClick={() => setContactOpen(true)}
-              className="nav-link px-3.5 py-2 text-[13.5px] text-[var(--text-muted)] hover:text-white transition-colors rounded-md"
-            >
-              Contact
-            </button>
-          </li>
-          <li>
-            <a
-              href="/docs"
-              className="nav-link px-3.5 py-2 text-[13.5px] text-[var(--text-muted)] hover:text-white transition-colors rounded-md"
-            >
-              Docs
-            </a>
-          </li>
-          <li>
-            <a
-              href="#replay"
-              className="nav-link px-3.5 py-2 text-[13.5px] text-[var(--text-muted)] hover:text-white transition-colors rounded-md"
-            >
-              Replay
-            </a>
-          </li>
-          <li>
-            <a
-              href="#features"
-              className="nav-link px-3.5 py-2 text-[13.5px] text-[var(--text-muted)] hover:text-white transition-colors rounded-md"
-            >
-              Features
-            </a>
-          </li>
-          <li>
-            <a
-              href="/pricing"
-              className="nav-link px-3.5 py-2 text-[13.5px] text-[var(--text-muted)] hover:text-white transition-colors rounded-md"
-            >
-              Pricing
-            </a>
-          </li>
-        </ul>
-
-        {/* ── DESKTOP: right CTA buttons ── */}
-        <div className="hidden md:flex items-center gap-3">
-          <button onClick={() => setWaitlistOpen(true)}>
-            <LiquidMetalButton label="Waitlist" />
-          </button>
-          <button onClick={() => setBetaOpen(true)}>
-            <ButtonColorful label="Book a Call" />
-          </button>
-        </div>
-
-        {/* ── MOBILE: waitlist + hamburger ── */}
-        <div className="flex md:hidden items-center gap-2">
-          <button onClick={() => setWaitlistOpen(true)}>
-            <LiquidMetalButton label="Waitlist" />
+          <button
+            type="button"
+            onClick={() => setWaitlistOpen(true)}
+            className="btn-secondary"
+          >
+            Join waitlist
           </button>
           <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="flex items-center justify-center w-9 h-9 rounded-md border border-[var(--border)] text-[var(--text-muted)] hover:text-white transition-all duration-200"
-            aria-label="Toggle menu"
+            type="button"
+            onClick={() => setBetaOpen(true)}
+            className="btn-primary"
           >
-            <motion.div
-              animate={{ rotate: mobileMenuOpen ? 90 : 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
-            </motion.div>
+            Book a call
+          </button>
+        </div>
+
+        <div className="flex items-center gap-2 lg:hidden">
+          <button
+            type="button"
+            onClick={() => setBetaOpen(true)}
+            className="btn-primary"
+          >
+            Book a call
+          </button>
+          <button
+            type="button"
+            onClick={() => setMobileOpen((open) => !open)}
+            aria-label="Toggle menu"
+            aria-expanded={mobileOpen}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius-control)] border-[length:var(--hairline)] border-[var(--line)] text-[var(--ink-2)] transition-colors hover:text-[var(--ink)]"
+          >
+            {mobileOpen ? <X size={17} /> : <Menu size={17} />}
           </button>
         </div>
       </nav>
 
-      {/* ── MOBILE: slide-down menu with staggered items ── */}
       <AnimatePresence>
-        {mobileMenuOpen && (
+        {mobileOpen && (
           <motion.div
-            className="md:hidden overflow-hidden border-b border-[var(--border)]"
-            style={{ background: "rgba(7,7,10,0.95)", backdropFilter: "blur(20px)" }}
+            className="overflow-hidden border-t-[length:var(--hairline)] border-[var(--line)] bg-[var(--void)] lg:hidden"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.25, ease: [0, 0, 0.2, 1] }}
           >
-            <div className="px-4 py-4 flex flex-col gap-3">
-              {[
-                { type: "button" as const, label: "Contact", action: () => { setContactOpen(true); setMobileMenuOpen(false); } },
-                { type: "link" as const, label: "Docs", href: "/docs" },
-                { type: "link" as const, label: "Replay", href: "#replay" },
-                { type: "link" as const, label: "Features", href: "#features" },
-                { type: "link" as const, label: "Pricing", href: "/pricing" },
-              ].map((item, i) => (
-                <motion.div
-                  key={item.label}
-                  custom={i}
-                  variants={menuItemVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
+            <div className="constrained flex flex-col gap-1 py-4">
+              {LINKS.map((link) => (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="rounded-[var(--radius-control)] px-2 py-2.5 text-[14px] text-[var(--ink-2)] transition-colors hover:bg-[var(--band)] hover:text-[var(--ink)]"
                 >
-                  {item.type === "button" ? (
-                    <button
-                      onClick={item.action}
-                      className="text-left w-full px-3 py-2.5 text-[14px] text-[var(--text-muted)] hover:text-white transition-colors rounded-md"
-                    >
-                      {item.label}
-                    </button>
-                  ) : (
-                    <a
-                      href={item.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="block px-3 py-2.5 text-[14px] text-[var(--text-muted)] hover:text-white transition-colors rounded-md"
-                    >
-                      {item.label}
-                    </a>
-                  )}
-                </motion.div>
+                  {link.label}
+                </Link>
               ))}
 
-              {/* divider */}
-              <motion.div
-                className="h-px bg-[var(--border)] my-1"
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ delay: 0.2, duration: 0.3 }}
-                style={{ transformOrigin: "left" }}
-              />
-
-              {/* social icons */}
-              <motion.div
-                className="flex items-center gap-3 px-3"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.25, duration: 0.3 }}
+              <button
+                type="button"
+                onClick={() => {
+                  setContactOpen(true);
+                  setMobileOpen(false);
+                }}
+                className="rounded-[var(--radius-control)] px-2 py-2.5 text-left text-[14px] text-[var(--ink-2)] transition-colors hover:bg-[var(--component)] hover:text-[var(--ink)]"
               >
-                <a
-                  href="https://discord.gg/nhbdZkcG"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Discord"
-                  className="flex items-center justify-center w-9 h-9 rounded-md border border-[var(--border)] text-[var(--text-muted)] hover:text-[#5865F2] hover:scale-110 transition-all duration-200"
+                Contact
+              </button>
+
+              <div className="mt-3 flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setWaitlistOpen(true);
+                    setMobileOpen(false);
+                  }}
+                  className="btn-secondary flex-1"
                 >
-                  <RiDiscordFill size={18} />
-                </a>
+                  Join waitlist
+                </button>
                 <a
                   href="https://github.com/VaradDurge/ARGUS"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="GitHub"
-                  className="flex items-center justify-center w-9 h-9 rounded-md border border-[var(--border)] text-[var(--text-muted)] hover:text-white hover:scale-110 transition-all duration-200"
+                  className="btn-secondary px-2.5"
                 >
-                  <RiGithubFill size={18} />
+                  <RiGithubFill size={16} />
                 </a>
                 <a
-                  href="https://www.instagram.com/argus.in"
+                  href="https://discord.gg/nhbdZkcG"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Instagram"
-                  className="flex items-center justify-center w-9 h-9 rounded-md border border-[var(--border)] text-[var(--text-muted)] hover:text-[#E4405F] hover:scale-110 transition-all duration-200"
+                  aria-label="Discord"
+                  className="btn-secondary px-2.5"
                 >
-                  <RiInstagramFill size={18} />
+                  <RiDiscordFill size={16} />
                 </a>
-              </motion.div>
-
-              {/* Book a Call button */}
-              <motion.div
-                className="px-3 pt-1"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.3 }}
-              >
-                <button onClick={() => { setBetaOpen(true); setMobileMenuOpen(false); }} className="w-full">
-                  <ButtonColorful label="Book a Call" />
-                </button>
-              </motion.div>
+              </div>
             </div>
           </motion.div>
         )}

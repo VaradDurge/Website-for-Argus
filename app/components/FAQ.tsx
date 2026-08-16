@@ -63,8 +63,8 @@ export function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section className="relative py-24 lg:py-32">
-      <div className="mx-auto max-w-[1280px] px-6 lg:px-10 grid lg:grid-cols-[0.9fr_1.4fr] gap-12 lg:gap-20 items-start">
+    <section className="relative py-16 md:py-24">
+      <div className="constrained grid lg:grid-cols-[0.9fr_1.4fr] gap-12 lg:gap-20 items-start">
         {/* sticky left column — animated entrance */}
         <div className="lg:sticky lg:top-28 lg:self-start">
           <motion.div
@@ -81,49 +81,49 @@ export function FAQ() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-4 sm:mt-6 text-[28px] sm:text-[64px] lg:text-[80px] leading-[0.95] tracking-[-0.04em] text-[var(--accent-soft)]"
+            className="heading-2 mt-4 sm:mt-6 text-[var(--ink)]"
           >
             Questions,
             <br />
-            <span className="font-serif-italic text-white">answered.</span>
+            <span className="text-[var(--ink-3)]">answered.</span>
           </motion.h2>
         </div>
 
         {/* questions list — staggered entrance */}
         <div className="lg:pt-2">
-          <ul className="border-t border-[var(--border)]">
+          <ul className="border-t-[length:var(--hairline)] border-[var(--line)]">
             {QA.map((item, i) => {
               const isOpen = open === i;
               return (
                 <motion.li
                   key={item.q}
-                  className="border-b border-[var(--border)]"
+                  className="border-b-[length:var(--hairline)] border-[var(--line)]"
                   initial={{ opacity: 0, y: 12 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-40px" }}
                   transition={{ duration: 0.4, delay: i * 0.05, ease: "easeOut" }}
                   style={{
-                    borderBottomColor: isOpen ? "rgba(109, 92, 255, 0.2)" : undefined,
+                    borderBottomColor: isOpen ? "var(--iris-border)" : undefined,
                     transition: "border-color 0.3s ease",
                   }}
                 >
                   <button
                     onClick={() => setOpen(isOpen ? null : i)}
-                    className="w-full flex items-center justify-between gap-4 sm:gap-6 py-4 sm:py-5 text-left group transition-colors hover:bg-white/[0.01] rounded-sm"
+                    className="w-full flex items-center justify-between gap-4 sm:gap-6 py-4 sm:py-5 text-left group transition-colors rounded-sm"
                     aria-expanded={isOpen}
                   >
                     <span
-                      className={`text-[16px] sm:text-[17px] tracking-[-0.01em] transition-colors ${
-                        isOpen ? "text-white" : "text-[var(--text)]"
-                      } group-hover:text-white`}
+                      className={`text-[15px] sm:text-[16px] tracking-[-0.01em] transition-colors ${
+                        isOpen ? "text-[var(--ink)]" : "text-[var(--ink-2)]"
+                      } group-hover:text-[var(--ink)]`}
                     >
                       {item.q}
                     </span>
                     <span
-                      className={`shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full border border-[var(--border-strong)] transition-all duration-300 ${
+                      className={`shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full border-[length:var(--hairline)] transition-all duration-300 ${
                         isOpen
-                          ? "bg-[var(--accent)] border-[var(--accent)] text-white"
-                          : "text-[var(--text-muted)] group-hover:text-white group-hover:border-[var(--accent-soft)]"
+                          ? "bg-[var(--iris)] border-[var(--iris)] text-[var(--on-inverted)]"
+                          : "border-[var(--line-2)] text-[var(--ink-3)] group-hover:text-[var(--ink)]"
                       }`}
                     >
                       <Plus
@@ -147,7 +147,7 @@ export function FAQ() {
                           initial={{ y: 8, opacity: 0 }}
                           animate={{ y: 0, opacity: 1 }}
                           transition={{ duration: 0.3, delay: 0.1 }}
-                          className="pb-5 pr-4 sm:pr-12 text-[13.5px] sm:text-[14.5px] leading-[1.7] text-[var(--text-muted)]"
+                          className="pb-5 pr-4 sm:pr-12 text-[13.5px] sm:text-[14px] leading-[1.7] text-[var(--ink-2)]"
                         >
                           {item.a}
                         </motion.p>

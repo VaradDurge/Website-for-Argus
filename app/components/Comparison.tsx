@@ -35,8 +35,8 @@ export function Comparison() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <section className="relative py-24 lg:py-32">
-      <div className="mx-auto max-w-[960px] px-4 sm:px-6 lg:px-10">
+    <section className="relative py-16 md:py-24">
+      <div className="constrained max-w-[960px]">
         {/* Header */}
         <div className="mb-14 lg:mb-16 text-center">
           <motion.div
@@ -57,12 +57,10 @@ export function Comparison() {
               delay: 0.1,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="mt-5 text-[38px] sm:text-[46px] lg:text-[52px] leading-[1.05] tracking-[-0.03em] font-medium"
+            className="heading-3 mt-5 text-[var(--ink)]"
           >
             They trace.{" "}
-            <span className="font-serif-italic text-[var(--accent-soft)]">
-              We detect.
-            </span>
+            <span className="text-[var(--ink-3)]">We detect.</span>
           </motion.h2>
         </div>
 
@@ -78,7 +76,7 @@ export function Comparison() {
           <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-[var(--text-dim)]">
             Capability
           </span>
-          <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-[var(--accent-soft)]">
+          <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-[var(--iris-fg)]">
             Argus
           </span>
           <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-[var(--text-dim)]">
@@ -109,7 +107,7 @@ export function Comparison() {
                 <motion.div
                   className="absolute left-0 top-0 bottom-0 w-[2px]"
                   style={{
-                    background: "var(--signal-ok)",
+                    background: "var(--iris)",
                     transformOrigin: "top",
                   }}
                   initial={{ scaleY: 0 }}
@@ -123,8 +121,8 @@ export function Comparison() {
                     className="font-mono text-[12px] tracking-[0.1em] pt-px transition-colors duration-300"
                     style={{
                       color: isHovered
-                        ? "var(--accent-soft)"
-                        : "var(--text-dim)",
+                        ? "var(--iris-fg)"
+                        : "var(--ink-3)",
                     }}
                   >
                     {String(i + 1).padStart(2, "0")}
@@ -133,7 +131,7 @@ export function Comparison() {
                   <span
                     className="text-[13.5px] font-medium tracking-[-0.01em] transition-colors duration-300"
                     style={{
-                      color: isHovered ? "white" : "var(--text-muted)",
+                      color: isHovered ? "var(--ink)" : "var(--ink-2)",
                     }}
                   >
                     {row.capability}
@@ -144,21 +142,21 @@ export function Comparison() {
                       className="mt-[6px] w-1 h-1 rounded-full shrink-0 transition-colors duration-300"
                       style={{
                         background: isHovered
-                          ? "var(--signal-ok)"
-                          : "var(--text-dim)",
+                          ? "var(--sig-ok)"
+                          : "var(--ink-3)",
                       }}
                     />
                     <span
                       className="text-[13px] leading-[1.5] transition-colors duration-300"
                       style={{
-                        color: isHovered ? "white" : "var(--text-muted)",
+                        color: isHovered ? "var(--ink)" : "var(--ink-2)",
                       }}
                     >
                       {row.argus}
                     </span>
                   </div>
 
-                  <span className="text-[13px] leading-[1.5] text-[var(--text-dim)]">
+                  <span className="text-[13px] leading-[1.5] text-[var(--ink-3)]">
                     {row.others}
                   </span>
                 </div>
@@ -166,21 +164,21 @@ export function Comparison() {
                 {/* Mobile layout */}
                 <div className="lg:hidden py-3.5 pl-3 pr-2 space-y-1.5 cursor-default">
                   <div className="flex items-center gap-3">
-                    <span className="font-mono text-[12px] tracking-[0.1em] text-[var(--text-dim)]">
+                    <span className="font-mono text-[12px] tracking-[0.1em] text-[var(--ink-3)]">
                       {String(i + 1).padStart(2, "0")}
                     </span>
-                    <span className="text-[13.5px] font-medium text-[var(--text-muted)]">
+                    <span className="text-[13.5px] font-medium text-[var(--ink-2)]">
                       {row.capability}
                     </span>
                   </div>
                   <div className="pl-8 flex items-start gap-1.5">
-                    <span className="mt-[5px] w-1 h-1 rounded-full shrink-0 bg-[var(--signal-ok)]" />
-                    <span className="text-[12.5px] leading-[1.5] text-white">
+                    <span className="mt-[5px] w-1 h-1 rounded-full shrink-0 bg-[var(--sig-ok)]" />
+                    <span className="text-[12.5px] leading-[1.5] text-[var(--ink)]">
                       {row.argus}
                     </span>
                   </div>
                   <div className="pl-8">
-                    <span className="text-[12px] leading-[1.5] text-[var(--text-dim)]">
+                    <span className="text-[12px] leading-[1.5] text-[var(--ink-3)]">
                       {row.others}
                     </span>
                   </div>
