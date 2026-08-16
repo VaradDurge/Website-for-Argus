@@ -144,6 +144,7 @@ export const DOCS_REGISTRY: Record<string, DocPage> = {
       "Complete reference for all ARGUS CLI commands.",
     toc: [
       { id: "overview", label: "Overview", level: 2 },
+      { id: "argus-init", label: "argus init", level: 2 },
       { id: "argus-watch", label: "argus watch", level: 2 },
       { id: "argus-trace", label: "argus trace", level: 2 },
       { id: "argus-replay", label: "argus replay", level: 2 },

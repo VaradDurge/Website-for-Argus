@@ -28,33 +28,58 @@ export default function Quickstart() {
             ),
           },
           {
-            title: "Paste the AI setup prompt",
+            title: "Write project skills",
             content: (
               <>
                 <p>
-                  Go to the{" "}
+                  <code>argus init</code>
+                </p>
+                <p className="mt-2">
+                  Writes Cursor and Claude skills at{" "}
+                  <code>.cursor/skills/argus-debug/</code> and{" "}
+                  <code>.claude/skills/argus-debug/</code>. Commit them. The skill
+                  already contains the setup prompt — later chats can call{" "}
+                  <code>ArgusWatcher.attach()</code> and read{" "}
+                  <code>.argus/runs</code> instead of guessing from logs.
+                </p>
+              </>
+            ),
+          },
+          {
+            title: "Attach ARGUS",
+            content: (
+              <>
+                <p>
+                  Ask your editor agent to wire ARGUS — after{" "}
+                  <code>argus init</code>, that is enough. The{" "}
                   <Link
                     href="/"
                     className="text-[var(--accent-soft)] underline decoration-dotted underline-offset-2 hover:text-white hover:decoration-solid"
                   >
                     homepage
-                  </Link>
-                  , copy <span className="text-white">AI Setup Prompt</span>, paste it into
-                  Cursor / Claude / ChatGPT. It wires <code>attach()</code> into your graph.
+                  </Link>{" "}
+                  AI Setup Prompt is a fallback if you still want to paste a one-shot.
+                  Happy path: <code>ArgusWatcher.attach(graph)</code>.
                 </p>
               </>
             ),
           },
           {
             title: "Run your pipeline",
-            content: <p>Same as always. ARGUS watches in the background and saves the run.</p>,
+            content: (
+              <p>
+                Same as always. If something is wrong, a short{" "}
+                <code>[argus]</code> finding prints in the terminal. Clean runs stay
+                silent.
+              </p>
+            ),
           },
           {
             title: "See what it caught",
             content: (
               <>
                 <p>
-                  <code>argus ui</code> or <code>argus show last</code>
+                  <code>argus show last</code> or <code>argus ui</code>
                 </p>
               </>
             ),

@@ -56,6 +56,12 @@ STEP 3 — INTEGRATE ARGUS
 Install: pip install argus-agents
 (The PyPI package is argus-agents, not argus. Default install includes the CLI, LangGraph adapter, and UI. LLM judge is optional: run argus key set — no extra pip extra.)
 
+Also run: argus init
+This writes project skills for Cursor and Claude:
+  .cursor/skills/argus-debug/SKILL.md
+  .claude/skills/argus-debug/SKILL.md
+Commit them. Later chats will attach ArgusWatcher and read .argus/runs JSON instead of guessing from logs.
+
 Add ArgusWatcher to the file where the graph is built:
 
 from argus import ArgusWatcher
@@ -135,9 +141,9 @@ argus doctor          # check environment and optional deps`;
 
 const STEPS = [
   { num: "1", label: "pip install argus-agents" },
-  { num: "2", label: "Paste the AI prompt" },
-  { num: "3", label: "Run your pipeline" },
-  { num: "4", label: "argus ui" },
+  { num: "2", label: "argus init" },
+  { num: "3", label: "Ask your agent to wire ARGUS" },
+  { num: "4", label: "argus show last" },
 ];
 
 function PromptLine({ line, num }: { line: string; num: number }) {
@@ -227,8 +233,9 @@ export function AgentSetup() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="mt-4 text-[14px] sm:text-[16px] text-[var(--text-muted)] max-w-[480px] mx-auto leading-[1.6]"
           >
-            Copy this prompt, paste it into Claude or ChatGPT, and it will
-            audit your pipeline and wire up ARGUS automatically.
+            Run argus init, then ask your editor agent to wire ARGUS. The
+            skill already contains the setup prompt — paste below only as a
+            fallback.
           </motion.p>
         </div>
 

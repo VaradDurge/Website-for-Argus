@@ -17,7 +17,8 @@ export default function CLIReference() {
 
       <CodeBlock
         language="bash"
-        code={`argus list                          # all runs
+        code={`argus init                          # write Cursor + Claude project skills
+argus list                          # all runs
 argus show last                     # most recent run
 argus show run <id>                 # by full id or 8-char prefix
 argus replay <id> <node>            # re-run from a node
@@ -36,6 +37,21 @@ argus logout                        # clear credentials
 argus whoami                        # check login status
 argus update                        # check for new release`}
       />
+
+      <Heading level={2} id="argus-init">
+        argus init
+      </Heading>
+      <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        Write Cursor and Claude project skills (
+        <code>.cursor/skills/argus-debug/</code> and{" "}
+        <code>.claude/skills/argus-debug/</code>). Commit them. The skill already
+        contains the setup prompt — later chats can call{" "}
+        <code>ArgusWatcher.attach()</code> and read <code>.argus/runs</code>{" "}
+        instead of guessing from logs. Safe to re-run; pass <code>--force</code>{" "}
+        to overwrite customized files.
+      </p>
+      <CodeBlock language="bash" code={`argus init
+argus init --force`} />
 
       <Heading level={2} id="argus-list">
         argus list
