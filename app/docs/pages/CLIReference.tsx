@@ -21,6 +21,7 @@ export default function CLIReference() {
 argus list                          # all runs
 argus show last                     # most recent run
 argus show run <id>                 # by full id or 8-char prefix
+argus fix <id>                      # paste-ready prompt for the root-cause node
 argus replay <id> <node>            # re-run from a node
 argus replay <id> <node> --only     # re-run just that one node
 argus inspect <id> --step <node>    # raw input/output for a node
@@ -64,6 +65,23 @@ argus init --force`} />
         language="bash"
         code={`# List all runs
 argus list`}
+      />
+
+      <Heading level={2} id="argus-fix">
+        argus fix
+      </Heading>
+      <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
+        Print a paste-ready prompt for a coding agent, aimed at the{" "}
+        <em>root-cause</em> node — not the crash site. No LLM call. Write to a
+        file with <code>--output</code>. Strip recorded values with{" "}
+        <code>--sanitized</code>.
+      </p>
+      <CodeBlock
+        language="bash"
+        code={`argus fix <run-id>
+argus fix <run-id> --node retrieve
+argus fix <run-id> --output fix.md
+argus fix <run-id> --sanitized`}
       />
 
       <Heading level={2} id="argus-show">
