@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Container, TagList } from "@/components/ui/section";
+import { ArgusDemo, type DemoPreset } from "../demo/ArgusDemo";
 
 export interface FeatureBleedProps {
   num: string;
@@ -11,18 +11,20 @@ export interface FeatureBleedProps {
   slotId: string;
   /** Copy on the left (start) or right (end). Alternates per Interfere cadence. */
   align?: "start" | "end";
-  image: {
-    src: string;
-    alt: string;
-    width: number;
-    height: number;
-  };
+  preset: DemoPreset;
+  label: string;
   glow?: boolean;
 }
 
+const WASH =
+  "radial-gradient(1200px 700px at 20% 80%, rgba(255,59,0,.55), transparent 60%)," +
+  "radial-gradient(1000px 640px at 75% 20%, rgba(0,142,255,.5), transparent 58%)," +
+  "radial-gradient(900px 600px at 55% 60%, rgba(246,0,157,.42), transparent 55%)," +
+  "linear-gradient(115deg,#ff3b00 0%,#f6009d 32%,#973ec6 58%,#5a46e0 82%,#00c2a8 100%)";
+
 /**
  * Copy + a 15:8 product panel that bleeds off the container edge.
- * The panel is a cropped demo-UI still on a rainbow wash — not a live slot.
+ * The panel is the Argus instrument dashboard on a rainbow wash.
  */
 export function FeatureBleed({
   num,
@@ -32,7 +34,8 @@ export function FeatureBleed({
   tags,
   slotId,
   align = "start",
-  image,
+  preset,
+  label,
   glow = false,
 }: FeatureBleedProps) {
   const copyFirst = align === "start";
@@ -74,16 +77,14 @@ export function FeatureBleed({
               ) : null}
               <div
                 data-demo-slot={slotId}
-                className="relative h-full overflow-hidden rounded-[var(--radius-panel)] border-[length:var(--hairline)] border-[var(--line)] bg-[var(--ex)] shadow-[var(--shadow-demo)]"
+                role="img"
+                aria-label={label}
+                className="relative h-full overflow-hidden rounded-[var(--radius-panel)] border-[length:var(--hairline)] border-[var(--line)] shadow-[var(--shadow-demo)]"
               >
-                <Image
-                  src={image.src}
-                  alt={image.alt}
-                  width={image.width}
-                  height={image.height}
-                  className="h-full w-full object-cover object-left"
-                  sizes="(max-width: 768px) 100vw, 1200px"
-                />
+                <div aria-hidden className="absolute inset-0" style={{ background: WASH }} />
+                <div className="absolute inset-[6%] overflow-hidden rounded-[12px] border border-black/10 bg-[var(--panel)] shadow-[0_40px_80px_-24px_rgba(0,0,0,0.35)]">
+                  <ArgusDemo preset={preset} frozen />
+                </div>
               </div>
             </div>
           </div>

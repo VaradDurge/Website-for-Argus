@@ -16,12 +16,9 @@ const FEATURES: readonly FeatureBleedProps[] = [
     ],
     slotId: "feat-01-detection-shell",
     align: "start",
-    image: {
-      src: "/images/demo/feat-01-detection.png",
-      alt: "ARGUS detections list showing a silent failure on the summarize node of support-triage.",
-      width: 2400,
-      height: 1280,
-    },
+    preset: "pipeline",
+    label:
+      "ARGUS pipeline view showing a silent failure on enrich_account, a placeholder in draft_reply, and a crash in policy_check.",
   },
   {
     num: "02",
@@ -38,12 +35,9 @@ const FEATURES: readonly FeatureBleedProps[] = [
     ],
     slotId: "feat-02-root-cause",
     align: "end",
-    image: {
-      src: "/images/demo/feat-02-root-cause.png",
-      alt: "Execution graph walkback highlighting enrich as the root cause and summarize as the silent failure.",
-      width: 2400,
-      height: 1280,
-    },
+    preset: "overview",
+    label:
+      "ARGUS overview with root-cause walkback highlighting enrich_account and the execution graph for support-triage.",
   },
   {
     num: "03",
@@ -61,12 +55,9 @@ const FEATURES: readonly FeatureBleedProps[] = [
     slotId: "feat-03-replay-verify",
     align: "start",
     glow: true,
-    image: {
-      src: "/images/demo/feat-03-replay.png",
-      alt: "Replay workspace comparing the original placeholder summary against a grounded replayed output.",
-      width: 2400,
-      height: 1280,
-    },
+    preset: "compare",
+    label:
+      "ARGUS replay compare showing the original placeholder body against a grounded replayed output.",
   },
 ];
 
