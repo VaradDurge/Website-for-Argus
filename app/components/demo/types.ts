@@ -1,45 +1,35 @@
 export type Signal = "ok" | "lime" | "warn" | "fail" | "info";
-
 export type RunStatus = "clean" | "silent" | "failed";
 
-export type DemoTab = "runs" | "trace" | "replay";
+export type SignalTone = "ok" | "bad" | "warn" | "sem" | "live" | "mute";
 
-export type NodeId =
-  | "extract"
-  | "enrich"
-  | "summarize"
-  | "validate"
-  | "respond";
+export type WorkspaceTab = "overview" | "pipeline" | "analysis" | "correlations" | "state" | "logs";
 
-export type NodeStatus = Signal;
+export type RailId = "runs" | "compare" | "approvals" | "datasets" | "graphs";
 
-export interface RunRow {
+export type ExplorerTone = "ok" | "bad" | "warn" | "sem" | "live" | "plain";
+
+export interface ExplorerRun {
   id: string;
-  graph: string;
-  path: string;
-  status: RunStatus;
-  failedNode?: string;
-  steps: readonly Signal[];
-  duration: string;
   ago: string;
-  tokens: string;
+  tone: ExplorerTone;
+  nest?: boolean;
+  label?: string;
 }
 
-export interface PipelineNode {
-  id: NodeId;
+export interface WorkspaceItem {
+  id: string;
+  kind: "run" | "compare";
   label: string;
-  step: string;
-  type: string;
-  status: NodeStatus;
-  duration: string;
-  finding: string;
-  input: Record<string, string | number | boolean | null>;
-  output: Record<string, string | number | boolean | null>;
+  tone: ExplorerTone;
 }
 
-export interface ReplayField {
-  key: string;
-  before: string;
-  after: string;
-  changed: boolean;
+export interface PipelineRow {
+  num: string;
+  name: string;
+  detail?: string;
+  status: SignalTone;
+  statusLabel: string;
+  duration: string;
+  flag?: "tool" | "sem";
 }

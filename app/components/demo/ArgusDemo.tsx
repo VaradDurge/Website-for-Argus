@@ -3,73 +3,94 @@
 import { useEffect, useState } from "react";
 import {
   Activity,
-  GitBranch,
+  BookOpen,
+  ClipboardCheck,
+  Clock,
+  Database,
+  FileText,
+  GitCompare,
+  Info,
+  Network,
+  Plus,
   RotateCcw,
   Search,
   Settings,
+  X,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { HexMark, MonoLabel } from "./chrome";
-import { SELECTED_RUN_ID } from "./data";
-import { RunsScreen } from "./screens/RunsScreen";
-import { TraceScreen } from "./screens/TraceScreen";
-import { ReplayScreen, type ReplayPhase } from "./screens/ReplayScreen";
-import type { DemoTab, NodeId, RunRow, RunStatus } from "./types";
+import {
+  CRASHED_ID,
+  FAILING,
+  INITIAL_TABS,
+  LOG_LINES,
+  RECENT,
+  RUN_META,
+} from "./data";
+import { OverviewScreen } from "./screens/OverviewScreen";
+import { PipelineScreen } from "./screens/PipelineScreen";
+import { StateScreen } from "./screens/StateScreen";
+import type { ExplorerRun, ExplorerTone, RailId, WorkspaceTab } from "./types";
+import "./instrument.css";
 
-const RAIL = [
-  { id: "runs" as const, icon: Activity, label: "Runs" },
-  { id: "trace" as const, icon: GitBranch, label: "Trace" },
-  { id: "replay" as const, icon: RotateCcw, label: "Replay" },
+const RAIL: { id: RailId; label: string; icon: typeof Activity }[] = [
+  { id: "runs", label: "Runs", icon: Activity },
+  { id: "compare", label: "Compare", icon: GitCompare },
+  { id: "approvals", label: "Approvals", icon: ClipboardCheck },
+  { id: "datasets", label: "Datasets", icon: Database },
+  { id: "graphs", label: "Graphs", icon: Network },
 ];
 
-const EXPLORE = [
-  {
-    label: "Observe",
-    items: [
-      { id: "runs" as const, label: "Runs" },
-      { id: "runs" as const, label: "Detections", filter: "silent" as const },
-    ],
-  },
-  {
-    label: "Analyze",
-    items: [
-      { id: "trace" as const, label: "Trace" },
-      { id: "replay" as const, label: "Replay" },
-    ],
-  },
+const INNER: { id: WorkspaceTab; label: string }[] = [
+  { id: "overview", label: "Overview" },
+  { id: "pipeline", label: "Pipeline" },
+  { id: "analysis", label: "AI Analysis" },
+  { id: "correlations", label: "Correlations" },
+  { id: "state", label: "State" },
+  { id: "logs", label: "Logs" },
 ];
 
-const TABS: { id: DemoTab; label: string }[] = [
-  { id: "runs", label: "Runs" },
-  { id: "trace", label: "Trace" },
-  { id: "replay", label: "Replay" },
-];
+function HexMark() {
+  return (
+    <svg viewBox="0 0 18 18" fill="none" aria-hidden>
+      <path
+        d="M9 1.5 16.5 5.5v7L9 16.5 1.5 12.5v-7L9 1.5Z"
+        stroke="currentColor"
+        strokeWidth="1.4"
+      />
+      <circle cx="9" cy="9" r="2.2" stroke="currentColor" strokeWidth="1.3" />
+      <circle cx="9" cy="9" r=".9" fill="currentColor" />
+    </svg>
+  );
+}
+
+function toneClass(tone: ExplorerTone) {
+  if (tone === "plain") return "fg";
+  return `fg ${tone}`;
+}
 
 export function ArgusDemo() {
-  const [tab, setTab] = useState<DemoTab>("runs");
-  const [filter, setFilter] = useState<"all" | RunStatus>("all");
-  const [selectedId, setSelectedId] = useState(SELECTED_RUN_ID);
-  const [selectedNode, setSelectedNode] = useState<NodeId>("summarize");
-  const [replayPhase, setReplayPhase] = useState<ReplayPhase>("idle");
+  const [rail, setRail] = useState<RailId>("runs");
+  const [live, setLive] = useState(true);
+  const [noteOpen, setNoteOpen] = useState(true);
+  const [query, setQuery] = useState("");
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [openGroups, setOpenGroups] = useState({
+    failing: true,
+    recent: true,
+    pipelines: true,
+    saved: false,
+  });
+  const tabs = INITIAL_TABS;
+  const [activeId, setActiveId] = useState(CRASHED_ID);
+  const [inner, setInner] = useState<WorkspaceTab>("overview");
+  const [selectedNode, setSelectedNode] = useState<string | null>("enrich_account");
+  const [replayPhase, setReplayPhase] = useState<"idle" | "running" | "done">("idle");
 
-  function openTab(next: DemoTab, nextFilter?: "all" | RunStatus) {
-    setTab(next);
-    if (nextFilter) setFilter(nextFilter);
-  }
-
-  function selectRun(run: RunRow) {
-    setSelectedId(run.id);
-    if (run.failedNode === "summarize" || run.failedNode === "parse_diff") {
-      setSelectedNode(run.failedNode === "parse_diff" ? "extract" : "summarize");
-    }
-  }
+  const runId = CRASHED_ID;
+  const meta = RUN_META[CRASHED_ID];
+  const lockedRail = rail === "compare" || rail === "approvals" || rail === "datasets" || rail === "graphs";
 
   function replay() {
-    if (replayPhase === "running") return;
-    if (replayPhase === "done") {
-      setReplayPhase("idle");
-      return;
-    }
+    if (replayPhase !== "idle") return;
     setReplayPhase("running");
   }
 
@@ -80,130 +101,387 @@ export function ArgusDemo() {
     return () => window.clearTimeout(timer);
   }, [replayPhase]);
 
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+      if (e.key === "Escape") {
+        setSearchOpen(false);
+        setQuery("");
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  function onExplorer(item: ExplorerRun) {
+    if (item.id !== CRASHED_ID) return;
+    setActiveId(CRASHED_ID);
+    setRail("runs");
+    setInner("overview");
+  }
+
+  const filter = (items: readonly ExplorerRun[]) =>
+    items.filter((item) => {
+      const label = item.label ?? item.id;
+      return !query || label.toLowerCase().includes(query.toLowerCase());
+    });
+
   return (
-    <div className="trial-ui flex h-full min-h-0 bg-[var(--panel)] text-[var(--ink)]">
-      <aside className="hidden w-10 shrink-0 flex-col items-center border-r-[length:var(--hairline)] border-[var(--line)] bg-[var(--rail)] py-2.5 sm:flex">
-        <HexMark size={18} />
-        <nav className="mt-4 flex flex-1 flex-col items-center gap-1" aria-label="Instrument">
+    <div className="argus-instrument">
+      <div className="ide">
+        <nav className="irail" aria-label="Instrument">
+          <span className="irail-mark">
+            <HexMark />
+          </span>
           {RAIL.map((item) => {
             const Icon = item.icon;
-            const active = tab === item.id;
             return (
               <button
                 key={item.id}
                 type="button"
                 title={item.label}
                 aria-label={item.label}
-                onClick={() => openTab(item.id)}
-                className={cn(
-                  "flex h-8 w-8 items-center justify-center rounded-[7px] transition-colors",
-                  active
-                    ? "bg-[var(--iris-subtle)] text-[var(--iris)]"
-                    : "text-[var(--ink-3)] hover:bg-[var(--band)] hover:text-[var(--ink)]"
-                )}
+                className={rail === item.id ? "on" : undefined}
+                onClick={() => setRail(item.id)}
               >
-                <Icon size={14} strokeWidth={1.75} />
+                <Icon strokeWidth={1.7} />
               </button>
             );
           })}
+          <span className="sp" />
+          <button type="button" title="Guide" aria-label="Guide">
+            <BookOpen strokeWidth={1.7} />
+          </button>
+          <button type="button" title="Settings" aria-label="Settings">
+            <Settings strokeWidth={1.7} />
+          </button>
         </nav>
-        <Settings size={14} className="text-[var(--ink-3)]" />
-      </aside>
 
-      <aside className="hidden w-[168px] shrink-0 flex-col border-r-[length:var(--hairline)] border-[var(--line)] bg-[var(--ex)] md:flex">
-        <div className="border-b-[length:var(--hairline)] border-[var(--line)] px-3 py-2.5">
-          <div className="text-[12px] font-medium tracking-[-0.01em] text-[var(--ink)]">
-            ARGUS
-          </div>
-          <MonoLabel className="mt-0.5 block">Instrument · live</MonoLabel>
-        </div>
-        <div className="flex-1 space-y-4 overflow-auto px-2 py-3">
-          {EXPLORE.map((group) => (
-            <div key={group.label}>
-              <MonoLabel className="px-1.5">{group.label}</MonoLabel>
-              <div className="mt-1.5 space-y-0.5">
-                {group.items.map((item) => {
-                  const active =
-                    tab === item.id &&
-                    (!("filter" in item) || filter === item.filter);
-                  return (
-                    <button
-                      key={item.label}
-                      type="button"
-                      onClick={() =>
-                        openTab(item.id, "filter" in item ? item.filter : "all")
-                      }
-                      className={cn(
-                        "flex w-full items-center rounded-[6px] px-1.5 py-1 text-left text-[12px] transition-colors",
-                        active
-                          ? "bg-[var(--panel)] text-[var(--ink)] shadow-[var(--shadow-control)]"
-                          : "text-[var(--ink-2)] hover:bg-[var(--band)] hover:text-[var(--ink)]"
-                      )}
-                    >
-                      {item.label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
-        </div>
-      </aside>
-
-      <div className="flex min-w-0 flex-1 flex-col">
-        <div className="flex shrink-0 items-center gap-2 border-b-[length:var(--hairline)] border-[var(--line)] bg-[var(--band)] px-3 py-1.5">
-          <span className="live-dot" />
-          <MonoLabel>support-triage</MonoLabel>
-          <span className="text-[var(--line-3)]">/</span>
-          <span className="truncate font-mono text-[10px] text-[var(--ink-2)]">
-            {selectedId}
-          </span>
-          <div className="ml-auto hidden items-center gap-1.5 sm:flex">
-            <Search size={11} className="text-[var(--ink-3)]" />
-            <span className="font-mono text-[10px] text-[var(--ink-3)]">
-              ⌕ node, run, field
-            </span>
-          </div>
-        </div>
-
-        <div className="flex shrink-0 items-center gap-0.5 border-b-[length:var(--hairline)] border-[var(--line)] px-2">
-          {TABS.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => openTab(item.id)}
-              className={cn(
-                "border-b-2 px-2.5 py-2 text-[12px] transition-colors",
-                tab === item.id
-                  ? "border-[var(--iris)] text-[var(--ink)]"
-                  : "border-transparent text-[var(--ink-3)] hover:text-[var(--ink)]"
-              )}
-            >
-              {item.label}
+        <aside className="explorer">
+          {searchOpen ? (
+            <label className="ex-search">
+              <Search />
+              <input
+                autoFocus
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onBlur={() => !query && setSearchOpen(false)}
+                placeholder="Search runs"
+                style={{
+                  flex: 1,
+                  border: "none",
+                  background: "transparent",
+                  outline: "none",
+                  font: "inherit",
+                  color: "var(--ink)",
+                  minWidth: 0,
+                }}
+              />
+              <span className="kbd">esc</span>
+            </label>
+          ) : (
+            <button type="button" className="ex-search" onClick={() => setSearchOpen(true)}>
+              <Search />
+              Search runs
+              <span className="kbd">⌘K</span>
             </button>
-          ))}
-        </div>
+          )}
+          <div className="ex-title">
+            Run Explorer <Info />
+          </div>
+          <div className="ex-scroll">
+            <ExplorerGroup
+              title="Failing now"
+              count={FAILING.length}
+              open={openGroups.failing}
+              onToggle={() => setOpenGroups((g) => ({ ...g, failing: !g.failing }))}
+              items={filter(FAILING)}
+              activeId={activeId}
+              onSelect={onExplorer}
+            />
+            <ExplorerGroup
+              title="Recent"
+              count={RECENT.length}
+              open={openGroups.recent}
+              onToggle={() => setOpenGroups((g) => ({ ...g, recent: !g.recent }))}
+              items={filter(RECENT)}
+              activeId={activeId}
+              onSelect={onExplorer}
+            />
+            <div className="ex-group">
+              <button
+                type="button"
+                className={`ex-head${openGroups.pipelines ? "" : " closed"}`}
+                onClick={() => setOpenGroups((g) => ({ ...g, pipelines: !g.pipelines }))}
+              >
+                <span className="tri" />
+                Pipelines
+                <span className="add" aria-hidden>
+                  <Plus />
+                </span>
+              </button>
+              {openGroups.pipelines ? (
+                <div className="ex-body">
+                  <div className="ex-item">
+                    <Network className="fg ok" />
+                    <span className="lb">support-triage</span>
+                    <span className="ago">7n</span>
+                  </div>
+                  <div className="ex-item">
+                    <Network className="fg warn" />
+                    <span className="lb">doc-indexer</span>
+                    <span className="ago">6n</span>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+            <div className="ex-group">
+              <button
+                type="button"
+                className={`ex-head${openGroups.saved ? "" : " closed"}`}
+                onClick={() => setOpenGroups((g) => ({ ...g, saved: !g.saved }))}
+              >
+                <span className="tri" />
+                Saved views
+                <span className="n">4</span>
+              </button>
+            </div>
+          </div>
+        </aside>
 
-        <div className="min-h-0 flex-1 overflow-hidden">
-          {tab === "runs" ? (
-            <RunsScreen
-              selectedId={selectedId}
-              filter={filter}
-              onFilter={setFilter}
-              onSelect={selectRun}
-            />
-          ) : null}
-          {tab === "trace" ? (
-            <TraceScreen
-              selectedNode={selectedNode}
-              onSelectNode={setSelectedNode}
-            />
-          ) : null}
-          {tab === "replay" ? (
-            <ReplayScreen phase={replayPhase} onReplay={replay} />
-          ) : null}
+        <div className="ws">
+          <div className="ws-top">
+            <div className="ws-vp">
+              <button
+                type="button"
+                className={live ? "on" : undefined}
+                title="Live tail"
+                onClick={() => setLive(true)}
+              >
+                <Activity />
+              </button>
+              <button
+                type="button"
+                className={live ? undefined : "on"}
+                title="Paused"
+                onClick={() => setLive(false)}
+              >
+                <Clock />
+              </button>
+            </div>
+            <span className="ws-live">Production · {live ? "live" : "paused"}</span>
+            {noteOpen ? (
+              <div className="ws-note">
+                <Info />
+                4 nodes lack type annotations
+                <button type="button" aria-label="Dismiss" onClick={() => setNoteOpen(false)}>
+                  <X />
+                </button>
+              </div>
+            ) : null}
+          </div>
+
+          <div className="tabbar">
+            {tabs.map((tab) => (
+              <div
+                key={tab.id}
+                className={`tab${tab.id === activeId ? " on" : ""}`}
+                role="tab"
+                tabIndex={0}
+                aria-selected={tab.id === activeId}
+              >
+                <FileText className={toneClass(tab.tone)} />
+                <span className="lb">{tab.label}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="ws-body">
+            {lockedRail ? (
+              <LockedPane label={rail} />
+            ) : (
+              <>
+                <div className="run-head">
+                  <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
+                    <span className="run-id">{meta.fullId}</span>
+                    <span className={`stat ${meta.status}`}>
+                      <i />
+                      {meta.statusLabel}
+                    </span>
+                    <span style={{ flex: 1 }} />
+                    <button type="button" className="btn btn-sm btn-ghost">
+                      Export
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-sm"
+                      onClick={replay}
+                      disabled={replayPhase === "running"}
+                    >
+                      <RotateCcw />
+                      {replayPhase === "running"
+                        ? "Replaying…"
+                        : replayPhase === "done"
+                          ? "Verified"
+                          : "Replay"}
+                    </button>
+                  </div>
+                  <div className="run-meta">{meta.meta}</div>
+                  <div className="tabs" role="tablist">
+                    {INNER.map((tab) => (
+                      <button
+                        key={tab.id}
+                        type="button"
+                        role="tab"
+                        aria-selected={inner === tab.id}
+                        onClick={() => setInner(tab.id)}
+                      >
+                        {tab.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                {inner === "overview" ? (
+                  <OverviewScreen
+                    runId={runId}
+                    selectedNode={selectedNode}
+                    onSelectNode={setSelectedNode}
+                    onOpenPipeline={() => setInner("pipeline")}
+                  />
+                ) : null}
+                {inner === "pipeline" ? (
+                  <PipelineScreen selectedStep={selectedNode} onSelectStep={setSelectedNode} />
+                ) : null}
+                {inner === "state" ? <StateScreen /> : null}
+                {inner === "analysis" ? <AnalysisPane /> : null}
+                {inner === "correlations" ? <CorrelationsPane /> : null}
+                {inner === "logs" ? <LogsPane /> : null}
+              </>
+            )}
+          </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function ExplorerGroup({
+  title,
+  count,
+  open,
+  onToggle,
+  items,
+  activeId,
+  onSelect,
+}: {
+  title: string;
+  count: number;
+  open: boolean;
+  onToggle: () => void;
+  items: readonly ExplorerRun[];
+  activeId: string;
+  onSelect: (item: ExplorerRun) => void;
+}) {
+  return (
+    <div className="ex-group">
+      <button type="button" className={`ex-head${open ? "" : " closed"}`} onClick={onToggle}>
+        <span className="tri" />
+        {title}
+        <span className="n">{count}</span>
+      </button>
+      {open ? (
+        <div className="ex-body">
+          {items.map((item) => {
+            const locked = item.id !== CRASHED_ID;
+            return (
+            <button
+              key={item.label ?? item.id}
+              type="button"
+              className={`ex-item${item.nest ? " nest" : ""}${activeId === item.id ? " on" : ""}${locked ? " locked" : ""}`}
+              aria-disabled={locked}
+              onClick={() => {
+                if (!locked) onSelect(item);
+              }}
+            >
+              {item.nest ? (
+                <RotateCcw className="fg" />
+              ) : (
+                <FileText className={toneClass(item.tone)} />
+              )}
+              <span className="lb">{item.label ?? item.id}</span>
+              <span className="ago">{item.ago}</span>
+            </button>
+            );
+          })}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function AnalysisPane() {
+  return (
+    <div className="wc">
+      <div>
+        <p className="finding">
+          <span className="who">enrich_account</span> is the first hop that introduced bad state.
+          The investigator scores this 0.91: <code>stripe_api</code> returned 429, the handler
+          omitted <code>csat_history</code>, and <code>policy_check</code> crashed on the missing
+          field.
+        </p>
+        <p className="finding-sub">
+          Heuristic 0.94 <span className="arrow">·</span> anomaly 0.71{" "}
+          <span className="arrow">·</span> judge 0.91
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function CorrelationsPane() {
+  return (
+    <div className="wc">
+      <div>
+        <p className="finding">
+          Same signature on <span className="who">3 runs</span> in the last hour: swallowed 429
+          from <code>stripe_api</code>, then a crash in <code>policy_check</code>.
+        </p>
+        <p className="finding-sub">
+          <span className="n">2e8a3c</span>
+          <span className="arrow">·</span>
+          <span className="n">990422</span>
+          <span className="arrow">·</span>
+          <span className="n">5a9592</span>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function LogsPane() {
+  return (
+    <div className="wc">
+      <pre className="log">
+        {LOG_LINES.map((line) => (
+          <div key={line.t} className={line.err ? "err" : undefined}>
+            {line.t}  {line.msg}
+          </div>
+        ))}
+      </pre>
+    </div>
+  );
+}
+
+function LockedPane({ label }: { label: string }) {
+  return (
+    <div className="wc">
+      <p className="finding" style={{ color: "var(--ink-3)" }}>
+        {label[0].toUpperCase() + label.slice(1)} is part of the instrument. This demo stays on
+        the run that crashed.
+      </p>
     </div>
   );
 }

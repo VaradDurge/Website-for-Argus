@@ -1,0 +1,1720 @@
+/* Scoped to the hero demo. Tokens and chrome from
+   ARGUS Redesign/argus-instrument.html — design spec · rev D §07. */
+
+.argus-instrument {
+  --rail: #f8f8f7;
+  --ex: #f8f8f7;
+  --band: #ededed;
+  --void: #ffffff;
+  --panel: #ffffff;
+  --raised: #ffffff;
+  --raised-hover: #f1f1ee;
+  --line: #e3e3df;
+  --line-2: #d6d6d1;
+  --line-3: #bebeb8;
+  --ink: #1a1a1c;
+  --ink-2: #5a5a62;
+  --ink-3: #80808a;
+  --ink-4: #90909a;
+  --hover: rgba(0, 0, 0, 0.03);
+  --fill-subtle: rgba(0, 0, 0, 0.045);
+  --dot: rgba(0, 0, 0, 0.085);
+  --iris: #4e5ae0;
+  --iris-bright: #3c48ce;
+  --iris-dim: rgba(78, 90, 224, 0.09);
+  --iris-line: rgba(78, 90, 224, 0.32);
+  --on-accent: #ffffff;
+  --on-signal: #ffffff;
+  --ok: #15804f;
+  --tool: #d2352f;
+  --quality: #9a6b0e;
+  --semantic: #7538d8;
+  --coherence: #0d7686;
+  --idle: #a5a5ac;
+  --ok-dim: rgba(21, 128, 79, 0.09);
+  --tool-dim: rgba(210, 53, 47, 0.08);
+  --quality-dim: rgba(154, 107, 14, 0.09);
+  --semantic-dim: rgba(117, 56, 216, 0.08);
+  --coherence-dim: rgba(13, 118, 134, 0.09);
+  --surf-tool: #fef3f2;
+  --surf-quality: #fdf6e8;
+  --surf-semantic: #f8f3fe;
+  --surf-coherence: #edfafb;
+  --glow-tool: rgba(210, 53, 47, 0.22);
+  --glow-iris: rgba(78, 90, 224, 0.22);
+  --overlay: rgba(255, 255, 255, 0.97);
+  --edge-pass: rgba(92, 92, 100, 0.34);
+  --edge-skip: rgba(92, 92, 100, 0.14);
+  --shadow-lg: 0 24px 60px -20px rgba(20, 20, 26, 0.2);
+  --r-panel: 10px;
+  --j-key: #4e5ae0;
+  --j-str: #15804f;
+  --j-num: #9a6b0e;
+  --j-bool: #0d7686;
+  --diff-add-bg: rgba(21, 128, 79, 0.08);
+  --diff-add-fg: #0f6a41;
+  --diff-del-bg: rgba(210, 53, 47, 0.07);
+  --diff-del-fg: #af2a25;
+  --sans: var(--font-geist), -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --mono: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  --r-ctl: 7px;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --fast: 110ms;
+  --med: 200ms;
+
+  height: 100%;
+  min-height: 0;
+  color: var(--ink);
+  font-family: var(--sans);
+  background: var(--void);
+}
+
+.argus-instrument code {
+  font-family: var(--mono);
+  font-size: 0.87em;
+  color: var(--ink);
+  background: var(--fill-subtle);
+  border-radius: 4px;
+  padding: 1.5px 5px;
+}
+
+.argus-instrument .ide {
+  display: grid;
+  grid-template-columns: 46px 232px minmax(0, 1fr);
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--void);
+}
+
+.argus-instrument .irail {
+  background: var(--rail);
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 9px 0 10px;
+  gap: 3px;
+}
+
+.argus-instrument .irail-mark {
+  width: 26px;
+  height: 26px;
+  margin-bottom: 12px;
+  border-radius: 7px;
+  background: var(--iris);
+  color: var(--on-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.argus-instrument .irail-mark svg {
+  width: 15px;
+  height: 15px;
+}
+
+.argus-instrument .irail button {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-3);
+  background: transparent;
+  cursor: pointer;
+  transition: background var(--fast) var(--ease), color var(--fast) var(--ease);
+}
+
+.argus-instrument .irail button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.argus-instrument .irail button:hover {
+  background: var(--hover);
+  color: var(--ink);
+}
+
+.argus-instrument .irail button.on {
+  background: var(--iris-dim);
+  color: var(--iris);
+}
+
+.argus-instrument .irail .sp {
+  flex: 1;
+}
+
+.argus-instrument .explorer {
+  background: var(--ex);
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.argus-instrument .ex-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 9px 10px;
+  padding: 5px 9px;
+  border: 1px solid var(--line-2);
+  border-radius: 6px;
+  background: var(--panel);
+  font-size: 12.5px;
+  color: var(--ink-3);
+  cursor: pointer;
+  flex: none;
+  width: calc(100% - 20px);
+  text-align: left;
+  font-family: inherit;
+}
+
+.argus-instrument .ex-search svg {
+  width: 13px;
+  height: 13px;
+  flex: none;
+}
+
+.argus-instrument .kbd {
+  margin-left: auto;
+  height: 17px;
+  min-width: 24px;
+  padding: 0 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 10px;
+  border: none;
+  border-radius: 4px;
+  background: var(--fill-subtle);
+  color: var(--ink-4);
+}
+
+.argus-instrument .ex-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 12px 9px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  flex: none;
+}
+
+.argus-instrument .ex-title svg {
+  width: 13px;
+  height: 13px;
+  color: var(--ink-4);
+}
+
+.argus-instrument .ex-scroll {
+  overflow-y: auto;
+  flex: 1;
+}
+
+.argus-instrument .ex-group {
+  border-top: 1px solid var(--line);
+}
+
+.argus-instrument .ex-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  width: 100%;
+  background: var(--band);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink-2);
+  cursor: pointer;
+  user-select: none;
+  border: none;
+  font-family: inherit;
+  text-align: left;
+}
+
+.argus-instrument .ex-head .tri {
+  width: 0;
+  height: 0;
+  flex: none;
+  border-left: 4.5px solid transparent;
+  border-right: 4.5px solid transparent;
+  border-top: 5px solid var(--ink-3);
+  transition: transform var(--fast) var(--ease);
+}
+
+.argus-instrument .ex-head.closed .tri {
+  transform: rotate(-90deg);
+}
+
+.argus-instrument .ex-head .n {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink-4);
+  font-variant-numeric: tabular-nums;
+}
+
+.argus-instrument .ex-head .add {
+  margin-left: auto;
+  display: flex;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line-3);
+  color: var(--ink-3);
+}
+
+.argus-instrument .ex-head .add svg {
+  width: 9px;
+  height: 9px;
+}
+
+.argus-instrument .ex-body {
+  background: var(--panel);
+  padding: 4px 0 6px;
+}
+
+.argus-instrument .ex-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px 5px 24px;
+  width: 100%;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  font-family: inherit;
+  text-align: left;
+}
+
+.argus-instrument .ex-item:hover {
+  background: var(--hover);
+  color: var(--ink);
+}
+
+.argus-instrument .ex-item.on {
+  background: var(--iris-dim);
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.argus-instrument .ex-item .fg {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  color: var(--ink-4);
+}
+
+.argus-instrument .ex-item .fg.ok {
+  color: var(--ok);
+}
+.argus-instrument .ex-item .fg.bad {
+  color: var(--tool);
+}
+.argus-instrument .ex-item .fg.warn {
+  color: var(--quality);
+}
+.argus-instrument .ex-item .fg.sem {
+  color: var(--semantic);
+}
+.argus-instrument .ex-item .fg.live {
+  color: var(--iris);
+}
+
+.argus-instrument .ex-item .lb {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.argus-instrument .ex-item .ago {
+  margin-left: auto;
+  padding-left: 8px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink-4);
+  font-variant-numeric: tabular-nums;
+}
+
+.argus-instrument .ex-item.nest {
+  padding-left: 40px;
+}
+
+.argus-instrument .ex-item.locked {
+  opacity: 0.42;
+  cursor: default;
+}
+
+.argus-instrument .ex-item.locked:hover {
+  background: transparent;
+  color: var(--ink-2);
+}
+
+.argus-instrument .ws {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  background: var(--void);
+}
+
+.argus-instrument .ws-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--line);
+  background: var(--ex);
+  flex: none;
+}
+
+.argus-instrument .ws-vp {
+  display: flex;
+  gap: 2px;
+}
+
+.argus-instrument .ws-vp button {
+  width: 26px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  border-radius: 5px;
+  color: var(--ink-3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.argus-instrument .ws-vp button svg {
+  width: 14px;
+  height: 14px;
+}
+
+.argus-instrument .ws-vp button.on {
+  background: var(--panel);
+  color: var(--iris);
+  box-shadow: 0 0 0 1px var(--line-2);
+}
+
+.argus-instrument .ws-live {
+  font-size: 11.5px;
+  color: var(--ink-3);
+}
+
+.argus-instrument .ws-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  padding: 4px 9px;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  background: var(--panel);
+  font-size: 11.5px;
+  color: var(--ink-2);
+}
+
+.argus-instrument .ws-note svg {
+  width: 12px;
+  height: 12px;
+  color: var(--ink-4);
+}
+
+.argus-instrument .ws-note button {
+  border: none;
+  background: transparent;
+  padding: 0;
+  display: flex;
+  color: var(--ink-4);
+  cursor: pointer;
+}
+
+.argus-instrument .tabbar {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--line);
+  background: var(--ex);
+  overflow-x: auto;
+  flex: none;
+}
+
+.argus-instrument .tab {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 13px;
+  border: none;
+  border-right: 1px solid var(--line);
+  font-size: 12.5px;
+  color: var(--ink-3);
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.argus-instrument .tab .fg {
+  width: 13px;
+  height: 13px;
+  flex: none;
+  color: var(--ink-4);
+}
+.argus-instrument .tab .fg.ok {
+  color: var(--ok);
+}
+.argus-instrument .tab .fg.bad {
+  color: var(--tool);
+}
+.argus-instrument .tab .fg.sem {
+  color: var(--semantic);
+}
+
+.argus-instrument .tab .lb {
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.argus-instrument .tab .x {
+  color: var(--ink-4);
+  display: flex;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.argus-instrument .tab .x svg {
+  width: 11px;
+  height: 11px;
+}
+
+.argus-instrument .tab:hover {
+  background: var(--hover);
+  color: var(--ink-2);
+}
+
+.argus-instrument .tab.on {
+  background: var(--void);
+  color: var(--ink);
+  box-shadow: inset 0 -1px 0 var(--void);
+}
+
+.argus-instrument .ws-body {
+  overflow: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.argus-instrument .run-head {
+  padding: 18px 34px 0;
+  border-bottom: 1px solid var(--line);
+  min-width: 0;
+}
+
+.argus-instrument .run-id {
+  font-family: var(--mono);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.argus-instrument .run-meta {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  margin-top: 6px;
+}
+
+.argus-instrument .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 32px;
+  padding: 0 13px;
+  border-radius: var(--r-ctl);
+  border: 1px solid var(--line-2);
+  background: var(--raised);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--fast) var(--ease), border-color var(--fast) var(--ease),
+    color var(--fast) var(--ease);
+}
+
+.argus-instrument .btn:hover {
+  background: var(--raised-hover);
+  border-color: var(--line-3);
+}
+
+.argus-instrument .btn svg {
+  width: 14px;
+  height: 14px;
+  flex: none;
+}
+
+.argus-instrument .btn-primary {
+  background: var(--iris);
+  border-color: var(--iris);
+  color: var(--on-accent);
+  font-weight: 600;
+}
+
+.argus-instrument .btn-primary:hover {
+  background: var(--iris-bright);
+  border-color: var(--iris-bright);
+}
+
+.argus-instrument .btn-ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--ink-2);
+}
+
+.argus-instrument .btn-ghost:hover {
+  background: var(--hover);
+  color: var(--ink);
+  border-color: transparent;
+}
+
+.argus-instrument .btn-sm {
+  height: 27px;
+  padding: 0 10px;
+  font-size: 12px;
+}
+
+.argus-instrument .btn:disabled {
+  opacity: 0.36;
+  cursor: not-allowed;
+}
+
+.argus-instrument .tabs {
+  display: flex;
+  gap: 4px;
+  margin-top: 16px;
+}
+
+.argus-instrument .tabs button {
+  border: none;
+  background: transparent;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-3);
+  padding: 9px 12px;
+  cursor: pointer;
+  border-bottom: 1.5px solid transparent;
+  margin-bottom: -1px;
+}
+
+.argus-instrument .tabs button:hover {
+  color: var(--ink);
+}
+
+.argus-instrument .tabs button[aria-selected="true"] {
+  color: var(--ink);
+  border-bottom-color: var(--iris);
+}
+
+.argus-instrument .wc {
+  padding: 30px 34px 34px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.argus-instrument .finding {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.62;
+  color: var(--ink);
+  max-width: 74ch;
+  letter-spacing: -0.011em;
+}
+
+.argus-instrument .finding .who {
+  font-family: var(--mono);
+  font-size: 15px;
+  color: var(--tool);
+}
+
+.argus-instrument .finding .who.ok {
+  color: var(--ok);
+}
+
+.argus-instrument .finding-sub {
+  margin: 12px 0 0;
+  font-size: 12.5px;
+  color: var(--ink-3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.argus-instrument .finding-sub .arrow {
+  color: var(--ink-4);
+}
+
+.argus-instrument .finding-sub .n {
+  font-family: var(--mono);
+}
+
+.argus-instrument .cap {
+  font-size: 12px;
+  color: var(--ink-3);
+  margin: 0 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.argus-instrument .cap button,
+.argus-instrument .cap a {
+  color: var(--ink-3);
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+}
+
+.argus-instrument .gwrap {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  margin: 0 -34px;
+  background: var(--panel);
+  overflow: hidden;
+}
+
+.argus-instrument .gbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+  min-width: 0;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.argus-instrument .gbar-sp {
+  flex: 1 1 8px;
+  min-width: 8px;
+}
+
+.argus-instrument .gbar-note {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.argus-instrument .gbar-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--ink-2);
+  cursor: pointer;
+  flex: none;
+}
+
+.argus-instrument .gbar .btn {
+  flex: none;
+}
+
+.argus-instrument .switch {
+  width: 34px;
+  height: 19px;
+  border-radius: 999px;
+  background: var(--line-2);
+  border: 1px solid var(--line-3);
+  position: relative;
+  cursor: pointer;
+  flex: none;
+  transition: background var(--med) var(--ease), border-color var(--med) var(--ease);
+}
+
+.argus-instrument .switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--ink-2);
+  transition: transform var(--med) var(--ease), background var(--med) var(--ease);
+}
+
+.argus-instrument .switch.on {
+  background: var(--iris);
+  border-color: var(--iris);
+}
+
+.argus-instrument .switch.on::after {
+  transform: translateX(15px);
+  background: #fff;
+}
+
+.argus-instrument .gzoom {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 25;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-ctl);
+  background: var(--overlay);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.argus-instrument .gzoom button {
+  width: 28px;
+  height: 27px;
+  border: none;
+  background: transparent;
+  color: var(--ink-2);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.argus-instrument .gzoom button:hover {
+  background: var(--hover);
+  color: var(--ink);
+}
+
+.argus-instrument .gzoom-val {
+  min-width: 46px;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-2);
+  border-left: 1px solid var(--line-2);
+  border-right: 1px solid var(--line-2);
+  padding: 0 4px;
+  line-height: 27px;
+  font-variant-numeric: tabular-nums;
+}
+
+.argus-instrument .gzoom-fit {
+  width: auto !important;
+  padding: 0 8px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}
+
+.argus-instrument .gcanvas {
+  position: relative;
+  height: 280px;
+  overflow: hidden;
+  isolation: isolate;
+  contain: paint;
+  background: radial-gradient(circle at center, var(--dot) 1px, transparent 1px) 0 0 / 26px 26px,
+    var(--void);
+  cursor: grab;
+  touch-action: none;
+  overscroll-behavior: contain;
+}
+
+.argus-instrument .gcanvas.panning {
+  cursor: grabbing;
+}
+
+.argus-instrument .gtick {
+  position: absolute;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0.45;
+}
+
+.argus-instrument .gtick::before,
+.argus-instrument .gtick::after {
+  content: "";
+  position: absolute;
+  background: var(--line-3);
+}
+
+.argus-instrument .gtick::before {
+  width: 13px;
+  height: 1px;
+}
+
+.argus-instrument .gtick::after {
+  width: 1px;
+  height: 13px;
+}
+
+.argus-instrument .gtick.tl {
+  top: 12px;
+  left: 12px;
+}
+
+.argus-instrument .gtick.tr {
+  top: 12px;
+  right: 12px;
+}
+
+.argus-instrument .gtick.tr::before,
+.argus-instrument .gtick.tr::after {
+  right: 0;
+}
+
+.argus-instrument .gtick.bl {
+  bottom: 12px;
+  left: 12px;
+}
+
+.argus-instrument .gtick.bl::before,
+.argus-instrument .gtick.bl::after {
+  bottom: 0;
+}
+
+.argus-instrument .gtick.br {
+  bottom: 12px;
+  right: 12px;
+}
+
+.argus-instrument .gtick.br::before,
+.argus-instrument .gtick.br::after {
+  bottom: 0;
+  right: 0;
+}
+
+.argus-instrument .gworld {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.argus-instrument .gedges {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.argus-instrument .facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 26px;
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
+
+.argus-instrument .facts span b {
+  font-family: var(--mono);
+  font-weight: 500;
+  color: var(--ink);
+  margin-left: 7px;
+  font-variant-numeric: tabular-nums;
+}
+
+.argus-instrument .stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+.argus-instrument .stat i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--idle);
+  display: block;
+  flex: none;
+}
+
+.argus-instrument .stat.ok {
+  color: var(--ok);
+}
+.argus-instrument .stat.ok i {
+  background: var(--ok);
+}
+.argus-instrument .stat.bad {
+  color: var(--tool);
+}
+.argus-instrument .stat.bad i {
+  background: var(--tool);
+}
+.argus-instrument .stat.warn {
+  color: var(--quality);
+}
+.argus-instrument .stat.warn i {
+  background: var(--quality);
+}
+.argus-instrument .stat.sem {
+  color: var(--semantic);
+}
+.argus-instrument .stat.sem i {
+  background: var(--semantic);
+}
+.argus-instrument .stat.mute {
+  color: var(--ink-3);
+}
+
+.argus-instrument .gnode {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 178px;
+  border-radius: 10px;
+  border: 1px solid var(--line-2);
+  background: var(--raised);
+  padding: 10px 12px;
+  cursor: grab;
+  user-select: none;
+  text-align: left;
+  font-family: inherit;
+  transition: border-color var(--fast) var(--ease), box-shadow var(--fast) var(--ease),
+    opacity var(--med) var(--ease);
+}
+
+.argus-instrument .gnode.dragging {
+  cursor: grabbing;
+  z-index: 40;
+  box-shadow: var(--shadow-lg);
+  transition: none;
+}
+
+.argus-instrument .gnode:hover {
+  border-color: var(--line-3);
+}
+
+.argus-instrument .gnode-top {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.argus-instrument .gnode-ico {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--fill-subtle);
+  color: var(--ink-2);
+}
+
+.argus-instrument .gnode-ico svg {
+  width: 14px;
+  height: 14px;
+}
+
+.argus-instrument .gnode-name {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.argus-instrument .gnode-sub {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink-3);
+  margin-top: 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+.argus-instrument .gnode-badge {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 16px;
+  height: 16px;
+  border-radius: 0 10px 0 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--void);
+}
+
+.argus-instrument .gnode-tab {
+  position: absolute;
+  top: -18px;
+  left: 10px;
+  font-family: var(--sans);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 2px 7px;
+  border-radius: 3px 3px 0 0;
+  white-space: nowrap;
+}
+
+.argus-instrument .gnode.s-crashed {
+  border-color: var(--tool);
+  border-width: 1.5px;
+  box-shadow: 0 0 0 3px var(--tool-dim), 0 0 26px -8px var(--glow-tool);
+  background: var(--surf-tool);
+}
+
+.argus-instrument .gnode.s-crashed .gnode-ico {
+  background: var(--tool-dim);
+  color: var(--tool);
+}
+
+.argus-instrument .gnode.s-crashed .gnode-badge {
+  background: var(--tool);
+}
+
+.argus-instrument .gnode.s-fail {
+  border-color: var(--quality);
+  background: var(--surf-quality);
+}
+
+.argus-instrument .gnode.s-fail .gnode-ico {
+  background: var(--quality-dim);
+  color: var(--quality);
+}
+
+.argus-instrument .gnode.s-fail .gnode-badge {
+  background: var(--quality);
+}
+
+.argus-instrument .gnode.s-fail::after {
+  content: "";
+  position: absolute;
+  left: -1px;
+  bottom: -1px;
+  border-width: 0 0 13px 13px;
+  border-style: solid;
+  border-color: transparent transparent var(--quality) transparent;
+  border-bottom-left-radius: 10px;
+  opacity: 0.85;
+}
+
+.argus-instrument .gnode.s-semantic {
+  border-color: var(--semantic);
+  background: repeating-linear-gradient(
+      135deg,
+      var(--semantic-dim) 0 5px,
+      transparent 5px 11px
+    ),
+    var(--surf-semantic);
+}
+
+.argus-instrument .gnode.s-semantic .gnode-ico {
+  background: var(--semantic-dim);
+  color: var(--semantic);
+}
+
+.argus-instrument .gnode.s-semantic .gnode-badge {
+  background: var(--semantic);
+}
+
+.argus-instrument .gnode.s-degraded {
+  border-style: dashed;
+  border-color: var(--coherence);
+  background: var(--surf-coherence);
+}
+
+.argus-instrument .gnode.s-degraded .gnode-ico {
+  background: var(--coherence-dim);
+  color: var(--coherence);
+}
+
+.argus-instrument .gnode.s-degraded .gnode-badge {
+  background: var(--coherence);
+}
+
+.argus-instrument .gnode.s-running {
+  border-color: var(--iris);
+  box-shadow: 0 0 20px -8px var(--glow-iris);
+}
+
+.argus-instrument .gnode.s-running .gnode-ico {
+  background: var(--iris-dim);
+  color: var(--iris-bright);
+}
+
+.argus-instrument .gnode.s-skipped {
+  opacity: 0.32;
+  border-style: dashed;
+  border-color: var(--line-2);
+  background: transparent;
+}
+
+.argus-instrument .gnode.rootcause {
+  box-shadow: 0 0 0 1px var(--void), 0 0 0 3px var(--tool), 0 0 32px -6px var(--glow-tool);
+  animation: rcpulse 2.4s var(--ease) infinite;
+}
+
+@keyframes rcpulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 1px var(--void), 0 0 0 3px var(--tool), 0 0 30px -10px var(--glow-tool);
+  }
+  50% {
+    box-shadow: 0 0 0 1px var(--void), 0 0 0 3px var(--tool), 0 0 42px -4px var(--glow-tool);
+  }
+}
+
+.argus-instrument .gnode.rootcause .gnode-tab {
+  background: var(--tool);
+  color: var(--on-signal);
+}
+
+.argus-instrument .gnode.selected {
+  border-color: var(--iris) !important;
+  box-shadow: 0 0 0 1px var(--void), 0 0 0 2.5px var(--iris);
+  animation: none;
+}
+
+.argus-instrument .gtools {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  gap: 7px;
+  flex-wrap: nowrap;
+  transition: opacity var(--med) var(--ease);
+}
+
+.argus-instrument .gnode.dimmed,
+.argus-instrument .gtools.dimmed {
+  opacity: 0.26;
+}
+
+.argus-instrument .gtool {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 25px;
+  padding: 0 11px;
+  border-radius: 999px;
+  border: 1px dashed var(--line-3);
+  background: var(--void);
+  color: var(--ink-2);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+
+.argus-instrument .gtool:hover {
+  border-color: var(--ink-3);
+  color: var(--ink);
+}
+
+.argus-instrument .gtool-ico {
+  width: 11px;
+  height: 11px;
+  flex: none;
+  opacity: 0.7;
+}
+
+.argus-instrument .gtool-kind {
+  color: var(--ink-4);
+}
+
+.argus-instrument .gtool.t-ok {
+  border-color: color-mix(in srgb, var(--ok) 34%, transparent);
+}
+
+.argus-instrument .gtool.t-ok .gtool-ico {
+  color: var(--ok);
+  opacity: 1;
+}
+
+.argus-instrument .gtool.t-error {
+  border-style: solid;
+  border-color: var(--tool);
+  background: var(--surf-tool);
+  color: var(--tool);
+  box-shadow: 0 0 18px -6px var(--glow-tool);
+}
+
+.argus-instrument .gtool.t-error .gtool-ico {
+  color: var(--tool);
+  opacity: 1;
+}
+
+.argus-instrument .gtool.t-slow {
+  border-style: solid;
+  border-color: var(--quality);
+  background: var(--surf-quality);
+  color: var(--quality);
+}
+
+.argus-instrument .gtool.t-slow .gtool-ico {
+  color: var(--quality);
+  opacity: 1;
+}
+
+.argus-instrument .gtool.t-empty {
+  border-color: var(--coherence);
+  background: var(--surf-coherence);
+  color: var(--coherence);
+}
+
+.argus-instrument .gtool.t-empty .gtool-ico {
+  color: var(--coherence);
+  opacity: 1;
+}
+
+.argus-instrument .gtool.t-skipped {
+  opacity: 0.28;
+}
+
+.argus-instrument .gtool.selected {
+  border-color: var(--iris) !important;
+  box-shadow: 0 0 0 2px var(--iris-dim);
+}
+
+.argus-instrument .ginsp {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  bottom: 44px;
+  width: min(240px, calc(100% - 20px));
+  z-index: 30;
+  border: 1px solid var(--line-3);
+  border-radius: 10px;
+  background: var(--overlay);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.argus-instrument .ginsp-h {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.argus-instrument .ginsp-h h5 {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  word-break: break-all;
+}
+
+.argus-instrument .ginsp-h .sub {
+  font-size: 11.5px;
+  color: var(--ink-4);
+  margin-top: 3px;
+}
+
+.argus-instrument .ginsp-x {
+  margin-left: auto;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  border: 1px solid var(--line-2);
+  background: transparent;
+  color: var(--ink-3);
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.argus-instrument .ginsp-x:hover {
+  color: var(--ink);
+  background: var(--hover);
+}
+
+.argus-instrument .ginsp-b {
+  padding: 12px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.argus-instrument .ginsp-sec {
+  margin-bottom: 16px;
+}
+
+.argus-instrument .ginsp-sec:last-child {
+  margin-bottom: 0;
+}
+
+.argus-instrument .specimen-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-bottom: 8px;
+}
+
+.argus-instrument .insp-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.argus-instrument .insp-line:last-child {
+  border-bottom: none;
+}
+
+.argus-instrument .insp-line span:first-child {
+  color: var(--ink-3);
+}
+
+.argus-instrument .insp-line span:last-child {
+  color: var(--ink);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.argus-instrument .insp-code {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  line-height: 1.6;
+  background: var(--void);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 8px 9px;
+  color: var(--ink-2);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.argus-instrument .glegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px 18px;
+  padding: 10px 16px;
+  border-top: 1px solid var(--line);
+  min-width: 0;
+}
+
+.argus-instrument .glegend-i {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  color: var(--ink-3);
+}
+
+.argus-instrument .lg-key {
+  width: 22px;
+  height: 13px;
+  border-radius: 3px;
+  flex: none;
+  border: 1px solid;
+}
+
+.argus-instrument .lg-pill {
+  width: 22px;
+  height: 12px;
+  border-radius: 999px;
+  flex: none;
+  border: 1px dashed;
+}
+
+@keyframes dashflow {
+  to {
+    stroke-dashoffset: -22;
+  }
+}
+
+.argus-instrument .e-live {
+  stroke-dasharray: 5 4;
+  animation: dashflow 1.1s linear infinite;
+}
+
+.argus-instrument .e-prop {
+  stroke-dasharray: 6 5;
+  animation: dashflow 1.5s linear infinite;
+}
+
+.argus-instrument .slist {
+  margin: 0 -34px;
+  border-top: 1px solid var(--line);
+}
+
+.argus-instrument .srow {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  align-items: baseline;
+  gap: 14px;
+  padding: 13px 34px;
+  border-bottom: 1px solid var(--line);
+  width: 100%;
+  background: transparent;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.argus-instrument .srow:hover {
+  background: var(--hover);
+}
+
+.argus-instrument .srow.flag {
+  box-shadow: inset 3px 0 0 var(--tool);
+}
+
+.argus-instrument .srow.flag-sem {
+  box-shadow: inset 3px 0 0 var(--semantic);
+}
+
+.argus-instrument .srow-n {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-4);
+  font-variant-numeric: tabular-nums;
+}
+
+.argus-instrument .srow-nm {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.argus-instrument .srow-d {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  margin-top: 5px;
+  line-height: 1.6;
+  max-width: 68ch;
+}
+
+.argus-instrument .srow-d em {
+  font-style: normal;
+  color: var(--ink-2);
+}
+
+.argus-instrument .srow-r {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.argus-instrument .srow-t {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-4);
+  font-variant-numeric: tabular-nums;
+}
+
+.argus-instrument .gut {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  background: var(--void);
+}
+
+.argus-instrument .gut-n {
+  padding: 16px 10px 16px 0;
+  text-align: right;
+  white-space: pre;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  line-height: 1.75;
+  color: var(--ink-4);
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+}
+
+.argus-instrument .gut-c {
+  padding: 16px 18px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.75;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.argus-instrument .j-k {
+  color: var(--j-key);
+}
+.argus-instrument .j-s {
+  color: var(--j-str);
+}
+.argus-instrument .j-n {
+  color: var(--j-num);
+}
+.argus-instrument .j-b {
+  color: var(--j-bool);
+}
+.argus-instrument .j-null {
+  color: var(--ink-4);
+}
+.argus-instrument .j-p {
+  color: var(--ink-3);
+}
+.argus-instrument .j-hl {
+  background: var(--diff-del-bg);
+  box-shadow: -4px 0 0 var(--tool);
+  display: inline-block;
+  width: 100%;
+}
+
+.argus-instrument .cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 34px;
+}
+
+.argus-instrument .cols h5 {
+  margin: 0 0 12px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--mono);
+}
+
+.argus-instrument .crow {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
+
+.argus-instrument .crow b {
+  font-family: var(--mono);
+  font-weight: 500;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.argus-instrument .diff {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.8;
+  border: 1px solid var(--line);
+  border-radius: var(--r-ctl);
+  overflow: hidden;
+  background: var(--void);
+}
+
+.argus-instrument .diff div {
+  padding: 0 16px;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.argus-instrument .diff .add {
+  background: var(--diff-add-bg);
+  color: var(--diff-add-fg);
+  box-shadow: inset 2px 0 0 var(--ok);
+}
+
+.argus-instrument .diff .del {
+  background: var(--diff-del-bg);
+  color: var(--diff-del-fg);
+  box-shadow: inset 2px 0 0 var(--tool);
+}
+
+.argus-instrument .tree {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.85;
+  color: var(--ink-2);
+}
+
+.argus-instrument .log {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.85;
+  color: var(--ink-2);
+}
+
+.argus-instrument .log .err {
+  color: var(--tool);
+}
+
+@media (max-width: 860px) {
+  .argus-instrument .ide {
+    grid-template-columns: 46px minmax(0, 1fr);
+  }
+  .argus-instrument .explorer {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .argus-instrument .ide {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .argus-instrument .irail {
+    display: none;
+  }
+  .argus-instrument .run-head,
+  .argus-instrument .wc {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .argus-instrument .gwrap,
+  .argus-instrument .slist {
+    margin-left: -16px;
+    margin-right: -16px;
+  }
+  .argus-instrument .cols {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .argus-instrument *,
+  .argus-instrument *::before,
+  .argus-instrument *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
