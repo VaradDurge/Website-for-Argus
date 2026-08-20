@@ -1,16 +1,20 @@
 /**
  * Decorative hero backdrop: a field of scattered characters over the
- * layered dome gradients defined by `.hero-atmos`.
+ * layered glow gradients defined by `.hero-atmos`.
  *
  * The characters are generated from a fixed seed rather than Math.random
  * so server and client produce identical markup. A tiled SVG pattern was
  * tried first and read as wallpaper — the repeat was obvious across the
  * width, so the rows are emitted individually instead.
+ *
+ * The row count matters: the field must run out above the eyebrow. Taller
+ * fields carry bright characters down behind the headline, where they are
+ * the brightest thing on screen.
  */
 
 const CHARS = "0123456789XABF";
 
-const ROWS = 30;
+const ROWS = 9;
 const CHUNKS_PER_ROW = 7;
 const CHARS_PER_CHUNK = 11;
 

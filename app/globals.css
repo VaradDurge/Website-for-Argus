@@ -445,16 +445,34 @@
   backdrop-filter: blur(20px);
 }
 
-/* ───────── hero atmosphere ─────────
-   A dark dome with a lit copper rim, a dusty violet haze above it, and a
-   character field over the top. Purely decorative: it sits behind the
-   hero content and never takes pointer events. The negative top inset
-   slides it under the translucent nav.
+/* The nav floats over the hero's lit band. A hairline bottom border used
+   to mark where it ended, which cut a hard seam straight across the glow;
+   the tint is faded out downwards instead so the bar dissolves into the
+   section. Sizing the fade to the bar height keeps the expanded mobile
+   drawer — which paints its own opaque ground — out of it. */
+.site-header {
+  background-image: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--void) 66%, transparent) 0%,
+    color-mix(in srgb, var(--void) 26%, transparent) 100%
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 3.5rem;
+  -webkit-backdrop-filter: blur(20px) saturate(1.35);
+  backdrop-filter: blur(20px) saturate(1.35);
+}
 
-   The rim is built by stacking two ellipses rather than putting copper
-   stops inside one gradient: the copper ellipse is slightly larger, and
-   the near-black dome painted over it leaves only a rim showing. A
-   single gradient reads as a flat smear instead of a lit edge. */
+/* ───────── hero atmosphere ─────────
+   An off-centre copper light with a cooler counter-glow, a dusty violet
+   sky, and a character field over the top. Purely decorative: it sits
+   behind the hero content and never takes pointer events. The negative
+   top inset slides it under the translucent nav.
+
+   Every layer is confined to the top band, above the eyebrow. An earlier
+   pass put a lit dome behind the whole section; at this hero's height the
+   arc cropped into a lens-flare streak and the copper sat directly behind
+   the headline, which cost contrast. Keeping the light in the nav band and
+   letting the copy sit on flat void reads calmer and holds the type. */
 .hero-atmos {
   position: absolute;
   inset: -3.5rem 0 0 0;
@@ -462,87 +480,72 @@
   overflow: hidden;
   pointer-events: none;
   background:
-    /* 1. the dome. Narrower than the viewport on purpose, so the haze
-          behind it stays visible at the shoulders and the silhouette
-          reads as a hill rather than a flat wash. */
+    /* 1. copper light source, off-centre so the band isn't a flat stripe */
     radial-gradient(
-      ellipse 68% 58% at 50% 80%,
-      #090807 0%,
-      #090807 84%,
-      rgba(9, 8, 7, 0.45) 92%,
-      rgba(9, 8, 7, 0) 98%
+      ellipse 66% 25% at 40% 2%,
+      rgba(248, 150, 76, 0.3) 0%,
+      rgba(214, 104, 62, 0.13) 44%,
+      transparent 76%
     ),
-    /* 2. copper rim: same centre, slightly larger, so only the edge
-          escapes from under the dome. Sits above the headline. */
+    /* 2. cooler counter-glow opposite it */
     radial-gradient(
-      ellipse 74% 63% at 50% 81%,
-      rgba(214, 96, 36, 0) 64%,
-      rgba(224, 104, 40, 0.34) 78%,
-      rgba(234, 138, 82, 0.26) 86%,
-      rgba(224, 156, 148, 0.14) 92%,
-      rgba(198, 158, 178, 0.06) 97%,
-      transparent 100%
+      ellipse 46% 20% at 84% 5%,
+      rgba(196, 138, 178, 0.15) 0%,
+      transparent 72%
     ),
-    /* 3. mauve-to-violet haze behind the dome */
+    /* 3. wide mauve-violet sky the two glows sit in */
     radial-gradient(
-      ellipse 120% 56% at 50% 26%,
-      rgba(198, 152, 180, 0.2) 0%,
-      rgba(154, 144, 194, 0.14) 48%,
-      transparent 82%
+      ellipse 130% 42% at 46% -6%,
+      rgba(180, 146, 196, 0.19) 0%,
+      rgba(136, 134, 200, 0.1) 46%,
+      transparent 80%
     ),
-    /* 4. vertical ground. Kept muted up top so the nav and eyebrow
-          keep their contrast against it. */
+    /* 4. settle to void well before the headline */
     linear-gradient(
       180deg,
-      rgba(146, 138, 182, 0.16) 0%,
-      rgba(112, 104, 146, 0.11) 12%,
-      rgba(56, 50, 66, 0.07) 26%,
-      rgba(14, 13, 12, 0.45) 44%,
-      var(--void) 66%
+      rgba(92, 86, 120, 0.12) 0%,
+      rgba(42, 38, 48, 0.06) 18%,
+      var(--void) 38%
     ),
     var(--void);
 }
 
-/* character field, faded out before it reaches the headline */
+/* Character field, faded out before it reaches the headline. It starts
+   below the nav rather than at the top of the atmosphere: the nav's
+   backdrop blur leaves a visible edge wherever it stops, and fine texture
+   crossing that edge makes the seam obvious. Only the smooth gradients
+   run underneath, where the blur has no detail to give itself away. */
 .hero-atmos__digits {
   position: absolute;
-  inset: 0 0 auto 0;
+  inset: 3.5rem 0 auto 0;
   overflow: hidden;
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 10px;
-  line-height: 17px;
-  letter-spacing: 0.16em;
+  font-size: 9px;
+  line-height: 18px;
+  letter-spacing: 0.34em;
   color: #ffffff;
   white-space: nowrap;
-  opacity: 0.3;
+  opacity: 0.2;
+  /* fades in as well as out, so the field emerges from under the nav
+     instead of starting on a flat edge at the blur boundary */
   -webkit-mask-image: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.95) 0%,
-    rgba(0, 0, 0, 0.6) 34%,
-    rgba(0, 0, 0, 0.25) 58%,
-    transparent 82%
+    transparent 0%,
+    rgba(0, 0, 0, 0.85) 14%,
+    rgba(0, 0, 0, 0.55) 46%,
+    transparent 78%
   );
   mask-image: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.95) 0%,
-    rgba(0, 0, 0, 0.6) 34%,
-    rgba(0, 0, 0, 0.25) 58%,
-    transparent 82%
+    transparent 0%,
+    rgba(0, 0, 0, 0.85) 14%,
+    rgba(0, 0, 0, 0.55) 46%,
+    transparent 78%
   );
 }
 
 .hero-atmos__row {
   display: flex;
-}
-
-/* settle back into the page ground at the bottom edge */
-.hero-atmos::after {
-  content: "";
-  position: absolute;
-  inset-inline: 0;
-  bottom: 0;
-  height: 20%;
-  background: linear-gradient(180deg, transparent, var(--void));
 }
 
 .grid-bg {

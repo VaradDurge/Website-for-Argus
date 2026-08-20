@@ -32,7 +32,7 @@ export function Nav({ stars }: { stars?: number | null }) {
       <BetaAccessModal open={betaOpen} onClose={() => setBetaOpen(false)} />
       <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />
 
-      <header className="sticky top-0 z-50 border-b-[length:var(--hairline)] border-[var(--line)]/60 bg-[var(--void)]/35 backdrop-blur-2xl backdrop-saturate-150">
+      <header className="site-header sticky top-0 z-50">
         <nav className="constrained flex h-14 items-center justify-between gap-4">
           <Link href="/" className="flex shrink-0 items-center gap-2">
             <Logo />
