@@ -1,69 +1,72 @@
 "use client";
 
+import { useState } from "react";
 import { usePathname } from "next/navigation";
+import { Menu } from "lucide-react";
 import { DocsSidebar } from "./DocsSidebar";
 import { DocsTOC } from "./DocsTOC";
 import { DocsPrevNext } from "./DocsPrevNext";
+import { DocsMobileDrawer } from "./DocsMobileDrawer";
 import { DOCS_REGISTRY } from "../content/registry";
+import { getSectionForSlug, getLabelForSlug } from "../content/sections";
 
 export function DocsShell({ children }: { children: React.ReactNode }) {
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const pathname = usePathname();
   const slug = pathname === "/docs" ? "introduction" : pathname.replace("/docs/", "");
   const page = DOCS_REGISTRY[slug];
+  const section = getSectionForSlug(slug);
+  const label = getLabelForSlug(slug);
 
   return (
-    <div className="mx-auto max-w-[1400px] flex">
-      {/* ── sidebar (desktop) ── */}
-      <aside
-        className="hidden lg:block w-[240px] shrink-0 sticky top-14 h-[calc(100vh-56px)] overflow-y-auto scroll-pretty border-r border-[var(--border)] px-2 py-6"
-        style={{
-          backgroundImage:
-            "linear-gradient(180deg, rgba(109,92,255,0.02) 0%, transparent 40%, rgba(0,240,168,0.01) 100%)",
-        }}
-      >
+    <div className="mx-auto flex max-w-[1400px]">
+      <aside className="sticky top-14 hidden h-[calc(100vh-56px)] w-[240px] shrink-0 overflow-y-auto scroll-pretty border-r-[length:var(--hairline)] border-[var(--line)] bg-[var(--void)] px-3 py-8 lg:block">
         <DocsSidebar />
       </aside>
 
-      {/* ── main content ── */}
-      <main className="flex-1 min-w-0">
-        <div className="max-w-[720px] mx-auto px-6 lg:px-8 py-8 lg:py-12">
-          {/* page title */}
+      <main className="min-w-0 flex-1">
+        <div className="sticky top-14 z-30 flex h-12 items-center gap-3 border-b-[length:var(--hairline)] border-[var(--line)] bg-[var(--void)]/80 px-4 backdrop-blur-xl lg:hidden">
+          <button
+            type="button"
+            onClick={() => setDrawerOpen(true)}
+            className="inline-flex h-8 w-8 items-center justify-center rounded-[var(--radius-control)] border-[length:var(--hairline)] border-[var(--line)] text-[var(--ink-2)] transition-colors hover:text-[var(--ink)]"
+            aria-label="Open documentation navigation"
+          >
+            <Menu size={16} />
+          </button>
+          {section && label && (
+            <p className="truncate font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--ink-3)]">
+              {section}
+              <span className="mx-1.5 text-[var(--ink-3)]">/</span>
+              <span className="text-[var(--ink-2)]">{label}</span>
+            </p>
+          )}
+        </div>
+
+        <div className="mx-auto max-w-[720px] px-6 py-10 lg:px-10 lg:py-14">
           {page && (
-            <div className="mb-10 pb-8 relative">
-              <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-[var(--accent-soft)] mb-2">
-                {page.title === "Introduction" ? "Getting Started" : ""}
-              </p>
-              <h1 className="text-[28px] sm:text-[34px] tracking-[-0.02em] font-medium text-white leading-[1.15]">
-                {page.title}
-              </h1>
-              <p className="mt-3 text-[15px] leading-[1.7] text-[var(--text-muted)]">
+            <div className="mb-10 border-b-[length:var(--hairline)] border-[var(--line)] pb-8">
+              {section && (
+                <p className="eyebrow mb-3">{section}</p>
+              )}
+              <h1 className="heading-3 text-[var(--ink)]">{page.title}</h1>
+              <p className="body-base mt-3">
                 <span className="font-serif-italic">{page.description}</span>
               </p>
-              {/* gradient divider */}
-              <div
-                className="absolute bottom-0 left-0 right-0 h-px"
-                style={{
-                  background:
-                    "linear-gradient(90deg, transparent, rgba(109,92,255,0.3), rgba(139,125,255,0.15), transparent)",
-                }}
-              />
             </div>
           )}
 
-          {/* page content */}
-          <article className="docs-prose">
-            {children}
-          </article>
+          <article className="docs-prose">{children}</article>
 
-          {/* prev/next */}
           <DocsPrevNext currentSlug={slug} />
         </div>
       </main>
 
-      {/* ── table of contents (desktop) ── */}
-      <aside className="hidden xl:block w-[200px] shrink-0 sticky top-14 h-[calc(100vh-56px)] overflow-y-auto scroll-pretty py-6 pr-4">
+      <aside className="sticky top-14 hidden h-[calc(100vh-56px)] w-[200px] shrink-0 overflow-y-auto scroll-pretty py-8 pr-6 xl:block">
         {page && <DocsTOC items={page.toc} />}
       </aside>
+
+      <DocsMobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
     </div>
   );
 }

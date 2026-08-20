@@ -69,6 +69,70 @@
   background: var(--void);
 }
 
+/* ─── dark pair ───
+   The demo declares its own palette above, so it cannot inherit the page
+   tokens. This re-declares the same names for dark so the instrument sits
+   on the page instead of glaring off it. Structure, spacing and every
+   rule below are untouched — only these values change.
+
+   Note: --on-accent and --on-signal are used as `color:` on top of iris
+   and signal fills. Those fills are bright in dark mode, so their
+   foreground inverts to near-black rather than white. */
+[data-theme="dark"] .argus-instrument {
+  --rail: #100e0d;
+  --ex: #141211;
+  --band: #1c1917;
+  --void: #0f0d0c;
+  --panel: #141211;
+  --raised: #1a1716;
+  --raised-hover: #221e1c;
+  --line: #262220;
+  --line-2: #332e2b;
+  --line-3: #47403c;
+  --ink: #f2ede9;
+  --ink-2: #a8a09a;
+  --ink-3: #7d746e;
+  --ink-4: #6b635e;
+  --hover: rgba(255, 255, 255, 0.04);
+  --fill-subtle: rgba(255, 255, 255, 0.055);
+  --dot: rgba(255, 255, 255, 0.1);
+  --iris: #8b7dff;
+  --iris-bright: #a99aff;
+  --iris-dim: rgba(139, 125, 255, 0.16);
+  --iris-line: rgba(139, 125, 255, 0.42);
+  --on-accent: #0f0d0c;
+  --on-signal: #0f0d0c;
+  --ok: #3dd9a0;
+  --tool: #ff6b7a;
+  --quality: #f0b03c;
+  --semantic: #b58cff;
+  --coherence: #4fd1e0;
+  --idle: #6b635e;
+  --ok-dim: rgba(61, 217, 160, 0.14);
+  --tool-dim: rgba(255, 107, 122, 0.14);
+  --quality-dim: rgba(240, 176, 60, 0.14);
+  --semantic-dim: rgba(181, 140, 255, 0.14);
+  --coherence-dim: rgba(79, 209, 224, 0.14);
+  --surf-tool: #2a1518;
+  --surf-quality: #2a2011;
+  --surf-semantic: #1f1830;
+  --surf-coherence: #0f2529;
+  --glow-tool: rgba(255, 107, 122, 0.26);
+  --glow-iris: rgba(139, 125, 255, 0.26);
+  --overlay: rgba(15, 13, 12, 0.97);
+  --edge-pass: rgba(200, 195, 190, 0.36);
+  --edge-skip: rgba(200, 195, 190, 0.15);
+  --shadow-lg: 0 24px 60px -20px rgba(0, 0, 0, 0.7);
+  --j-key: #a99aff;
+  --j-str: #3dd9a0;
+  --j-num: #f0b03c;
+  --j-bool: #4fd1e0;
+  --diff-add-bg: rgba(61, 217, 160, 0.12);
+  --diff-add-fg: #6fe3b8;
+  --diff-del-bg: rgba(255, 107, 122, 0.12);
+  --diff-del-fg: #ff8f9b;
+}
+
 .argus-instrument code {
   font-family: var(--mono);
   font-size: 0.87em;

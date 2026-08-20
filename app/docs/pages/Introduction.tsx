@@ -11,7 +11,7 @@ export default function Introduction() {
         What is ARGUS?
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        ARGUS is a <span className="text-white font-medium">production readiness platform</span> for
+        ARGUS is a <span className="text-[var(--ink)] font-medium">production readiness platform</span> for
         AI agent pipelines. It wraps your LangGraph (or any Python-based) workflow and watches
         every node execution, state transition, and tool call — then runs a multi-layered detection
         system to catch the failures that don&apos;t throw exceptions.
@@ -34,7 +34,7 @@ export default function Introduction() {
         finishes, returns a result, and nobody knows it&apos;s garbage until a human reads it.
       </p>
       <p className="mt-4 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        These are <span className="text-white font-medium">silent failures</span> — the pipeline
+        These are <span className="text-[var(--ink)] font-medium">silent failures</span> — the pipeline
         technically succeeds while the output quality collapses. Standard monitoring (latency,
         error rates, uptime) is blind to them. You need something that understands what your
         pipeline is <em>supposed</em> to do and can tell when it stops doing it.
@@ -105,7 +105,7 @@ print(watcher.run_id)`}
         <li className="flex gap-3">
           <span className="text-[var(--signal-ok)] mt-1 shrink-0">&#8227;</span>
           <span>
-            <span className="text-white font-medium">Silent failure detection</span> — catches
+            <span className="text-[var(--ink)] font-medium">Silent failure detection</span> — catches
             semantic degradation, hallucinated outputs, and logic errors that don&apos;t raise
             exceptions
           </span>
@@ -113,28 +113,28 @@ print(watcher.run_id)`}
         <li className="flex gap-3">
           <span className="text-[var(--signal-ok)] mt-1 shrink-0">&#8227;</span>
           <span>
-            <span className="text-white font-medium">Root cause analysis</span> — traces failures
+            <span className="text-[var(--ink)] font-medium">Root cause analysis</span> — traces failures
             back through the execution graph to the node that caused the problem
           </span>
         </li>
         <li className="flex gap-3">
           <span className="text-[var(--signal-ok)] mt-1 shrink-0">&#8227;</span>
           <span>
-            <span className="text-white font-medium">Execution replay</span> — re-run any node
+            <span className="text-[var(--ink)] font-medium">Execution replay</span> — re-run any node
             with frozen upstream state. Only the target node onward re-executes with your fixed code.
           </span>
         </li>
         <li className="flex gap-3">
           <span className="text-[var(--signal-ok)] mt-1 shrink-0">&#8227;</span>
           <span>
-            <span className="text-white font-medium">Four detection layers</span> — heuristic engine
+            <span className="text-[var(--ink)] font-medium">Four detection layers</span> — heuristic engine
             (150+ signatures), anomaly detector, correlator, and LLM investigator
           </span>
         </li>
         <li className="flex gap-3">
           <span className="text-[var(--signal-ok)] mt-1 shrink-0">&#8227;</span>
           <span>
-            <span className="text-white font-medium">Zero-config instrumentation</span> — one
+            <span className="text-[var(--ink)] font-medium">Zero-config instrumentation</span> — one
             wrapper call, no decorators, no manual span creation
           </span>
         </li>
@@ -149,7 +149,7 @@ print(watcher.run_id)`}
         know when your pipeline is silently producing bad output — ARGUS is for you.
       </p>
       <p className="mt-4 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        ARGUS also works <span className="text-white font-medium">without LangGraph</span> — use{" "}
+        ARGUS also works <span className="text-[var(--ink)] font-medium">without LangGraph</span> — use{" "}
         <code>ArgusSession</code> to wrap plain Python functions, Prefect tasks, or Temporal workflows.
       </p>
 
@@ -157,7 +157,7 @@ print(watcher.run_id)`}
         ARGUS is currently in beta (v0.6.18). The core API is stable, but some detection layers and CLI
         commands are still being refined. Requires Python 3.9+. LangGraph 0.2+ only needed for{" "}
         <code>ArgusWatcher</code>. Join the{" "}
-        <a href="https://discord.gg/nhbdZkcG" target="_blank" rel="noopener noreferrer" className="text-[var(--accent-soft)] underline decoration-dotted underline-offset-2 hover:text-white hover:decoration-solid">
+        <a href="https://discord.gg/yVuGDCX54K" target="_blank" rel="noopener noreferrer" className="text-[var(--accent-soft)] underline decoration-dotted underline-offset-2 hover:text-[var(--ink)] hover:decoration-solid">
           Discord
         </a>{" "}
         for early access and to shape the roadmap.
@@ -165,7 +165,7 @@ print(watcher.run_id)`}
 
       <p className="mt-6 text-[15px] leading-[1.75] text-[var(--text-muted)]">
         Ready to try it?{" "}
-        <Link href="/docs/quickstart" className="text-[var(--accent-soft)] underline decoration-dotted underline-offset-2 hover:text-white hover:decoration-solid">
+        <Link href="/docs/quickstart" className="text-[var(--accent-soft)] underline decoration-dotted underline-offset-2 hover:text-[var(--ink)] hover:decoration-solid">
           Jump to the Quickstart
         </Link>
         .

@@ -13,20 +13,13 @@ export interface FeatureBleedProps {
   align?: "start" | "end";
   preset: DemoPreset;
   label: string;
-  glow?: boolean;
   /** Taller panel so the execution graph reads like the dashboard. */
   tall?: boolean;
 }
 
-const WASH =
-  "radial-gradient(1200px 700px at 20% 80%, rgba(255,59,0,.55), transparent 60%)," +
-  "radial-gradient(1000px 640px at 75% 20%, rgba(0,142,255,.5), transparent 58%)," +
-  "radial-gradient(900px 600px at 55% 60%, rgba(246,0,157,.42), transparent 55%)," +
-  "linear-gradient(115deg,#ff3b00 0%,#f6009d 32%,#973ec6 58%,#5a46e0 82%,#00c2a8 100%)";
-
 /**
  * Copy + a 15:8 product panel that bleeds off the container edge.
- * The panel is the Argus instrument dashboard on a rainbow wash.
+ * The panel is the Argus instrument dashboard on a neutral ground.
  */
 export function FeatureBleed({
   num,
@@ -38,7 +31,6 @@ export function FeatureBleed({
   align = "start",
   preset,
   label,
-  glow = false,
   tall = false,
 }: FeatureBleedProps) {
   const copyFirst = align === "start";
@@ -73,25 +65,17 @@ export function FeatureBleed({
                 copyFirst ? "md:left-0" : "md:right-0"
               )}
             >
-              {glow ? (
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-[-12%] rounded-[300px] blur-[100px]"
-                  style={{ background: "var(--gradient-section-glow)" }}
-                />
-              ) : null}
               <div
                 data-demo-slot={slotId}
                 role="img"
                 aria-label={label}
-                className="relative h-full overflow-hidden rounded-[var(--radius-panel)] border-[length:var(--hairline)] border-[var(--line)] shadow-[var(--shadow-demo)]"
+                className="relative h-full overflow-hidden rounded-[var(--radius-panel)] border-[length:var(--hairline)] border-[var(--line)] bg-[var(--rail)] shadow-[var(--shadow-demo)]"
               >
-                <div aria-hidden className="absolute inset-0" style={{ background: WASH }} />
                 <div
-                  className={cn(
-                    "absolute overflow-hidden rounded-[12px] border border-black/10 bg-[var(--panel)] shadow-[0_40px_80px_-24px_rgba(0,0,0,0.35)]",
-                    tall ? "inset-[3%]" : "inset-[6%]"
-                  )}
+                className={cn(
+                  "absolute overflow-hidden rounded-[12px] border-[length:var(--hairline)] border-[var(--line-2)] bg-[var(--panel)] shadow-[var(--shadow-demo)]",
+                  tall ? "inset-[3%]" : "inset-[6%]"
+                )}
                 >
                   <ArgusDemo preset={preset} frozen />
                 </div>

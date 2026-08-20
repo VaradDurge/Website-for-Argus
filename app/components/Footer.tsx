@@ -32,7 +32,7 @@ const COLUMNS = [
     title: "Community",
     links: [
       { label: "GitHub", href: "https://github.com/VaradDurge/ARGUS" },
-      { label: "Discord", href: "https://discord.gg/nhbdZkcG" },
+      { label: "Discord", href: "https://discord.gg/yVuGDCX54K" },
       { label: "Instagram", href: "https://www.instagram.com/argus.in" },
     ],
   },
@@ -146,7 +146,7 @@ export function Footer() {
               <RiGithubFill size={16} />
             </a>
             <a
-              href="https://discord.gg/nhbdZkcG"
+              href="https://discord.gg/yVuGDCX54K"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Discord"

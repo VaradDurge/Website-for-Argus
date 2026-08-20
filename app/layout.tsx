@@ -1,11 +1,20 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter, Instrument_Serif } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Instrument_Serif, Doto } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const geist = Geist({
   variable: "--font-geist",
   subsets: ["latin"],
+  display: "swap",
+});
+
+/* Dot-matrix display face. ROND is exposed so the dots can be rounded
+   in CSS via font-variation-settings. */
+const display = Doto({
+  variable: "--font-display",
+  subsets: ["latin"],
+  axes: ["ROND"],
   display: "swap",
 });
 
@@ -90,7 +99,8 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geist.variable} ${inter.variable} ${mono.variable} ${serif.variable} antialiased`}
+      data-theme="dark"
+      className={`${geist.variable} ${inter.variable} ${mono.variable} ${serif.variable} ${display.variable} antialiased`}
     >
       <body className="min-h-screen bg-[var(--void)] text-[var(--ink)]">
         {children}

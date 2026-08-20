@@ -110,7 +110,7 @@ export function HowItWorks() {
   return (
     <section id="how-it-works" className="py-16 md:py-36">
       <Container>
-        <h2 className="heading-3 max-w-[900px] text-[var(--ink)]">
+        <h2 className="heading-3 heading-sans max-w-[900px] text-[var(--ink)]">
           {STEPS.map((step, i) => (
             <span key={step.num}>
               {i === 0 ? "ARGUS " : i === 1 ? ", " : ", and "}

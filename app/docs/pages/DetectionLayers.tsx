@@ -17,7 +17,7 @@ export default function DetectionLayers() {
         Layer 1 — Heuristic Engine
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Pattern matching against <span className="text-white font-medium">150+ known failure
+        Pattern matching against <span className="text-[var(--ink)] font-medium">150+ known failure
         signatures</span>. Deterministic, zero cost, catches ~80% of failures.
       </p>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
@@ -43,9 +43,9 @@ export default function DetectionLayers() {
       </ul>
 
       <p className="mt-4 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        The heuristic engine loads signatures from three tiers: <span className="text-white font-medium">bundled</span>{" "}
-        (ships with ARGUS), <span className="text-white font-medium">private</span> (your local patterns), and{" "}
-        <span className="text-white font-medium">shared</span> (community-contributed, synced from cloud). All
+        The heuristic engine loads signatures from three tiers: <span className="text-[var(--ink)] font-medium">bundled</span>{" "}
+        (ships with ARGUS), <span className="text-[var(--ink)] font-medium">private</span> (your local patterns), and{" "}
+        <span className="text-[var(--ink)] font-medium">shared</span> (community-contributed, synced from cloud). All
         merged and deduplicated at startup.
       </p>
 
@@ -54,7 +54,7 @@ export default function DetectionLayers() {
         pattern, it proposes a candidate signature. After you approve it in the Approvals page,
         the pattern is added to the heuristic engine — catching the same failure deterministically
         next time. See{" "}
-        <a href="/docs/adaptive-learning" className="text-[var(--accent-soft)] underline decoration-dotted underline-offset-2 hover:text-white hover:decoration-solid">
+        <a href="/docs/adaptive-learning" className="text-[var(--accent-soft)] underline decoration-dotted underline-offset-2 hover:text-[var(--ink)] hover:decoration-solid">
           Adaptive Learning
         </a>.
       </Callout>
@@ -63,7 +63,7 @@ export default function DetectionLayers() {
         Layer 2 — Anomaly Detector
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Statistical checks for <span className="text-white font-medium">suspicious patterns</span>{" "}
+        Statistical checks for <span className="text-[var(--ink)] font-medium">suspicious patterns</span>{" "}
         that the heuristic engine can&apos;t catch with fixed signatures. Still deterministic, no LLM
         calls.
       </p>
@@ -90,7 +90,7 @@ export default function DetectionLayers() {
         Layer 3 — Correlator
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Traces <span className="text-white font-medium">failure propagation across nodes</span>.
+        Traces <span className="text-[var(--ink)] font-medium">failure propagation across nodes</span>.
         This is the layer that tells you where the problem actually started, not just where it surfaced.
       </p>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
@@ -119,7 +119,7 @@ root cause   validate`}
         Layer 4 — LLM Investigator
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        Only triggers on <span className="text-white font-medium">ambiguous failures</span> or when
+        Only triggers on <span className="text-[var(--ink)] font-medium">ambiguous failures</span> or when
         explicitly enabled. This is the expensive layer — it calls an LLM.
       </p>
       <ul className="mt-3 space-y-2 text-[15px] leading-[1.75] text-[var(--text-muted)]">
@@ -168,7 +168,7 @@ watcher = ArgusWatcher(
       />
 
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        The judge runs <span className="text-white font-medium">after</span> deterministic checks on
+        The judge runs <span className="text-[var(--ink)] font-medium">after</span> deterministic checks on
         every passing node. It evaluates output quality and flags issues that pattern matching can&apos;t
         catch. It won&apos;t override a clear heuristic failure — it only steps in when the picture is
         ambiguous.
@@ -179,11 +179,11 @@ watcher = ArgusWatcher(
       </p>
 
       <p className="mt-4 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        <span className="text-white font-medium">When to use:</span> complex multi-agent pipelines,
+        <span className="text-[var(--ink)] font-medium">When to use:</span> complex multi-agent pipelines,
         customer-facing outputs, LLM-generated content where quality matters.
       </p>
       <p className="mt-2 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        <span className="text-white font-medium">When to skip:</span> simple pipelines, CI/CD speed
+        <span className="text-[var(--ink)] font-medium">When to skip:</span> simple pipelines, CI/CD speed
         runs, zero-cost monitoring.
       </p>
     </>

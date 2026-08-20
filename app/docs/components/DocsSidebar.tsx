@@ -10,12 +10,10 @@ export function DocsSidebar({ onNavigate }: { onNavigate?: () => void }) {
     pathname === "/docs" ? "introduction" : pathname.replace("/docs/", "");
 
   return (
-    <nav className="flex flex-col gap-6" aria-label="Documentation sidebar">
+    <nav className="flex flex-col gap-7" aria-label="Documentation sidebar">
       {SIDEBAR_SECTIONS.map((section) => (
         <div key={section.title}>
-          <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-[var(--text-dim)] mb-2 px-3">
-            {section.title}
-          </p>
+          <p className="eyebrow mb-2.5 px-2.5">{section.title}</p>
           <ul className="flex flex-col gap-0.5">
             {section.items.map((item) => {
               const isActive = currentSlug === item.slug;
@@ -25,10 +23,10 @@ export function DocsSidebar({ onNavigate }: { onNavigate?: () => void }) {
                   <Link
                     href={item.slug === "introduction" ? "/docs" : `/docs/${item.slug}`}
                     onClick={onNavigate}
-                    className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] transition-all duration-200 ${
+                    className={`flex items-center gap-2.5 rounded-[var(--radius-control)] px-2.5 py-1.5 text-[13px] transition-colors duration-200 ${
                       isActive
-                        ? "text-[var(--accent-soft)] bg-[rgba(109,92,255,0.07)] border-l-2 border-[var(--accent-soft)] -ml-[1px] shadow-[inset_0_0_20px_rgba(109,92,255,0.06)]"
-                        : "text-[var(--text-muted)] hover:text-white hover:bg-[rgba(255,255,255,0.025)] hover:shadow-[inset_0_0_12px_rgba(255,255,255,0.02)]"
+                        ? "bg-[var(--band)] font-medium text-[var(--ink)]"
+                        : "text-[var(--ink-2)] hover:bg-[var(--ex)] hover:text-[var(--ink)]"
                     }`}
                   >
                     <Icon size={15} strokeWidth={1.6} className="shrink-0" />

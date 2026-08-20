@@ -203,19 +203,19 @@ argus ui`}
       </Heading>
       <ul className="mt-3 space-y-2 text-[15px] leading-[1.75] text-[var(--text-muted)]">
         <li>
-          <Link href="/docs/core-concepts" className="text-[var(--accent-soft)] underline decoration-dotted underline-offset-2 hover:text-white hover:decoration-solid">
+          <Link href="/docs/core-concepts" className="text-[var(--accent-soft)] underline decoration-dotted underline-offset-2 hover:text-[var(--ink)] hover:decoration-solid">
             Core Concepts
           </Link>{" "}
           — understand Watchers, Detectors, Traces, and Forensics
         </li>
         <li>
-          <Link href="/docs/configuration" className="text-[var(--accent-soft)] underline decoration-dotted underline-offset-2 hover:text-white hover:decoration-solid">
+          <Link href="/docs/configuration" className="text-[var(--accent-soft)] underline decoration-dotted underline-offset-2 hover:text-[var(--ink)] hover:decoration-solid">
             Configuration
           </Link>{" "}
           — customize detection sensitivity, enable semantic judging, configure storage
         </li>
         <li>
-          <Link href="/docs/cli-reference" className="text-[var(--accent-soft)] underline decoration-dotted underline-offset-2 hover:text-white hover:decoration-solid">
+          <Link href="/docs/cli-reference" className="text-[var(--accent-soft)] underline decoration-dotted underline-offset-2 hover:text-[var(--ink)] hover:decoration-solid">
             CLI Reference
           </Link>{" "}
           — all available commands and flags

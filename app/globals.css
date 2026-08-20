@@ -70,6 +70,13 @@
     0 33px 19px -12px rgba(0, 0, 0, 0.035),
     0 10px 10px -5px rgba(0, 0, 0, 0.04),
     0 4px 4px -2px rgba(0, 0, 0, 0.05);
+  /* hover lift. Tokenized because a black-alpha shadow is invisible on
+     a dark ground. */
+  --shadow-hover: 0 8px 24px -10px rgba(0, 0, 0, 0.12);
+  --shadow-hover-lg: 0 12px 32px -16px rgba(0, 0, 0, 0.16);
+
+  /* film grain strength */
+  --grain-opacity: 0.03;
 
   /* ─── layout: 8pt grid ─── */
   --constrained-max: 1200px;
@@ -93,14 +100,7 @@
   --duration-ui: 200ms;
   --duration-reveal: 500ms;
 
-  /* ─── atmosphere (Interfere-structure rainbow, iris-terminated) ─── */
-  --gradient-hero-orb: linear-gradient(
-    90deg,
-    rgba(255, 59, 0, 0.42) 0%,
-    rgba(246, 0, 157, 0.36) 38%,
-    rgba(151, 62, 198, 0.32) 71%,
-    rgba(90, 70, 224, 0.4) 100%
-  );
+  /* ─── atmosphere ─── */
   --gradient-section-glow: linear-gradient(
     90deg,
     rgba(239, 95, 0, 0.22) 0%,
@@ -108,7 +108,6 @@
     rgba(83, 0, 158, 0.14) 70.67%,
     rgba(90, 70, 224, 0.2) 100%
   );
-
   /* ─── legacy aliases ───
      Older components reference these names directly. Mapping them onto
      the token layer re-themes them without touching every call site. */
@@ -129,30 +128,41 @@
   --signal-fail: var(--sig-fail);
   --grid: rgba(0, 0, 0, 0.035);
   --grid-strong: rgba(0, 0, 0, 0.07);
+
+  /* ─── platform brand marks ───
+     Not signal hues. Darkened from the official brand colours so they
+     hold up on a light ground; the dark pair restores them to full
+     saturation. */
+  --brand-reddit: #d43900;
+  --brand-discord: #4752c4;
+  --brand-instagram: #c31f5c;
 }
 
-/* ─── dark pair (authoritative). Not active; opt in with
-   <html data-theme="dark">. ─── */
+/* ─── dark pair (authoritative, active) ───
+   Warm near-black rather than neutral grey: the grounds carry a slight
+   red/amber cast so the copper atmosphere reads as part of the page
+   instead of a sticker on top of it. Iris stays the only interactive
+   accent — copper is atmosphere and never signals state. ─── */
 [data-theme="dark"] {
-  --void: #161618;
-  --panel: #1c1c1f;
-  --raised: #26262a;
-  --rail: #111113;
-  --ex: #1a1a1d;
-  --band: #222226;
-  --line: #2a2a2e;
-  --line-2: #34343a;
-  --line-3: #45454c;
-  --ink: #ececef;
-  --ink-2: #a6a6ad;
-  --ink-3: #7c7c85;
+  --void: #0e0d0c;
+  --panel: #161413;
+  --raised: #1e1b19;
+  --rail: #0a0908;
+  --ex: #141211;
+  --band: #1c1917;
+  --line: #262220;
+  --line-2: #332e2b;
+  --line-3: #47403c;
+  --ink: #f2ede9;
+  --ink-2: #a8a09a;
+  --ink-3: #7d746e;
 
   --iris: #8b7dff;
   --iris-fg: #a99aff;
   --iris-hover: #9c8dff;
   --iris-border: #3f3670;
   --iris-subtle: #221e3a;
-  --iris-on: #161618;
+  --iris-on: #0e0d0c;
 
   --sig-ok: #3dd9a0;
   --sig-lime: #b8e04a;
@@ -165,58 +175,40 @@
   --sig-fail-subtle: rgba(255, 107, 122, 0.14);
   --sig-info-subtle: rgba(79, 209, 224, 0.14);
 
-  --inverted: #ececef;
+  /* primary control inverts to near-white on dark */
+  --inverted: #f2ede9;
   --inverted-hover: #ffffff;
-  --on-inverted: #161618;
+  --on-inverted: #0e0d0c;
 
   --shadow-control:
-    0 0 0 0.5px rgba(255, 255, 255, 0.08),
-    0 1px 2px rgba(0, 0, 0, 0.4);
+    0 0 0 0.5px rgba(255, 255, 255, 0.07),
+    0 1px 2px rgba(0, 0, 0, 0.5);
   --shadow-demo:
-    0 0 0 0.5px rgba(255, 255, 255, 0.08),
-    0 40px 80px -20px rgba(0, 0, 0, 0.6);
+    0 0 0 0.5px rgba(255, 255, 255, 0.07),
+    0 62px 37px -30px rgba(0, 0, 0, 0.5),
+    0 33px 19px -12px rgba(0, 0, 0, 0.45),
+    0 10px 10px -5px rgba(0, 0, 0, 0.4);
+  --shadow-hover: 0 8px 24px -10px rgba(0, 0, 0, 0.6);
+  --shadow-hover-lg: 0 12px 32px -16px rgba(0, 0, 0, 0.7);
 
+  /* copper-weighted atmosphere, brighter than light mode because it is
+     sitting on near-black rather than cream */
+  --gradient-section-glow: linear-gradient(
+    90deg,
+    rgba(255, 122, 26, 0.3) 0%,
+    rgba(232, 74, 90, 0.2) 37.5%,
+    rgba(151, 62, 198, 0.16) 70.67%,
+    rgba(90, 70, 224, 0.24) 100%
+  );
   --grid: rgba(255, 255, 255, 0.03);
-  --grid-strong: rgba(255, 255, 255, 0.08);
+  --grid-strong: rgba(255, 255, 255, 0.07);
+  --grain-opacity: 0.055;
+
+  --brand-reddit: #ff5414;
+  --brand-discord: #5865f2;
+  --brand-instagram: #e4405f;
 }
 
-/* /docs is out of scope for this redesign and still ships dark-only
-   markup (hardcoded white text). Pin that subtree to the dark pair until
-   docs is redesigned. `.docs-prose` is rendered by every docs page. */
-:root:has(.docs-prose) {
-  --void: #161618;
-  --panel: #1c1c1f;
-  --raised: #26262a;
-  --rail: #111113;
-  --ex: #1a1a1d;
-  --band: #222226;
-  --line: #2a2a2e;
-  --line-2: #34343a;
-  --line-3: #45454c;
-  --ink: #ececef;
-  --ink-2: #a6a6ad;
-  --ink-3: #7c7c85;
-
-  --iris: #8b7dff;
-  --iris-fg: #a99aff;
-  --iris-hover: #9c8dff;
-  --iris-border: #3f3670;
-  --iris-subtle: #221e3a;
-  --iris-on: #161618;
-
-  --sig-ok: #3dd9a0;
-  --sig-lime: #b8e04a;
-  --sig-warn: #f0b03c;
-  --sig-fail: #ff6b7a;
-  --sig-info: #4fd1e0;
-
-  --inverted: #ececef;
-  --inverted-hover: #ffffff;
-  --on-inverted: #161618;
-
-  --grid: rgba(255, 255, 255, 0.03);
-  --grid-strong: rgba(255, 255, 255, 0.08);
-}
 
 @theme inline {
   --animate-gradient-shift: gradient-shift 4s ease infinite;
@@ -254,20 +246,13 @@
   --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono), ui-monospace, monospace;
   --font-serif: var(--font-serif), ui-serif, Georgia, serif;
+  --font-display: var(--font-display), var(--font-geist), ui-sans-serif, sans-serif;
 }
 
 @keyframes gradient-shift {
   0%   { background-position: 0%   50%; }
   50%  { background-position: 100% 50%; }
   100% { background-position: 0%   50%; }
-}
-
-/* The legacy mobile zoom hack breaks layout math for the redesigned
-   marketing page. Keep it only for docs, which was built around it. */
-@media (max-width: 640px) {
-  html:has(.docs-prose) {
-    zoom: 0.8;
-  }
 }
 
 @layer base {
@@ -282,6 +267,20 @@
   body {
     overflow-x: hidden;
     background: var(--void);
+  }
+
+  /* Film grain. Fixed so it never scrolls, and pointer-events:none so it
+     cannot swallow clicks on anything beneath it. */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: var(--grain-opacity);
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 140px 140px;
   }
 
   ::selection {
@@ -357,16 +356,41 @@
   font-weight: 500;
 }
 
+/* Section headings take the dot-matrix display face. The hero (.heading-1)
+   deliberately stays on Geist. Bitmap glyphs need positive tracking and a
+   heavier weight to stay legible, so the negative tracking used for Geist
+   is overridden here rather than inherited. */
 .heading-2 {
+  font-family: var(--font-display), var(--font-geist), ui-sans-serif, sans-serif;
+  font-variation-settings: "ROND" 100;
   font-size: clamp(28px, 4.4vw, 44px);
-  line-height: 1.08;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  font-weight: 600;
+}
+
+.heading-3 {
+  font-family: var(--font-display), var(--font-geist), ui-sans-serif, sans-serif;
+  font-variation-settings: "ROND" 100;
+  font-size: clamp(24px, 3.4vw, 36px);
+  line-height: 1.14;
+  letter-spacing: 0.01em;
+  font-weight: 600;
+}
+
+/* Opt-out for long, multi-clause headings: the dot-matrix face gets heavy
+   past a couple of lines, so those stay on Geist. */
+.heading-sans {
+  font-family: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  font-variation-settings: normal;
   letter-spacing: var(--tracking-heading);
   font-weight: 500;
 }
 
-.heading-3 {
-  font-size: clamp(24px, 3.4vw, 36px);
-  line-height: 1.12;
+/* Docs are a reading surface — page titles stay on Geist. */
+.docs-root .heading-3 {
+  font-family: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  font-variation-settings: normal;
   letter-spacing: var(--tracking-heading);
   font-weight: 500;
 }
@@ -419,6 +443,71 @@
   border-radius: var(--radius-panel);
   box-shadow: var(--shadow-demo);
   backdrop-filter: blur(20px);
+}
+
+/* ───────── hero atmosphere ─────────
+   Pale digital field up top, a large dark dome with a copper rim below,
+   fading back into the page ground. Purely decorative: it sits behind
+   the hero content and never takes pointer events. The negative top
+   inset slides it under the translucent nav. */
+.hero-atmos {
+  position: absolute;
+  inset: -3.5rem 0 0 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      124% 94% at 50% 100%,
+      #0b0a09 0%,
+      #100d0b 30%,
+      rgba(150, 62, 18, 0.5) 46%,
+      rgba(214, 108, 52, 0.46) 56%,
+      rgba(236, 158, 120, 0.3) 65%,
+      rgba(214, 172, 196, 0.22) 74%,
+      rgba(168, 162, 206, 0.17) 84%,
+      rgba(198, 196, 224, 0.12) 93%,
+      transparent 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(206, 204, 230, 0.32) 0%,
+      rgba(176, 172, 206, 0.2) 12%,
+      rgba(130, 126, 162, 0.09) 24%,
+      transparent 34%
+    );
+}
+
+/* scattered digits, masked to the pale upper band */
+.hero-atmos::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.42;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='150'%3E%3Cg font-family='monospace' font-size='11' fill='%23ffffff'%3E%3Ctext x='2' y='14'%3E0 8 4 X 1 9 0 6 B%3C/text%3E%3Ctext x='11' y='38'%3E8 0 1 A 6 4 X 8 0%3C/text%3E%3Ctext x='0' y='62'%3E4 X 9 0 8 1 6 0 A%3C/text%3E%3Ctext x='15' y='86'%3E1 6 0 8 X 4 9 B 8%3C/text%3E%3Ctext x='5' y='110'%3E9 4 8 1 0 6 X 0 4%3C/text%3E%3Ctext x='9' y='134'%3E0 1 X 6 8 4 A 9 0%3C/text%3E%3C/g%3E%3C/svg%3E");
+  background-size: 180px 150px;
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.5) 14%,
+    transparent 30%
+  );
+  mask-image: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.5) 14%,
+    transparent 30%
+  );
+}
+
+/* settle back into the page ground at the bottom edge */
+.hero-atmos::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 22%;
+  background: linear-gradient(180deg, transparent, var(--void));
 }
 
 .grid-bg {
@@ -601,26 +690,71 @@
   color: var(--iris-fg);
 }
 
-/* ───────── docs prose ───────── */
+/* ───────── docs prose (same type stack as landing) ───────── */
+.docs-prose {
+  font-family: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+}
 .docs-prose p {
   margin-top: 16px;
   font-size: 15px;
-  line-height: 1.75;
-  color: var(--text-muted);
+  line-height: 1.65;
+  color: var(--ink-2);
 }
 .docs-prose p:first-child {
   margin-top: 0;
 }
-
-.docs-link {
-  color: var(--accent-soft);
+.docs-prose em,
+.docs-prose i {
+  font-family: var(--font-serif), ui-serif, Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+.docs-prose strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+.docs-prose ul,
+.docs-prose ol {
+  color: var(--ink-2);
+}
+.docs-prose li {
+  font-size: 15px;
+  line-height: 1.65;
+}
+.docs-prose a:not([class]) {
+  color: var(--iris-fg);
   text-decoration: underline;
   text-decoration-style: dotted;
   text-underline-offset: 2px;
-  transition: color 180ms ease, text-decoration-style 180ms ease;
+}
+.docs-prose a:not([class]):hover {
+  color: var(--ink);
+  text-decoration-style: solid;
+}
+.docs-prose code:not(pre code) {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 12.5px;
+  font-feature-settings: "zero";
+  background: var(--ex);
+  border: var(--hairline) solid var(--line);
+  border-radius: 5px;
+  padding: 0.1em 0.4em;
+  color: var(--ink);
+}
+
+.docs-link {
+  color: var(--iris-fg);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 2px;
+  transition: color var(--duration-ui) var(--ease-out),
+    text-decoration-style var(--duration-ui) var(--ease-out);
 }
 .docs-link:hover {
-  color: var(--text);
+  color: var(--ink);
   text-decoration-style: solid;
 }
 
@@ -688,7 +822,7 @@
 }
 .feature-cell:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px -10px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--shadow-hover);
 }
 .feature-cell:hover .feature-icon { transform: rotate(6deg) scale(1.1); }
 .feature-icon { transition: transform 0.3s var(--ease-out); }
@@ -699,7 +833,7 @@
 }
 .proof-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 32px -16px rgba(0, 0, 0, 0.16);
+  box-shadow: var(--shadow-hover-lg);
   border-color: var(--line-2);
 }
 
@@ -708,7 +842,7 @@
 }
 .pipeline-node:hover {
   transform: scale(1.03);
-  box-shadow: 0 4px 16px -6px rgba(0, 0, 0, 0.14);
+  box-shadow: var(--shadow-hover);
 }
 
 @keyframes copy-pulse {

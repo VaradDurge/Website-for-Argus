@@ -15,29 +15,21 @@ export function DocsPrevNext({ currentSlug }: DocsPrevNextProps) {
   const nextLabel = nextSlug ? getLabelForSlug(nextSlug) : null;
 
   return (
-    <div className="mt-16 pt-8 relative flex items-stretch gap-4">
-      {/* gradient divider */}
-      <div
-        className="absolute top-0 left-0 right-0 h-px"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent, rgba(109,92,255,0.2), transparent)",
-        }}
-      />
+    <div className="mt-16 flex items-stretch gap-3 border-t-[length:var(--hairline)] border-[var(--line)] pt-8">
       {prevSlug && prevLabel ? (
         <Link
           href={prevSlug === "introduction" ? "/docs" : `/docs/${prevSlug}`}
-          className="flex-1 group flex items-center gap-3 p-4 rounded-lg border border-[var(--border)] bg-[rgba(255,255,255,0.01)] hover:border-[var(--accent)]/20 hover:bg-[rgba(109,92,255,0.03)] hover:shadow-[0_0_24px_rgba(109,92,255,0.06)] transition-all duration-200"
+          className="group flex flex-1 items-center gap-3 rounded-[var(--radius-inner)] border-[length:var(--hairline)] border-[var(--line)] bg-[var(--panel)] p-4 shadow-[var(--shadow-control)] transition-colors hover:border-[var(--line-2)] hover:bg-[var(--ex)]"
         >
           <ChevronLeft
             size={16}
-            className="text-[var(--text-dim)] group-hover:text-[var(--accent-soft)] transition-colors shrink-0"
+            className="shrink-0 text-[var(--ink-3)] transition-colors group-hover:text-[var(--ink)]"
           />
           <div>
-            <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-[var(--text-dim)]">
-              Previous
-            </span>
-            <p className="text-[14px] text-white mt-0.5">{prevLabel}</p>
+            <span className="eyebrow">Previous</span>
+            <p className="mt-1.5 text-[14px] font-medium text-[var(--ink)]">
+              {prevLabel}
+            </p>
           </div>
         </Link>
       ) : (
@@ -47,17 +39,17 @@ export function DocsPrevNext({ currentSlug }: DocsPrevNextProps) {
       {nextSlug && nextLabel ? (
         <Link
           href={`/docs/${nextSlug}`}
-          className="flex-1 group flex items-center justify-end gap-3 p-4 rounded-lg border border-[var(--border)] bg-[rgba(255,255,255,0.01)] hover:border-[var(--border-strong)] hover:bg-[rgba(255,255,255,0.02)] transition-colors text-right"
+          className="group flex flex-1 items-center justify-end gap-3 rounded-[var(--radius-inner)] border-[length:var(--hairline)] border-[var(--line)] bg-[var(--panel)] p-4 text-right shadow-[var(--shadow-control)] transition-colors hover:border-[var(--line-2)] hover:bg-[var(--ex)]"
         >
           <div>
-            <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-[var(--text-dim)]">
-              Next
-            </span>
-            <p className="text-[14px] text-white mt-0.5">{nextLabel}</p>
+            <span className="eyebrow">Next</span>
+            <p className="mt-1.5 text-[14px] font-medium text-[var(--ink)]">
+              {nextLabel}
+            </p>
           </div>
           <ChevronRight
             size={16}
-            className="text-[var(--text-dim)] group-hover:text-[var(--accent-soft)] transition-colors shrink-0"
+            className="shrink-0 text-[var(--ink-3)] transition-colors group-hover:text-[var(--ink)]"
           />
         </Link>
       ) : (

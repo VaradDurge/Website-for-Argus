@@ -17,7 +17,6 @@ const FEATURES: readonly FeatureBleedProps[] = [
     slotId: "feat-01-detection-shell",
     align: "start",
     preset: "pipeline",
-    glow: true,
     label:
       "ARGUS pipeline view showing a silent failure on enrich_account, a placeholder in draft_reply, and a crash in policy_check.",
   },
@@ -38,7 +37,6 @@ const FEATURES: readonly FeatureBleedProps[] = [
     align: "end",
     preset: "graph",
     tall: true,
-    glow: true,
     label:
       "ARGUS execution graph highlighting enrich_account as the root cause of the support-triage crash.",
   },

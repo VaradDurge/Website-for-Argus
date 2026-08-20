@@ -190,10 +190,10 @@ export default function Configuration() {
         Configuration values are resolved in this order (highest priority first):
       </p>
       <ol className="mt-3 space-y-1.5 text-[15px] leading-[1.75] text-[var(--text-muted)] list-decimal list-inside">
-        <li><span className="text-white font-medium">Constructor arguments</span> — values passed directly to <code>ArgusWatcher()</code></li>
-        <li><span className="text-white font-medium">Environment variables</span> — <code>ARGUS_*</code> vars</li>
-        <li><span className="text-white font-medium">Config file</span> — <code>argus.yaml</code> in project root</li>
-        <li><span className="text-white font-medium">Defaults</span> — built-in sensible defaults</li>
+        <li><span className="text-[var(--ink)] font-medium">Constructor arguments</span> — values passed directly to <code>ArgusWatcher()</code></li>
+        <li><span className="text-[var(--ink)] font-medium">Environment variables</span> — <code>ARGUS_*</code> vars</li>
+        <li><span className="text-[var(--ink)] font-medium">Config file</span> — <code>argus.yaml</code> in project root</li>
+        <li><span className="text-[var(--ink)] font-medium">Defaults</span> — built-in sensible defaults</li>
       </ol>
 
       <Callout type="info" title="Tip">

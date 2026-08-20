@@ -11,7 +11,7 @@ export default async function OGImage() {
         style={{
           width: '1200px',
           height: '630px',
-          background: '#ffffff',
+          background: '#0e0d0c',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
@@ -19,6 +19,21 @@ export default async function OGImage() {
           position: 'relative',
         }}
       >
+        {/* copper atmosphere. Literal values: this renders through Satori,
+            which does not resolve the stylesheet's custom properties. */}
+        <div
+          style={{
+            display: 'flex',
+            position: 'absolute',
+            left: '-10%',
+            right: '-10%',
+            top: '22%',
+            height: '70%',
+            background:
+              'radial-gradient(closest-side, rgba(255,122,26,0.30), rgba(232,74,90,0.16), rgba(14,13,12,0))',
+          }}
+        />
+
         {/* 16VC Badge */}
         <div
           style={{
@@ -31,8 +46,8 @@ export default async function OGImage() {
           <div
             style={{
               display: 'flex',
-              background: '#000000',
-              color: '#ffffff',
+              background: '#f2ede9',
+              color: '#0e0d0c',
               fontSize: '18px',
               fontWeight: 700,
               padding: '6px 12px',
@@ -47,7 +62,7 @@ export default async function OGImage() {
               display: 'flex',
               fontSize: '18px',
               fontWeight: 600,
-              color: '#555555',
+              color: '#a8a09a',
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
             }}
@@ -70,7 +85,7 @@ export default async function OGImage() {
               display: 'flex',
               fontSize: '96px',
               fontWeight: 700,
-              color: '#111111',
+              color: '#f2ede9',
               letterSpacing: '-3px',
             }}
           >
@@ -82,7 +97,7 @@ export default async function OGImage() {
               fontSize: '96px',
               fontStyle: 'italic',
               fontWeight: 700,
-              color: '#b0b0b0',
+              color: '#7d746e',
               letterSpacing: '-3px',
             }}
           >
@@ -95,7 +110,7 @@ export default async function OGImage() {
           style={{
             display: 'flex',
             fontSize: '26px',
-            color: '#777777',
+            color: '#a8a09a',
             lineHeight: 1.5,
             maxWidth: '880px',
           }}
@@ -111,7 +126,7 @@ export default async function OGImage() {
             bottom: '48px',
             right: '80px',
             fontSize: '20px',
-            color: '#aaaaaa',
+            color: '#7d746e',
             fontWeight: 500,
           }}
         >

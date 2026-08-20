@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
+import { ModalPortal } from "./ModalPortal";
 
 interface Props {
   open: boolean;
@@ -27,6 +28,7 @@ export function VideoModal({ open, onClose }: Props) {
   }, [open, onClose]);
 
   return (
+    <ModalPortal>
     <AnimatePresence>
       {open && (
         <>
@@ -52,7 +54,7 @@ export function VideoModal({ open, onClose }: Props) {
               <div className="relative rounded-xl overflow-hidden border border-[var(--border)] bg-black">
                 <button
                   onClick={onClose}
-                  className="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-black/60 text-white/70 hover:text-white hover:bg-black/80 transition-colors"
+                  className="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-black/60 text-[var(--ink-2)] hover:text-[var(--ink)] hover:bg-black/80 transition-colors"
                   aria-label="Close video"
                 >
                   <X size={16} />
@@ -70,5 +72,6 @@ export function VideoModal({ open, onClose }: Props) {
         </>
       )}
     </AnimatePresence>
+    </ModalPortal>
   );
 }

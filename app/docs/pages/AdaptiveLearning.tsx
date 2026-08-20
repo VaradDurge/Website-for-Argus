@@ -12,7 +12,7 @@ export default function AdaptiveLearning() {
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
         ARGUS learns from your runs. When the semantic judge discovers a new failure pattern, it
         proposes a candidate signature. You review it in the{" "}
-        <span className="text-white font-medium">Approvals</span> page and choose: Private (local
+        <span className="text-[var(--ink)] font-medium">Approvals</span> page and choose: Private (local
         only) or Shared (synced to all ARGUS users via cloud).
       </p>
       <p className="mt-4 text-[15px] leading-[1.75] text-[var(--text-muted)]">
@@ -25,24 +25,24 @@ export default function AdaptiveLearning() {
       </Heading>
       <ol className="mt-3 space-y-3 text-[15px] leading-[1.75] text-[var(--text-muted)] list-decimal list-inside">
         <li>
-          <span className="text-white font-medium">Discovery</span> — the LLM investigator analyzes
+          <span className="text-[var(--ink)] font-medium">Discovery</span> — the LLM investigator analyzes
           a failure and extracts a reusable pattern
         </li>
         <li>
-          <span className="text-white font-medium">Proposal</span> — the pattern is saved as a
+          <span className="text-[var(--ink)] font-medium">Proposal</span> — the pattern is saved as a
           candidate in <code>.argus/candidates.json</code> with confidence, evidence, and reasoning
         </li>
         <li>
-          <span className="text-white font-medium">Review</span> — open <code>argus ui</code>,
+          <span className="text-[var(--ink)] font-medium">Review</span> — open <code>argus ui</code>,
           go to the Approvals page. Each candidate shows the pattern, match strategy, severity,
           confidence score, and source evidence
         </li>
         <li>
-          <span className="text-white font-medium">Approval</span> — approve as Private (local only)
+          <span className="text-[var(--ink)] font-medium">Approval</span> — approve as Private (local only)
           or Shared (synced to all ARGUS users via cloud)
         </li>
         <li>
-          <span className="text-white font-medium">Detection</span> — the approved pattern is loaded
+          <span className="text-[var(--ink)] font-medium">Detection</span> — the approved pattern is loaded
           into the heuristic engine and matched against every future node output
         </li>
       </ol>
@@ -84,14 +84,14 @@ export default function AdaptiveLearning() {
         <li className="flex gap-3">
           <span className="text-[var(--accent-soft)] shrink-0">&#8227;</span>
           <span>
-            <span className="text-white font-medium">Bundled</span> — ships with ARGUS. Core patterns
+            <span className="text-[var(--ink)] font-medium">Bundled</span> — ships with ARGUS. Core patterns
             for placeholder outputs, semantic degradation markers, corrupted JSON, and repeated filler text.
           </span>
         </li>
         <li className="flex gap-3">
           <span className="text-[var(--signal-ok)] shrink-0">&#8227;</span>
           <span>
-            <span className="text-white font-medium">Private</span> — patterns you approved as
+            <span className="text-[var(--ink)] font-medium">Private</span> — patterns you approved as
             &quot;Private&quot;. Stored locally in <code>.argus/custom_signatures.json</code>.
             Only your instance uses these.
           </span>
@@ -99,7 +99,7 @@ export default function AdaptiveLearning() {
         <li className="flex gap-3">
           <span className="text-[var(--signal-warn)] shrink-0">&#8227;</span>
           <span>
-            <span className="text-white font-medium">Shared</span> — community-contributed patterns
+            <span className="text-[var(--ink)] font-medium">Shared</span> — community-contributed patterns
             synced from the cloud. When you approve a pattern as &quot;Shared&quot;, it gets pushed
             to the cloud database and becomes available to every ARGUS user.
           </span>
@@ -121,7 +121,7 @@ export default function AdaptiveLearning() {
       </p>
       <p className="mt-4 text-[15px] leading-[1.75] text-[var(--text-muted)]">
         When <code>semantic_judge=True</code>, the LLM judge runs{" "}
-        <span className="text-white font-medium">after</span> heuristic detection and can override
+        <span className="text-[var(--ink)] font-medium">after</span> heuristic detection and can override
         false positives. It reviews the full input/output context and clears flags that don&apos;t
         hold up under semantic analysis.
       </p>
@@ -136,20 +136,20 @@ export default function AdaptiveLearning() {
         <li className="flex gap-3">
           <span className="text-[var(--signal-warn)] shrink-0">&#8227;</span>
           <span>
-            <span className="text-white font-medium">Pending</span> — candidates discovered by the
+            <span className="text-[var(--ink)] font-medium">Pending</span> — candidates discovered by the
             LLM investigator, awaiting your review
           </span>
         </li>
         <li className="flex gap-3">
           <span className="text-[var(--signal-ok)] shrink-0">&#8227;</span>
           <span>
-            <span className="text-white font-medium">Private</span> — your locally approved patterns
+            <span className="text-[var(--ink)] font-medium">Private</span> — your locally approved patterns
           </span>
         </li>
         <li className="flex gap-3">
           <span className="text-[var(--accent-soft)] shrink-0">&#8227;</span>
           <span>
-            <span className="text-white font-medium">Shared</span> — community patterns synced from
+            <span className="text-[var(--ink)] font-medium">Shared</span> — community patterns synced from
             the cloud
           </span>
         </li>

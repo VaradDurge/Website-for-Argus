@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Mail } from "lucide-react";
 import { RiTwitterXFill, RiDiscordFill } from "@remixicon/react";
+import { ModalPortal } from "./ModalPortal";
 
 interface Props {
   open: boolean;
@@ -21,6 +22,7 @@ export function ContactModal({ open, onClose }: Props) {
   }, [open, onClose]);
 
   return (
+    <ModalPortal>
     <AnimatePresence>
       {open && (
         <>
@@ -46,7 +48,7 @@ export function ContactModal({ open, onClose }: Props) {
               <div className="panel p-7 relative">
                 <button
                   onClick={onClose}
-                  className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-md text-[var(--text-dim)] hover:text-white hover:bg-[var(--surface-2)] transition-colors"
+                  className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-md text-[var(--text-dim)] hover:text-[var(--ink)] hover:bg-[var(--surface-2)] transition-colors"
                   aria-label="Close"
                 >
                   <X size={15} />
@@ -67,9 +69,9 @@ export function ContactModal({ open, onClose }: Props) {
                     rel="noopener noreferrer"
                     className="flex items-center gap-3.5 px-4 py-3 rounded-[10px] border border-[var(--border)] hover:border-white/20 bg-[var(--surface-2)] hover:bg-[rgba(255,255,255,0.04)] transition-colors group"
                   >
-                    <RiTwitterXFill size={17} className="text-white shrink-0" />
+                    <RiTwitterXFill size={17} className="text-[var(--ink)] shrink-0" />
                     <div className="flex flex-col">
-                      <span className="text-[13px] text-white font-medium">@VaraadDurgaay</span>
+                      <span className="text-[13px] text-[var(--ink)] font-medium">@VaraadDurgaay</span>
                       <span className="text-[11px] text-[var(--text-dim)]">X / Twitter</span>
                     </div>
                   </a>
@@ -81,21 +83,21 @@ export function ContactModal({ open, onClose }: Props) {
                   >
                     <Mail size={17} className="text-[#f5b13c] shrink-0" strokeWidth={1.6} />
                     <div className="flex flex-col">
-                      <span className="text-[13px] text-white font-medium">varaddurge@gmail.com</span>
+                      <span className="text-[13px] text-[var(--ink)] font-medium">varaddurge@gmail.com</span>
                       <span className="text-[11px] text-[var(--text-dim)]">Email</span>
                     </div>
                   </a>
 
                   {/* Discord */}
                   <a
-                    href="https://discord.gg/nhbdZkcG"
+                    href="https://discord.gg/yVuGDCX54K"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-3.5 px-4 py-3 rounded-[10px] border border-[#5865F2]/25 hover:border-[#5865F2]/50 bg-[rgba(88,101,242,0.06)] hover:bg-[rgba(88,101,242,0.12)] transition-colors group"
                   >
                     <RiDiscordFill size={17} className="text-[#5865F2] shrink-0" />
                     <div className="flex flex-col">
-                      <span className="text-[13px] text-white font-medium">Argus Labs</span>
+                      <span className="text-[13px] text-[var(--ink)] font-medium">Argus Labs</span>
                       <span className="text-[11px] text-[var(--text-dim)]">Discord Server</span>
                     </div>
                   </a>
@@ -106,5 +108,6 @@ export function ContactModal({ open, onClose }: Props) {
         </>
       )}
     </AnimatePresence>
+    </ModalPortal>
   );
 }

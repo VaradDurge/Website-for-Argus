@@ -41,7 +41,9 @@ export function Hero() {
       <BetaAccessModal open={betaOpen} onClose={() => setBetaOpen(false)} />
       <VideoModal open={videoOpen} onClose={() => setVideoOpen(false)} />
 
-      <Container>
+      <div aria-hidden className="hero-atmos" />
+
+      <Container className="relative z-10">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
           {/* headline */}
           <div className="max-w-[620px]">

@@ -33,9 +33,9 @@ const PLATFORM_ICON: Record<Platform, React.ComponentType<any>> = {
 
 const PLATFORM_COLOR: Record<Platform, string> = {
   x: "var(--ink)",
-  reddit: "#d43900",
-  discord: "#4752c4",
-  instagram: "#c31f5c",
+  reddit: "var(--brand-reddit)",
+  discord: "var(--brand-discord)",
+  instagram: "var(--brand-instagram)",
 };
 
 // ═══════════════════════════════════════

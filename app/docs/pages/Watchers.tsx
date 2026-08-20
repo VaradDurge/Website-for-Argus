@@ -180,16 +180,16 @@ watcher = ArgusWatcher(
       </p>
       <ol className="mt-3 space-y-3 text-[15px] leading-[1.75] text-[var(--text-muted)] list-decimal list-inside">
         <li>
-          <span className="text-white font-medium">Created</span> — constructor called, parameters loaded
+          <span className="text-[var(--ink)] font-medium">Created</span> — constructor called, parameters loaded
         </li>
         <li>
-          <span className="text-white font-medium">Watching</span> — graph instrumented, ready for execution
+          <span className="text-[var(--ink)] font-medium">Watching</span> — graph instrumented, ready for execution
         </li>
         <li>
-          <span className="text-white font-medium">Recording</span> — pipeline running, capturing node data
+          <span className="text-[var(--ink)] font-medium">Recording</span> — pipeline running, capturing node data
         </li>
         <li>
-          <span className="text-white font-medium">Finalized</span> — detectors run, forensics generated, trace stored
+          <span className="text-[var(--ink)] font-medium">Finalized</span> — detectors run, forensics generated, trace stored
         </li>
       </ol>
 

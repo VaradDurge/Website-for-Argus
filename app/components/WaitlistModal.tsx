@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ArrowRight, Check } from "lucide-react";
 import { RiGithubFill, RiDiscordFill, RiInstagramFill } from "@remixicon/react";
+import { ModalPortal } from "./ModalPortal";
 
 interface Props {
   open: boolean;
@@ -60,6 +61,7 @@ export function WaitlistModal({ open, onClose }: Props) {
   }
 
   return (
+    <ModalPortal>
     <AnimatePresence>
       {open && (
         <>
@@ -89,7 +91,7 @@ export function WaitlistModal({ open, onClose }: Props) {
                 {/* close */}
                 <button
                   onClick={onClose}
-                  className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-md text-[var(--text-dim)] hover:text-white hover:bg-[var(--surface-2)] transition-colors"
+                  className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-md text-[var(--text-dim)] hover:text-[var(--ink)] hover:bg-[var(--surface-2)] transition-colors"
                   aria-label="Close"
                 >
                   <X size={15} />
@@ -100,7 +102,7 @@ export function WaitlistModal({ open, onClose }: Props) {
                     <span className="w-12 h-12 rounded-full bg-[rgba(0,240,168,0.08)] border border-[var(--signal-ok)]/30 flex items-center justify-center text-[var(--signal-ok)]">
                       <Check size={22} />
                     </span>
-                    <h3 className="text-[22px] font-medium text-white tracking-[-0.02em]">
+                    <h3 className="text-[22px] font-medium text-[var(--ink)] tracking-[-0.02em]">
                       You&apos;re in.
                     </h3>
                     <p className="text-[14px] leading-[1.65] text-[var(--text-muted)] max-w-[280px]">
@@ -113,13 +115,13 @@ export function WaitlistModal({ open, onClose }: Props) {
                     {/* socials */}
                     <div className="mt-2 flex items-center gap-3">
                       <a
-                        href="https://discord.gg/nhbdZkcG"
+                        href="https://discord.gg/yVuGDCX54K"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-2.5 px-4 py-2.5 rounded-lg border border-[#5865F2]/30 bg-[rgba(88,101,242,0.08)] text-[#5865F2] hover:bg-[rgba(88,101,242,0.15)] transition-colors"
                       >
                         <RiDiscordFill size={15} />
-                        <span className="text-[13px] text-white/80">
+                        <span className="text-[13px] text-[var(--ink-2)]">
                           You&apos;ve been invited to join our{" "}
                           <span className="text-[#5865F2] font-medium">Discord</span>
                         </span>
@@ -129,7 +131,7 @@ export function WaitlistModal({ open, onClose }: Props) {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="GitHub"
-                        className="flex items-center justify-center w-9 h-9 rounded-lg border border-white/15 bg-[rgba(255,255,255,0.04)] text-[var(--text-muted)] hover:text-white hover:bg-[rgba(255,255,255,0.08)] transition-colors shrink-0"
+                        className="flex items-center justify-center w-9 h-9 rounded-lg border border-white/15 bg-[rgba(255,255,255,0.04)] text-[var(--text-muted)] hover:text-[var(--ink)] hover:bg-[rgba(255,255,255,0.08)] transition-colors shrink-0"
                       >
                         <RiGithubFill size={17} />
                       </a>
@@ -146,7 +148,7 @@ export function WaitlistModal({ open, onClose }: Props) {
 
                     <button
                       onClick={onClose}
-                      className="mt-3 font-mono text-[10px] tracking-[0.2em] uppercase text-[var(--text-dim)] hover:text-white transition-colors"
+                      className="mt-3 font-mono text-[10px] tracking-[0.2em] uppercase text-[var(--text-dim)] hover:text-[var(--ink)] transition-colors"
                     >
                       Close
                     </button>
@@ -156,7 +158,7 @@ export function WaitlistModal({ open, onClose }: Props) {
                     {/* header */}
                     <div className="mb-6">
                       <div className="eyebrow mb-3">Early Access</div>
-                      <h3 className="text-[22px] font-medium tracking-[-0.02em] text-white">
+                      <h3 className="text-[22px] font-medium tracking-[-0.02em] text-[var(--ink)]">
                         Join the waitlist.
                       </h3>
                       <p className="mt-1.5 text-[13px] leading-[1.6] text-[var(--text-muted)]">
@@ -176,7 +178,7 @@ export function WaitlistModal({ open, onClose }: Props) {
                           onChange={(e) => setName(e.target.value)}
                           required
                           placeholder="Your name"
-                          className="w-full bg-[var(--surface-2)] border border-[var(--border)] rounded-[10px] px-3.5 py-2.5 text-[14px] text-white placeholder:text-[var(--text-dim)] outline-none focus:border-[var(--accent-soft)] transition-colors"
+                          className="w-full bg-[var(--surface-2)] border border-[var(--border)] rounded-[10px] px-3.5 py-2.5 text-[14px] text-[var(--ink)] placeholder:text-[var(--text-dim)] outline-none focus:border-[var(--accent-soft)] transition-colors"
                         />
                       </div>
 
@@ -190,7 +192,7 @@ export function WaitlistModal({ open, onClose }: Props) {
                           onChange={(e) => setEmail(e.target.value)}
                           required
                           placeholder="you@company.com"
-                          className="w-full bg-[var(--surface-2)] border border-[var(--border)] rounded-[10px] px-3.5 py-2.5 text-[14px] text-white placeholder:text-[var(--text-dim)] outline-none focus:border-[var(--accent-soft)] transition-colors"
+                          className="w-full bg-[var(--surface-2)] border border-[var(--border)] rounded-[10px] px-3.5 py-2.5 text-[14px] text-[var(--ink)] placeholder:text-[var(--text-dim)] outline-none focus:border-[var(--accent-soft)] transition-colors"
                         />
                       </div>
 
@@ -203,7 +205,7 @@ export function WaitlistModal({ open, onClose }: Props) {
                       <button
                         type="submit"
                         disabled={status === "loading"}
-                        className="mt-1 w-full flex items-center justify-center gap-2 bg-[var(--accent)] hover:bg-[var(--accent-soft)] text-white rounded-[10px] py-2.5 text-[14px] font-medium transition-colors disabled:opacity-60"
+                        className="mt-1 w-full flex items-center justify-center gap-2 bg-[var(--accent)] hover:bg-[var(--accent-soft)] text-[var(--iris-on)] rounded-[10px] py-2.5 text-[14px] font-medium transition-colors disabled:opacity-60"
                       >
                         {status === "loading" ? (
                           <span className="font-mono text-[12px] tracking-[0.1em]">Submitting…</span>
@@ -224,5 +226,6 @@ export function WaitlistModal({ open, onClose }: Props) {
         </>
       )}
     </AnimatePresence>
+    </ModalPortal>
   );
 }
