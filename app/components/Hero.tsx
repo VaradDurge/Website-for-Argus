@@ -7,6 +7,7 @@ import { MorphingText } from "@/components/ui/morphing-text";
 import { Container } from "@/components/ui/section";
 import { BetaAccessModal } from "./BetaAccessModal";
 import { VideoModal } from "./VideoModal";
+import { HeroBackdrop } from "./HeroBackdrop";
 
 const HERO_VERBS = ["work?", "succeed?", "deliver?", "reason?", "hold up?"];
 
@@ -41,7 +42,7 @@ export function Hero() {
       <BetaAccessModal open={betaOpen} onClose={() => setBetaOpen(false)} />
       <VideoModal open={videoOpen} onClose={() => setVideoOpen(false)} />
 
-      <div aria-hidden className="hero-atmos" />
+      <HeroBackdrop />
 
       <Container className="relative z-10">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between lg:gap-16">

@@ -446,10 +446,15 @@
 }
 
 /* ───────── hero atmosphere ─────────
-   Pale digital field up top, a large dark dome with a copper rim below,
-   fading back into the page ground. Purely decorative: it sits behind
-   the hero content and never takes pointer events. The negative top
-   inset slides it under the translucent nav. */
+   A dark dome with a lit copper rim, a dusty violet haze above it, and a
+   character field over the top. Purely decorative: it sits behind the
+   hero content and never takes pointer events. The negative top inset
+   slides it under the translucent nav.
+
+   The rim is built by stacking two ellipses rather than putting copper
+   stops inside one gradient: the copper ellipse is slightly larger, and
+   the near-black dome painted over it leaves only a rim showing. A
+   single gradient reads as a flat smear instead of a lit edge. */
 .hero-atmos {
   position: absolute;
   inset: -3.5rem 0 0 0;
@@ -457,47 +462,77 @@
   overflow: hidden;
   pointer-events: none;
   background:
+    /* 1. the dome. Narrower than the viewport on purpose, so the haze
+          behind it stays visible at the shoulders and the silhouette
+          reads as a hill rather than a flat wash. */
     radial-gradient(
-      124% 94% at 50% 100%,
-      #0b0a09 0%,
-      #100d0b 30%,
-      rgba(150, 62, 18, 0.5) 46%,
-      rgba(214, 108, 52, 0.46) 56%,
-      rgba(236, 158, 120, 0.3) 65%,
-      rgba(214, 172, 196, 0.22) 74%,
-      rgba(168, 162, 206, 0.17) 84%,
-      rgba(198, 196, 224, 0.12) 93%,
+      ellipse 68% 58% at 50% 80%,
+      #090807 0%,
+      #090807 84%,
+      rgba(9, 8, 7, 0.45) 92%,
+      rgba(9, 8, 7, 0) 98%
+    ),
+    /* 2. copper rim: same centre, slightly larger, so only the edge
+          escapes from under the dome. Sits above the headline. */
+    radial-gradient(
+      ellipse 74% 63% at 50% 81%,
+      rgba(214, 96, 36, 0) 64%,
+      rgba(224, 104, 40, 0.34) 78%,
+      rgba(234, 138, 82, 0.26) 86%,
+      rgba(224, 156, 148, 0.14) 92%,
+      rgba(198, 158, 178, 0.06) 97%,
       transparent 100%
     ),
+    /* 3. mauve-to-violet haze behind the dome */
+    radial-gradient(
+      ellipse 120% 56% at 50% 26%,
+      rgba(198, 152, 180, 0.2) 0%,
+      rgba(154, 144, 194, 0.14) 48%,
+      transparent 82%
+    ),
+    /* 4. vertical ground. Kept muted up top so the nav and eyebrow
+          keep their contrast against it. */
     linear-gradient(
       180deg,
-      rgba(206, 204, 230, 0.32) 0%,
-      rgba(176, 172, 206, 0.2) 12%,
-      rgba(130, 126, 162, 0.09) 24%,
-      transparent 34%
-    );
+      rgba(146, 138, 182, 0.16) 0%,
+      rgba(112, 104, 146, 0.11) 12%,
+      rgba(56, 50, 66, 0.07) 26%,
+      rgba(14, 13, 12, 0.45) 44%,
+      var(--void) 66%
+    ),
+    var(--void);
 }
 
-/* scattered digits, masked to the pale upper band */
-.hero-atmos::before {
-  content: "";
+/* character field, faded out before it reaches the headline */
+.hero-atmos__digits {
   position: absolute;
-  inset: 0;
-  opacity: 0.42;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='150'%3E%3Cg font-family='monospace' font-size='11' fill='%23ffffff'%3E%3Ctext x='2' y='14'%3E0 8 4 X 1 9 0 6 B%3C/text%3E%3Ctext x='11' y='38'%3E8 0 1 A 6 4 X 8 0%3C/text%3E%3Ctext x='0' y='62'%3E4 X 9 0 8 1 6 0 A%3C/text%3E%3Ctext x='15' y='86'%3E1 6 0 8 X 4 9 B 8%3C/text%3E%3Ctext x='5' y='110'%3E9 4 8 1 0 6 X 0 4%3C/text%3E%3Ctext x='9' y='134'%3E0 1 X 6 8 4 A 9 0%3C/text%3E%3C/g%3E%3C/svg%3E");
-  background-size: 180px 150px;
+  inset: 0 0 auto 0;
+  overflow: hidden;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10px;
+  line-height: 17px;
+  letter-spacing: 0.16em;
+  color: #ffffff;
+  white-space: nowrap;
+  opacity: 0.3;
   -webkit-mask-image: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.9) 0%,
-    rgba(0, 0, 0, 0.5) 14%,
-    transparent 30%
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.6) 34%,
+    rgba(0, 0, 0, 0.25) 58%,
+    transparent 82%
   );
   mask-image: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.9) 0%,
-    rgba(0, 0, 0, 0.5) 14%,
-    transparent 30%
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.6) 34%,
+    rgba(0, 0, 0, 0.25) 58%,
+    transparent 82%
   );
+}
+
+.hero-atmos__row {
+  display: flex;
 }
 
 /* settle back into the page ground at the bottom edge */
@@ -506,7 +541,7 @@
   position: absolute;
   inset-inline: 0;
   bottom: 0;
-  height: 22%;
+  height: 20%;
   background: linear-gradient(180deg, transparent, var(--void));
 }
 
