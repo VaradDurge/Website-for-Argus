@@ -1,4 +1,4 @@
-import { Nav } from "./components/Nav";
+import { SiteNav } from "./components/SiteNav";
 import { Hero } from "./components/Hero";
 import { HeroCradle } from "./components/sections/HeroCradle";
 import { SocialProofTicker } from "./components/SocialProofTicker";
@@ -14,7 +14,7 @@ import { Footer } from "./components/Footer";
 export default function Home() {
   return (
     <>
-      <Nav />
+      <SiteNav />
       <main>
         <Hero />
         <HeroCradle />

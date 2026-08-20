@@ -1,4 +1,4 @@
-import { Nav } from "../components/Nav";
+import { SiteNav } from "../components/SiteNav";
 import { DocsShell } from "./components/DocsShell";
 
 export const metadata = {
@@ -15,7 +15,7 @@ export default function DocsLayout({
 }) {
   return (
     <div className="docs-root min-h-screen bg-[var(--void)]">
-      <Nav />
+      <SiteNav />
       <DocsShell>{children}</DocsShell>
     </div>
   );

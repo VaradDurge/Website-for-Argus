@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { RiDiscordFill, RiGithubFill } from "@remixicon/react";
+import { formatStarCount, GITHUB_URL } from "@/lib/github";
 import { Logo } from "./Logo";
 import { WaitlistModal } from "./WaitlistModal";
 import { BetaAccessModal } from "./BetaAccessModal";
@@ -19,7 +20,7 @@ const LINKS = [
   { label: "Pricing", href: "/pricing" },
 ] as const;
 
-export function Nav() {
+export function Nav({ stars }: { stars?: number | null }) {
   const [waitlistOpen, setWaitlistOpen] = useState(false);
   const [betaOpen, setBetaOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
@@ -52,13 +53,22 @@ export function Nav() {
 
           <div className="hidden shrink-0 items-center gap-2 lg:flex">
             <a
-              href="https://github.com/VaradDurge/ARGUS"
+              href={GITHUB_URL}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="GitHub"
-              className="btn-ghost px-1.5"
+              aria-label={
+                typeof stars === "number"
+                  ? `GitHub — ${stars} stars`
+                  : "GitHub"
+              }
+              className="btn-ghost gap-1.5 px-1.5"
             >
               <RiGithubFill size={16} />
+              {typeof stars === "number" ? (
+                <span className="font-mono text-[12px] tabular-nums text-[var(--ink-2)]">
+                  {formatStarCount(stars)}
+                </span>
+              ) : null}
             </a>
             <a
               href="https://discord.gg/yVuGDCX54K"
@@ -149,13 +159,22 @@ export function Nav() {
                     Join waitlist
                   </button>
                   <a
-                    href="https://github.com/VaradDurge/ARGUS"
+                    href={GITHUB_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="GitHub"
-                    className="btn-secondary px-2.5"
+                    aria-label={
+                      typeof stars === "number"
+                        ? `GitHub — ${stars} stars`
+                        : "GitHub"
+                    }
+                    className="btn-secondary gap-1.5 px-2.5"
                   >
                     <RiGithubFill size={16} />
+                    {typeof stars === "number" ? (
+                      <span className="font-mono text-[12px] tabular-nums">
+                        {formatStarCount(stars)}
+                      </span>
+                    ) : null}
                   </a>
                   <a
                     href="https://discord.gg/yVuGDCX54K"
