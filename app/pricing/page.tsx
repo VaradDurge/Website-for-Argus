@@ -1,4 +1,4 @@
-import { Nav } from "../components/Nav";
+import { SiteNav } from "../components/SiteNav";
 import { Pricing } from "../components/Pricing";
 import { Footer } from "../components/Footer";
 
@@ -11,7 +11,7 @@ export const metadata = {
 export default function PricingPage() {
   return (
     <>
-      <Nav />
+      <SiteNav />
       <main>
         <Pricing />
       </main>

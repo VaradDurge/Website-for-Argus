@@ -50,7 +50,7 @@ export default function Storage() {
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
         All external HTTP calls (OpenAI, search tools, databases) are{" "}
-        <span className="text-white font-medium">recorded by default</span>. Every API response
+        <span className="text-[var(--ink)] font-medium">recorded by default</span>. Every API response
         is saved to disk alongside the run. During replay, the recorded responses are served back —
         same data, zero extra cost, fully reproducible.
       </p>

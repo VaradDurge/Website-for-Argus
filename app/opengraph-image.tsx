@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og'
 
-export const alt = 'ARGUS — Forensic Observability for AI Agent Pipelines'
+export const alt = 'ARGUS — Catch silent failures in AI agents before you deploy'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
@@ -11,7 +11,7 @@ export default async function OGImage() {
         style={{
           width: '1200px',
           height: '630px',
-          background: '#ffffff',
+          background: '#f3f1ea',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
@@ -19,6 +19,22 @@ export default async function OGImage() {
           position: 'relative',
         }}
       >
+        {/* a warm lamp on the paper, as on the site. Literal values: this renders
+            through Satori, which does not resolve the stylesheet's custom
+            properties. */}
+        <div
+          style={{
+            display: 'flex',
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            background:
+              'linear-gradient(200deg, rgba(214,178,92,0.16) 0%, rgba(214,178,92,0.04) 30%, rgba(243,241,234,0) 55%)',
+          }}
+        />
+
         {/* 16VC Badge */}
         <div
           style={{
@@ -31,8 +47,8 @@ export default async function OGImage() {
           <div
             style={{
               display: 'flex',
-              background: '#000000',
-              color: '#ffffff',
+              background: '#141416',
+              color: '#e6cf8a',
               fontSize: '18px',
               fontWeight: 700,
               padding: '6px 12px',
@@ -47,7 +63,7 @@ export default async function OGImage() {
               display: 'flex',
               fontSize: '18px',
               fontWeight: 600,
-              color: '#555555',
+              color: '#4b4b53',
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
             }}
@@ -70,23 +86,30 @@ export default async function OGImage() {
               display: 'flex',
               fontSize: '96px',
               fontWeight: 700,
-              color: '#111111',
+              color: '#141416',
               letterSpacing: '-3px',
             }}
           >
-            Your Agents Are Failing.
+            <span>Catch&nbsp;</span>
+            <span
+              style={{
+                backgroundImage:
+                  'linear-gradient(180deg, rgba(255,207,31,0) 52%, rgba(255,207,31,0.62) 52%, rgba(255,207,31,0.62) 94%, rgba(255,207,31,0) 94%)',
+              }}
+            >
+              silent failures
+            </span>
           </div>
           <div
             style={{
               display: 'flex',
               fontSize: '96px',
-              fontStyle: 'italic',
               fontWeight: 700,
-              color: '#b0b0b0',
+              color: '#141416',
               letterSpacing: '-3px',
             }}
           >
-            Silently.
+            before you deploy.
           </div>
         </div>
 
@@ -95,12 +118,12 @@ export default async function OGImage() {
           style={{
             display: 'flex',
             fontSize: '26px',
-            color: '#777777',
+            color: '#4b4b53',
             lineHeight: 1.5,
             maxWidth: '880px',
           }}
         >
-          ARGUS detects silent failures, semantic drift, and contract violations in your LangGraph pipelines — before production.
+          Your agent finishes, but one node quietly returned nothing. ARGUS finds that node and fails the build before it ships.
         </div>
 
         {/* Domain */}
@@ -111,7 +134,7 @@ export default async function OGImage() {
             bottom: '48px',
             right: '80px',
             fontSize: '20px',
-            color: '#aaaaaa',
+            color: '#82621a',
             fontWeight: 500,
           }}
         >

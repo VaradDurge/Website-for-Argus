@@ -1,16 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter, Instrument_Serif } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const geist = Geist({
   variable: "--font-geist",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const inter = Inter({
-  variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
 });
@@ -30,9 +24,9 @@ const serif = Instrument_Serif({
 });
 
 const SITE_URL = 'https://arguslabs.in'
-const SITE_TITLE = 'ARGUS — Forensic Observability for AI Agent Pipelines'
+const SITE_TITLE = 'ARGUS — Catch silent failures in AI agents before you deploy'
 const SITE_DESC =
-  'ARGUS detects silent failures, explains root causes, and helps you ship AI pipelines you can trust. LangGraph-first, framework-agnostic.'
+  'Your agent finishes, but one node quietly returned nothing. ARGUS records what every node returned, names the one that broke, and fails the build before it ships. Open-source core, LangGraph-first.'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -90,7 +84,8 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geist.variable} ${inter.variable} ${mono.variable} ${serif.variable} antialiased`}
+      data-theme="light"
+      className={`${geist.variable} ${mono.variable} ${serif.variable} antialiased`}
     >
       <body className="min-h-screen bg-[var(--void)] text-[var(--ink)]">
         {children}

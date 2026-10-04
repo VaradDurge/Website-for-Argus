@@ -10,9 +10,9 @@ interface HeadingProps {
 }
 
 const STYLES: Record<number, string> = {
-  2: "text-[24px] sm:text-[28px] tracking-[-0.02em] font-medium text-white mt-12 mb-5",
-  3: "text-[18px] sm:text-[20px] tracking-[-0.01em] font-medium text-white mt-8 mb-3",
-  4: "text-[15px] sm:text-[16px] font-medium text-[var(--text)] mt-6 mb-2",
+  2: "mt-12 mb-4 text-[22px] sm:text-[26px] font-medium tracking-[-0.01em] text-[var(--ink)]",
+  3: "mt-8 mb-3 text-[17px] sm:text-[18px] font-medium tracking-[-0.01em] text-[var(--ink)]",
+  4: "mt-6 mb-2 text-[15px] font-medium text-[var(--ink)]",
 };
 
 export function Heading({ level, id, children }: HeadingProps) {
@@ -28,18 +28,16 @@ export function Heading({ level, id, children }: HeadingProps) {
   };
 
   return (
-    <Tag id={id} className={`group relative flex items-center gap-2 scroll-mt-24 ${style}`}>
+    <Tag id={id} className={`group relative flex scroll-mt-28 items-center gap-2 lg:scroll-mt-20 ${style}`}>
       {children}
       <button
+        type="button"
         onClick={copyLink}
-        className="opacity-0 group-hover:opacity-100 transition-opacity inline-flex items-center justify-center w-6 h-6 rounded-md text-[var(--text-dim)] hover:text-[var(--accent-soft)]"
+        className="inline-flex h-6 w-6 items-center justify-center rounded-md text-[var(--ink-3)] opacity-0 transition-opacity hover:text-[var(--ink)] group-hover:opacity-100"
         aria-label="Copy link"
       >
         {copied ? <Check size={13} /> : <Link2 size={13} />}
       </button>
-      {level === 2 && (
-        <div className="absolute left-0 right-0 -bottom-2 h-px bg-gradient-to-r from-transparent via-[var(--border)] to-transparent" />
-      )}
     </Tag>
   );
 }

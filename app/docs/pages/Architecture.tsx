@@ -36,28 +36,28 @@ export default function Architecture() {
       </p>
       <ol className="mt-3 space-y-3 text-[15px] leading-[1.75] text-[var(--text-muted)] list-decimal list-inside">
         <li>
-          <span className="text-white font-medium">Instrumentation</span> — the Watcher patches
+          <span className="text-[var(--ink)] font-medium">Instrumentation</span> — the Watcher patches
           the graph&apos;s node callbacks to intercept inputs and outputs at each step
         </li>
         <li>
-          <span className="text-white font-medium">Execution recording</span> — as the pipeline runs,
+          <span className="text-[var(--ink)] font-medium">Execution recording</span> — as the pipeline runs,
           each node creates a <code>TraceStep</code> with input state, output state, timing, and metadata
         </li>
         <li>
-          <span className="text-white font-medium">Detection</span> — four layers run against the
+          <span className="text-[var(--ink)] font-medium">Detection</span> — four layers run against the
           trace: heuristic engine, anomaly detector, correlator, and (when needed) LLM investigator
         </li>
         <li>
-          <span className="text-white font-medium">Forensics</span> — if detections are found and
+          <span className="text-[var(--ink)] font-medium">Forensics</span> — if detections are found and
           <code> investigate</code> is enabled, the forensic analyzer traces the causal chain from
           symptom to root cause
         </li>
         <li>
-          <span className="text-white font-medium">Storage</span> — the complete run (steps +
+          <span className="text-[var(--ink)] font-medium">Storage</span> — the complete run (steps +
           detections + forensics + HTTP recordings) is written to <code>.argus/runs/</code>
         </li>
         <li>
-          <span className="text-white font-medium">Presentation</span> — results are available via
+          <span className="text-[var(--ink)] font-medium">Presentation</span> — results are available via
           CLI, the web dashboard, or the Python API
         </li>
       </ol>
@@ -77,14 +77,14 @@ export default function Architecture() {
         <li className="flex gap-3">
           <span className="text-[var(--accent-soft)] shrink-0">&#8227;</span>
           <span>
-            <span className="text-white font-medium">ArgusWatcher</span> — for LangGraph pipelines.
+            <span className="text-[var(--ink)] font-medium">ArgusWatcher</span> — for LangGraph pipelines.
             Hooks into the graph&apos;s execution callbacks automatically. Requires LangGraph 0.2+.
           </span>
         </li>
         <li className="flex gap-3">
           <span className="text-[var(--accent-soft)] shrink-0">&#8227;</span>
           <span>
-            <span className="text-white font-medium">ArgusSession</span> — for everything else.
+            <span className="text-[var(--ink)] font-medium">ArgusSession</span> — for everything else.
             Works with plain Python functions, Prefect tasks, Temporal workflows, or any callable.
             No framework dependency.
           </span>
@@ -116,7 +116,7 @@ session.finalize()`}
         <li className="flex gap-3">
           <span className="text-[var(--accent-soft)] shrink-0">&#8227;</span>
           <span>
-            <span className="text-white font-medium">Validators</span> — pass custom validation
+            <span className="text-[var(--ink)] font-medium">Validators</span> — pass custom validation
             functions via the <code>validators</code> parameter for domain-specific checks.
             Use <code>&quot;*&quot;</code> to run on every node.
           </span>
@@ -124,7 +124,7 @@ session.finalize()`}
         <li className="flex gap-3">
           <span className="text-[var(--accent-soft)] shrink-0">&#8227;</span>
           <span>
-            <span className="text-white font-medium">Adaptive signatures</span> — the LLM
+            <span className="text-[var(--ink)] font-medium">Adaptive signatures</span> — the LLM
             investigator proposes new heuristic patterns. Approve them in the Approvals page to
             extend the detection engine.
           </span>
@@ -132,7 +132,7 @@ session.finalize()`}
         <li className="flex gap-3">
           <span className="text-[var(--accent-soft)] shrink-0">&#8227;</span>
           <span>
-            <span className="text-white font-medium">Linear integration</span> — connect your
+            <span className="text-[var(--ink)] font-medium">Linear integration</span> — connect your
             Linear workspace from the Settings page. Reports create labeled issues with full
             diagnostics.
           </span>

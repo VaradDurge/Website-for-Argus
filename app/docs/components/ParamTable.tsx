@@ -16,50 +16,45 @@ interface ParamTableProps {
 
 export function ParamTable({ groups }: ParamTableProps) {
   return (
-    <div className="my-5 rounded-lg border border-[var(--border)] bg-[var(--surface)] overflow-hidden">
+    <div className="my-5 overflow-hidden rounded-[var(--radius-inner)] border-[length:var(--hairline)] border-[var(--line)] bg-[var(--panel)] shadow-[var(--shadow-control)]">
       {groups.map((group, gi) => (
         <div key={group.label}>
-          {/* group header */}
           <div
-            className={`px-4 py-2.5 ${
-              gi > 0 ? "border-t border-[var(--border)]" : ""
+            className={`bg-[var(--ex)] px-4 py-2.5 ${
+              gi > 0 ? "border-t-[length:var(--hairline)] border-[var(--line)]" : ""
             }`}
-            style={{ background: "rgba(255,255,255,0.015)" }}
           >
-            <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-[var(--text-dim)]">
-              {group.label}
-            </span>
+            <span className="eyebrow">{group.label}</span>
           </div>
 
-          {/* params */}
           <div>
             {group.params.map((p, pi) => (
               <div
                 key={p.name}
-                className={`px-4 py-3 flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-4 ${
+                className={`flex flex-col gap-1 px-4 py-3 sm:flex-row sm:items-start sm:gap-4 ${
                   pi < group.params.length - 1
-                    ? "border-b border-[var(--border)]/30"
+                    ? "border-b-[length:var(--hairline)] border-[var(--line)]"
                     : ""
                 }`}
               >
-                <div className="flex items-baseline gap-2 sm:w-[200px] shrink-0">
-                  <code className="font-mono text-[12px] text-white">
+                <div className="flex shrink-0 items-baseline gap-2 sm:w-[200px]">
+                  <code className="font-mono text-[12px] text-[var(--ink)]">
                     {p.name}
                   </code>
-                  <span className="font-mono text-[10.5px] text-[var(--text-dim)]">
+                  <span className="font-mono text-[10.5px] text-[var(--ink-3)]">
                     {p.type}
                   </span>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[13px] leading-[1.6] text-[var(--text-muted)]">
+                <div className="min-w-0 flex-1">
+                  <p className="text-[13px] leading-[1.6] text-[var(--ink-2)]">
                     {p.description}
                   </p>
                   {p.default !== undefined && (
                     <p className="mt-1">
-                      <span className="font-mono text-[10.5px] text-[var(--text-dim)]">
+                      <span className="font-mono text-[10.5px] text-[var(--ink-3)]">
                         Default:{" "}
                       </span>
-                      <code className="font-mono text-[11px] text-[var(--signal-ok)]">
+                      <code className="font-mono text-[11px] text-[var(--sig-ok)]">
                         {p.default}
                       </code>
                     </p>

@@ -1,38 +1,35 @@
-import Image from "next/image";
+import { cn } from "@/lib/utils";
 
-export function Logo({ clipHeight = 52 }: { clipHeight?: number }) {
-  // The source PNG is 1536×1024 but the visible logo content only
-  // occupies ~45% of the canvas height (heavy transparent padding).
-  // We render the image 2.4× larger than the desired clip height so
-  // the actual letterforms fill the clipping window, then we crop the
-  // transparent top/bottom with overflow:hidden.
-  const renderHeight = Math.round(clipHeight * 2.4);
-  const renderWidth = Math.round(renderHeight * (1536 / 1024));
+/** The ArgusLabs mark: a signal line with a break in it. Traced from the
+    brand PNG so it stays crisp at any size and takes `currentColor`. */
+export function LogoMark({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 33"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden
+    >
+      <path d="M2.4 17 12.5 2.7v9.9" />
+      <path d="M12.5 17.5v12.8L21.6 16.6" />
+    </svg>
+  );
+}
 
-  // The logo content is vertically centred in the source image.
-  // Offset pulls the content into the visible clip window:
-  //   content centre in rendered px  = renderHeight * 0.5
-  //   desired centre in clip window  = clipHeight  * 0.5
-  const offsetTop = Math.round(renderHeight * 0.5 - clipHeight * 0.5);
-
+export function Logo({ className }: { className?: string }) {
   return (
     <span
-      className="inline-block overflow-hidden shrink-0"
-      style={{ height: clipHeight, width: "auto" }}
+      className={cn("inline-flex items-center gap-2 text-[var(--ink)]", className)}
+      aria-label="ArgusLabs"
     >
-      <Image
-        src="/argus-logo.png"
-        alt="ARGUS — ArgusLabs"
-        width={renderWidth}
-        height={renderHeight}
-        priority
-        style={{
-          height: renderHeight,
-          width: "auto",
-          marginTop: -offsetTop,
-          display: "block",
-        }}
-      />
+      <LogoMark className="h-[21px] w-auto" />
+      <span className="text-[16.5px] font-semibold tracking-[-0.035em]" aria-hidden>
+        ArgusLabs
+      </span>
     </span>
   );
 }

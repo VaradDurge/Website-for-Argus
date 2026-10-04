@@ -1,169 +1,123 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { Check, Copy } from "lucide-react";
 import { RiDiscordFill, RiGithubFill, RiInstagramFill } from "@remixicon/react";
 import { Container } from "@/components/ui/section";
-import { Logo } from "./Logo";
+import { GITHUB_URL } from "@/lib/github";
+import { DISCORD_URL, INSTAGRAM_URL, QUICKSTART_HREF } from "@/lib/site";
+import { ContactModal } from "./ContactModal";
+import { Logo, LogoMark } from "./Logo";
 
-const INSTALL_CMD = "pip install argus-agents";
+type FooterLink = { label: string; href: string } | { label: string; action: "contact" };
 
-const COLUMNS = [
+const COLUMNS: { title: string; links: FooterLink[] }[] = [
   {
     title: "Product",
     links: [
       { label: "How it works", href: "/#how-it-works" },
-      { label: "Features", href: "/#features" },
-      { label: "Security", href: "/#security" },
       { label: "Pricing", href: "/pricing" },
+      { label: "Changelog", href: `${GITHUB_URL}/releases` },
+      { label: "FAQ", href: "/#faq" },
     ],
   },
   {
     title: "Developers",
     links: [
       { label: "Documentation", href: "/docs" },
-      { label: "Quickstart", href: "/docs/quickstart" },
-      { label: "Configuration", href: "/docs/configuration" },
-      { label: "Changelog", href: "/#changelog" },
+      { label: "Quickstart", href: QUICKSTART_HREF },
+      { label: "CLI reference", href: "/docs/cli-reference" },
+      { label: "Storage & privacy", href: "/docs/storage" },
     ],
   },
   {
-    title: "Community",
+    title: "Company",
     links: [
-      { label: "GitHub", href: "https://github.com/VaradDurge/ARGUS" },
-      { label: "Discord", href: "https://discord.gg/nhbdZkcG" },
-      { label: "Instagram", href: "https://www.instagram.com/argus.in" },
+      { label: "GitHub", href: GITHUB_URL },
+      { label: "Discord", href: DISCORD_URL },
+      { label: "Contact", action: "contact" },
     ],
   },
-] as const;
+];
+
+const LINK_CLASS =
+  "text-[14px] text-[var(--ink-2)] transition-colors hover:text-[var(--ink)]";
 
 export function Footer() {
-  const [copied, setCopied] = useState(false);
-  const copyRef = useRef<HTMLButtonElement>(null);
-
-  function copyInstall() {
-    navigator.clipboard.writeText(INSTALL_CMD);
-    setCopied(true);
-    if (copyRef.current) {
-      copyRef.current.classList.remove("copy-pulse");
-      void copyRef.current.offsetWidth;
-      copyRef.current.classList.add("copy-pulse");
-    }
-    setTimeout(() => setCopied(false), 1400);
-  }
+  const [contactOpen, setContactOpen] = useState(false);
 
   return (
-    <footer
-      id="footer"
-      className="border-t-[length:var(--hairline)] border-[var(--line)]"
-    >
-      <Container className="py-16 md:py-24">
-        {/* closing echo of the hero */}
-        <h2 className="heading-2 max-w-[16ch] text-[var(--ink)]">
-          Ship agents you can{" "}
-          <span className="text-[var(--ink-3)]">
-            actually trust.
-          </span>
-        </h2>
+    <footer id="footer" className="relative overflow-hidden shadow-[inset_0_1px_0_var(--line)]">
+      <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />
 
-        <div className="mt-14 grid grid-cols-2 gap-10 md:grid-cols-[1.4fr_repeat(3,1fr)]">
-          <div className="col-span-2 md:col-span-1">
-            <Logo />
-            <p className="body-sm mt-4 max-w-[30ch]">
-              Forensic observability for AI agent pipelines. See every failure,
-              fix the right thing.
-            </p>
-
-            <button
-              ref={copyRef}
-              type="button"
-              onClick={copyInstall}
-              className="mt-5 inline-flex items-center gap-2 rounded-[var(--radius-control)] border-[length:var(--hairline)] border-[var(--line)] bg-[var(--ex)] px-2.5 py-1.5 font-mono text-[12px] text-[var(--ink-2)] transition-colors hover:border-[var(--line-2)] hover:text-[var(--ink)]"
-              aria-label="Copy install command"
-            >
-              <span className="text-[var(--ink-3)]">$</span>
-              <span>{INSTALL_CMD}</span>
-              {copied ? (
-                <Check size={12} className="text-[var(--sig-ok)]" />
-              ) : (
-                <Copy size={12} className="text-[var(--ink-3)]" />
-              )}
-            </button>
+      <Container className="grid grid-cols-2 gap-x-8 gap-y-12 pb-12 pt-16 md:grid-cols-[1.5fr_repeat(3,1fr)] md:pt-20">
+        <div className="col-span-2 md:col-span-1">
+          <Logo />
+          <p className="mt-4 max-w-[26ch] text-[14px] leading-[1.6] text-[var(--ink-2)]">
+            Pre-deploy checks for AI agents. All eyes on your pipeline.
+          </p>
+          <div className="mt-6 flex items-center gap-1">
+            {[
+              { href: GITHUB_URL, label: "GitHub", Icon: RiGithubFill },
+              { href: DISCORD_URL, label: "Discord", Icon: RiDiscordFill },
+              { href: INSTAGRAM_URL, label: "Instagram", Icon: RiInstagramFill },
+            ].map(({ href, label, Icon }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                className="btn-ghost h-9 w-9 justify-center px-0"
+              >
+                <Icon size={17} />
+              </a>
+            ))}
           </div>
-
-          {COLUMNS.map((column) => (
-            <div key={column.title}>
-              <p className="eyebrow">{column.title}</p>
-              <ul className="mt-4 flex flex-col gap-2.5">
-                {column.links.map((link) => {
-                  const className =
-                    "text-[13px] text-[var(--ink-2)] transition-colors hover:text-[var(--ink)]";
-                  return (
-                    <li key={link.label}>
-                      {link.href.startsWith("http") ? (
-                        <a
-                          href={link.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={className}
-                        >
-                          {link.label}
-                        </a>
-                      ) : (
-                        <Link href={link.href} className={className}>
-                          {link.label}
-                        </Link>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ))}
         </div>
-      </Container>
 
-      <Container className="overflow-hidden py-10 select-none md:py-14">
-        <p className="text-center text-[clamp(40px,9vw,112px)] font-medium leading-none tracking-[-0.06em] text-[var(--ink)] opacity-[0.07]">
-          ArgusLabs
-        </p>
-      </Container>
-
-      <div className="border-t-[length:var(--hairline)] border-[var(--line)]">
-        <Container className="flex flex-col items-center justify-between gap-3 py-5 sm:flex-row">
-          <span className="eyebrow-dim">
-            © 2026 ARGUS Labs · All eyes on your pipeline
-          </span>
-          <div className="flex items-center gap-3">
-            <a
-              href="https://github.com/VaradDurge/ARGUS"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="GitHub"
-              className="text-[var(--ink-3)] transition-colors hover:text-[var(--ink)]"
-            >
-              <RiGithubFill size={16} />
-            </a>
-            <a
-              href="https://discord.gg/nhbdZkcG"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Discord"
-              className="text-[var(--ink-3)] transition-colors hover:text-[var(--ink)]"
-            >
-              <RiDiscordFill size={16} />
-            </a>
-            <a
-              href="https://www.instagram.com/argus.in"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram"
-              className="text-[var(--ink-3)] transition-colors hover:text-[var(--ink)]"
-            >
-              <RiInstagramFill size={16} />
-            </a>
+        {COLUMNS.map((column) => (
+          <div key={column.title}>
+            <p className="eyebrow">{column.title}</p>
+            <ul className="mt-5 flex flex-col gap-3">
+              {column.links.map((link) => (
+                <li key={link.label}>
+                  {"action" in link ? (
+                    <button type="button" onClick={() => setContactOpen(true)} className={LINK_CLASS}>
+                      {link.label}
+                    </button>
+                  ) : link.href.startsWith("http") ? (
+                    <a href={link.href} target="_blank" rel="noopener noreferrer" className={LINK_CLASS}>
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link href={link.href} className={LINK_CLASS}>
+                      {link.label}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
           </div>
+        ))}
+      </Container>
+
+      <div aria-hidden className="footer-mark select-none">
+        <Container className="flex items-end gap-[0.06em]">
+          {/* the wordmark is clipped gradient text, so the mark needs its own colour */}
+          <LogoMark className="h-[0.74em] w-auto shrink-0 -translate-y-[0.06em] stroke-[2.2] text-[#b8913a]" />
+          <span>ARGUS</span>
+        </Container>
+      </div>
+
+      <div className="relative shadow-[inset_0_1px_0_var(--line)]">
+        <Container className="flex flex-col items-start justify-between gap-2 py-6 sm:flex-row sm:items-center">
+          <span className="font-mono text-[11px] tracking-[0.08em] text-[var(--ink-3)]">
+            © 2026 ArgusLabs
+          </span>
+          <span className="font-mono text-[11px] tracking-[0.08em] text-[var(--ink-3)]">
+            Open-source core · Apache-2.0
+          </span>
         </Container>
       </div>
     </footer>

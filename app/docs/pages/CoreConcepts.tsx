@@ -11,7 +11,7 @@ export default function CoreConcepts() {
         Watchers
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        A <span className="text-white font-medium">Watcher</span> is the core instrumentation
+        A <span className="text-[var(--ink)] font-medium">Watcher</span> is the core instrumentation
         primitive. It attaches to your pipeline graph and records everything that happens during
         execution — node inputs, outputs, state transitions, timing, and tool calls.
       </p>
@@ -47,7 +47,7 @@ print(watcher.run_id)`}
         <li className="flex gap-3">
           <span className="text-[var(--signal-warn)] shrink-0">1.</span>
           <span>
-            <span className="text-white font-medium">Heuristic engine</span> — pattern matching
+            <span className="text-[var(--ink)] font-medium">Heuristic engine</span> — pattern matching
             against 150+ known failure signatures (placeholder outputs, empty results, error keys,
             semantic degradation markers). Deterministic, zero cost, catches ~80% of failures.
           </span>
@@ -55,7 +55,7 @@ print(watcher.run_id)`}
         <li className="flex gap-3">
           <span className="text-[var(--signal-warn)] shrink-0">2.</span>
           <span>
-            <span className="text-white font-medium">Anomaly detector</span> — statistical checks
+            <span className="text-[var(--ink)] font-medium">Anomaly detector</span> — statistical checks
             for suspicious patterns (unexpected field types, output size anomalies, timing outliers).
             Still deterministic.
           </span>
@@ -63,7 +63,7 @@ print(watcher.run_id)`}
         <li className="flex gap-3">
           <span className="text-[var(--signal-warn)] shrink-0">3.</span>
           <span>
-            <span className="text-white font-medium">Correlator</span> — traces failure propagation
+            <span className="text-[var(--ink)] font-medium">Correlator</span> — traces failure propagation
             across nodes. If node 3 dropped a field and node 5 crashed because of it, the correlator
             builds the causal chain and points you at node 3, not node 5.
           </span>
@@ -71,7 +71,7 @@ print(watcher.run_id)`}
         <li className="flex gap-3">
           <span className="text-[var(--signal-warn)] shrink-0">4.</span>
           <span>
-            <span className="text-white font-medium">LLM investigator</span> — only triggers on
+            <span className="text-[var(--ink)] font-medium">LLM investigator</span> — only triggers on
             ambiguous failures or when explicitly enabled. Generates root cause explanations,
             causal hypotheses, and debugging suggestions. Also proposes new heuristic signatures
             so the same failure gets caught deterministically next time.
@@ -83,7 +83,7 @@ print(watcher.run_id)`}
         Traces
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        A <span className="text-white font-medium">Trace</span> is the complete record of a
+        A <span className="text-[var(--ink)] font-medium">Trace</span> is the complete record of a
         single pipeline execution. It contains:
       </p>
       <ul className="mt-3 space-y-1.5 text-[15px] leading-[1.75] text-[var(--text-muted)]">
@@ -109,7 +109,7 @@ argus list`}
 
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
         Runs are stored locally in <code>.argus/runs/</code> by default. See{" "}
-        <Link href="/docs/storage" className="text-[var(--accent-soft)] underline decoration-dotted underline-offset-2 hover:text-white hover:decoration-solid">
+        <Link href="/docs/storage" className="text-[var(--accent-soft)] underline decoration-dotted underline-offset-2 hover:text-[var(--ink)] hover:decoration-solid">
           Storage
         </Link>{" "}
         for details.
@@ -119,7 +119,7 @@ argus list`}
         Forensics
       </Heading>
       <p className="mt-3 text-[15px] leading-[1.75] text-[var(--text-muted)]">
-        When detectors flag a failure, the <span className="text-white font-medium">Forensics</span>{" "}
+        When detectors flag a failure, the <span className="text-[var(--ink)] font-medium">Forensics</span>{" "}
         engine kicks in. It traces the failure backward through the execution graph to find the
         root cause — which node, which input, which state transition caused the downstream
         degradation.
@@ -130,15 +130,15 @@ argus list`}
       <ul className="mt-3 space-y-2 text-[15px] leading-[1.75] text-[var(--text-muted)]">
         <li className="flex gap-3">
           <span className="text-[var(--signal-fail)] shrink-0">&#8227;</span>
-          <span><span className="text-white font-medium">What failed?</span> — the specific detection that fired and what it found</span>
+          <span><span className="text-[var(--ink)] font-medium">What failed?</span> — the specific detection that fired and what it found</span>
         </li>
         <li className="flex gap-3">
           <span className="text-[var(--signal-fail)] shrink-0">&#8227;</span>
-          <span><span className="text-white font-medium">Where did it fail?</span> — the node and step in the execution graph</span>
+          <span><span className="text-[var(--ink)] font-medium">Where did it fail?</span> — the node and step in the execution graph</span>
         </li>
         <li className="flex gap-3">
           <span className="text-[var(--signal-fail)] shrink-0">&#8227;</span>
-          <span><span className="text-white font-medium">Why did it fail?</span> — the causal chain from the root cause to the observed symptom</span>
+          <span><span className="text-[var(--ink)] font-medium">Why did it fail?</span> — the causal chain from the root cause to the observed symptom</span>
         </li>
       </ul>
 
@@ -166,10 +166,10 @@ argus list`}
       </figure>
 
       <ol className="mt-3 space-y-2 text-[15px] leading-[1.75] text-[var(--text-muted)] list-decimal list-inside">
-        <li>You create a <span className="text-white">Watcher</span> and attach it to your graph</li>
-        <li>Your pipeline runs normally — the Watcher records a <span className="text-white">Trace</span></li>
-        <li><span className="text-white">Detectors</span> analyze the trace (auto-runs for linear/fan-out graphs)</li>
-        <li>If failures are found — <span className="text-white">Forensics</span> traces back to root cause</li>
+        <li>You create a <span className="text-[var(--ink)] font-medium">Watcher</span> and attach it to your graph</li>
+        <li>Your pipeline runs normally — the Watcher records a <span className="text-[var(--ink)] font-medium">Trace</span></li>
+        <li><span className="text-[var(--ink)] font-medium">Detectors</span> analyze the trace (auto-runs for linear/fan-out graphs)</li>
+        <li>If failures are found — <span className="text-[var(--ink)] font-medium">Forensics</span> traces back to root cause</li>
         <li>You view results via CLI, UI, or programmatic API</li>
       </ol>
 

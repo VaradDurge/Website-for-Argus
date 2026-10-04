@@ -1,175 +1,182 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { ArrowRight, Menu, X } from "lucide-react";
 import { RiDiscordFill, RiGithubFill } from "@remixicon/react";
+import { formatStarCount, GITHUB_URL } from "@/lib/github";
+import { DISCORD_URL, QUICKSTART_HREF } from "@/lib/site";
+import { cn } from "@/lib/utils";
 import { Logo } from "./Logo";
 import { WaitlistModal } from "./WaitlistModal";
 import { BetaAccessModal } from "./BetaAccessModal";
-import { ContactModal } from "./ContactModal";
 
 const LINKS = [
   { label: "How it works", href: "/#how-it-works" },
-  { label: "Features", href: "/#features" },
-  { label: "Security", href: "/#security" },
-  { label: "Changelog", href: "/#changelog" },
   { label: "Docs", href: "/docs" },
   { label: "Pricing", href: "/pricing" },
+  { label: "Changelog", href: `${GITHUB_URL}/releases` },
 ] as const;
 
-export function Nav() {
+function NavLink({ href, label, className, onClick }: {
+  href: string;
+  label: string;
+  className?: string;
+  onClick?: () => void;
+}) {
+  return href.startsWith("http") ? (
+    <a href={href} target="_blank" rel="noopener noreferrer" className={className} onClick={onClick}>
+      {label}
+    </a>
+  ) : (
+    <Link href={href} className={className} onClick={onClick}>
+      {label}
+    </Link>
+  );
+}
+
+export function Nav({ stars }: { stars?: number | null }) {
   const [waitlistOpen, setWaitlistOpen] = useState(false);
-  const [betaOpen, setBetaOpen] = useState(false);
-  const [contactOpen, setContactOpen] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [callOpen, setCallOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const starLabel = typeof stars === "number" ? `GitHub, ${stars} stars` : "GitHub";
 
   return (
-    <header className="sticky top-0 z-50 border-b-[length:var(--hairline)] border-[var(--line)] bg-[var(--void)]/80 backdrop-blur-xl">
+    <>
       <WaitlistModal open={waitlistOpen} onClose={() => setWaitlistOpen(false)} />
-      <BetaAccessModal open={betaOpen} onClose={() => setBetaOpen(false)} />
-      <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />
+      <BetaAccessModal open={callOpen} onClose={() => setCallOpen(false)} />
 
-      <nav className="constrained flex h-14 items-center justify-between gap-4">
-        <Link href="/" className="flex shrink-0 items-center gap-2">
-          <Logo />
-          <span className="rounded-[5px] border-[length:var(--hairline)] border-[var(--line)] bg-[var(--ex)] px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-[var(--ink-3)]">
-            Beta
-          </span>
-        </Link>
+      {/* A floating island: clear over the hero, glass once the page moves. */}
+      <header className="sticky top-0 z-50 px-3 pt-3 sm:px-5">
+        <nav
+          className={cn(
+            "mx-auto flex h-14 max-w-[1180px] items-center justify-between gap-6 rounded-full pl-5 pr-2 transition-[background-color,box-shadow,backdrop-filter] duration-500",
+            scrolled || menuOpen
+              ? "bg-[color-mix(in_srgb,var(--panel)_70%,transparent)] shadow-[inset_0_0_0_1px_var(--line-2),inset_0_1px_0_rgba(255,255,255,0.06),0_24px_60px_-24px_rgba(0,0,0,0.9)] backdrop-blur-xl backdrop-saturate-150"
+              : "bg-transparent shadow-[inset_0_0_0_1px_transparent]"
+          )}
+        >
+          <Link href="/" className="flex shrink-0 items-center gap-2.5" aria-label="ArgusLabs home">
+            <Logo />
+            <span className="rounded-full px-2 py-[3px] font-mono text-[9.5px] uppercase tracking-[0.14em] text-[var(--ink-3)] shadow-[inset_0_0_0_1px_var(--line-2)]">
+              Beta
+            </span>
+          </Link>
 
-        <ul className="hidden items-center gap-0.5 lg:flex">
-          {LINKS.map((link) => (
-            <li key={link.label}>
-              <Link href={link.href} className="btn-ghost">
-                {link.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
+          <ul className="hidden items-center gap-1 lg:flex">
+            {LINKS.map((link) => (
+              <li key={link.label}>
+                <NavLink {...link} className="btn-ghost" />
+              </li>
+            ))}
+          </ul>
 
-        <div className="hidden items-center gap-2 lg:flex">
-          <a
-            href="https://github.com/VaradDurge/ARGUS"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub"
-            className="btn-ghost px-1.5"
-          >
-            <RiGithubFill size={16} />
-          </a>
-          <a
-            href="https://discord.gg/nhbdZkcG"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Discord"
-            className="btn-ghost px-1.5"
-          >
-            <RiDiscordFill size={16} />
-          </a>
-          <button
-            type="button"
-            onClick={() => setWaitlistOpen(true)}
-            className="btn-secondary"
-          >
-            Join waitlist
-          </button>
-          <button
-            type="button"
-            onClick={() => setBetaOpen(true)}
-            className="btn-primary"
-          >
-            Book a call
-          </button>
-        </div>
+          <div className="hidden shrink-0 items-center gap-2 lg:flex">
+            <a
+              href={GITHUB_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={starLabel}
+              className="btn-ghost gap-1.5 px-2"
+            >
+              <RiGithubFill size={16} />
+              {typeof stars === "number" ? (
+                <span className="font-mono text-[12px] tabular-nums">{formatStarCount(stars)}</span>
+              ) : null}
+            </a>
+            <button type="button" onClick={() => setCallOpen(true)} className="btn-secondary">
+              Book a call
+            </button>
+            <Link href={QUICKSTART_HREF} className="btn-primary group">
+              Get started
+              <ArrowRight size={14} className="transition-transform duration-200 group-hover:translate-x-0.5" />
+            </Link>
+          </div>
 
-        <div className="flex items-center gap-2 lg:hidden">
-          <button
-            type="button"
-            onClick={() => setBetaOpen(true)}
-            className="btn-primary"
-          >
-            Book a call
-          </button>
-          <button
-            type="button"
-            onClick={() => setMobileOpen((open) => !open)}
-            aria-label="Toggle menu"
-            aria-expanded={mobileOpen}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius-control)] border-[length:var(--hairline)] border-[var(--line)] text-[var(--ink-2)] transition-colors hover:text-[var(--ink)]"
-          >
-            {mobileOpen ? <X size={17} /> : <Menu size={17} />}
-          </button>
-        </div>
-      </nav>
+          <div className="flex items-center gap-2 lg:hidden">
+            <Link href={QUICKSTART_HREF} className="btn-primary h-9">
+              Get started
+            </Link>
+            <button
+              type="button"
+              onClick={() => setMenuOpen((open) => !open)}
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={menuOpen}
+              className="btn-secondary h-9 w-9 px-0"
+            >
+              {menuOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
+          </div>
+        </nav>
 
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            className="overflow-hidden border-t-[length:var(--hairline)] border-[var(--line)] bg-[var(--void)] lg:hidden"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: [0, 0, 0.2, 1] }}
-          >
-            <div className="constrained flex flex-col gap-1 py-4">
-              {LINKS.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="rounded-[var(--radius-control)] px-2 py-2.5 text-[14px] text-[var(--ink-2)] transition-colors hover:bg-[var(--band)] hover:text-[var(--ink)]"
-                >
-                  {link.label}
-                </Link>
-              ))}
-
-              <button
-                type="button"
-                onClick={() => {
-                  setContactOpen(true);
-                  setMobileOpen(false);
-                }}
-                className="rounded-[var(--radius-control)] px-2 py-2.5 text-left text-[14px] text-[var(--ink-2)] transition-colors hover:bg-[var(--component)] hover:text-[var(--ink)]"
-              >
-                Contact
-              </button>
-
-              <div className="mt-3 flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setWaitlistOpen(true);
-                    setMobileOpen(false);
-                  }}
-                  className="btn-secondary flex-1"
-                >
-                  Join waitlist
-                </button>
-                <a
-                  href="https://github.com/VaradDurge/ARGUS"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="GitHub"
-                  className="btn-secondary px-2.5"
-                >
-                  <RiGithubFill size={16} />
-                </a>
-                <a
-                  href="https://discord.gg/nhbdZkcG"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Discord"
-                  className="btn-secondary px-2.5"
-                >
-                  <RiDiscordFill size={16} />
-                </a>
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              className="mx-auto mt-2 max-w-[1180px] overflow-hidden rounded-[28px] bg-[color-mix(in_srgb,var(--panel)_86%,transparent)] shadow-[inset_0_0_0_1px_var(--line-2),0_24px_60px_-24px_rgba(0,0,0,0.9)] backdrop-blur-xl lg:hidden"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="flex flex-col gap-1 px-4 pb-5 pt-3">
+                {LINKS.map((link) => (
+                  <NavLink
+                    key={link.label}
+                    {...link}
+                    onClick={() => setMenuOpen(false)}
+                    className="rounded-[var(--radius-control)] px-2 py-3 text-[16px] text-[var(--ink-2)] transition-colors hover:bg-[var(--band)] hover:text-[var(--ink)]"
+                  />
+                ))}
+                <div className="mt-4 grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCallOpen(true);
+                      setMenuOpen(false);
+                    }}
+                    className="btn-secondary h-11"
+                  >
+                    Book a call
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setWaitlistOpen(true);
+                      setMenuOpen(false);
+                    }}
+                    className="btn-secondary h-11"
+                  >
+                    Early access
+                  </button>
+                </div>
+                <div className="mt-2 flex gap-2">
+                  <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" aria-label={starLabel} className="btn-secondary h-11 flex-1">
+                    <RiGithubFill size={16} />
+                    GitHub
+                    {typeof stars === "number" ? (
+                      <span className="font-mono text-[12px] tabular-nums text-[var(--ink-3)]">{formatStarCount(stars)}</span>
+                    ) : null}
+                  </a>
+                  <a href={DISCORD_URL} target="_blank" rel="noopener noreferrer" className="btn-secondary h-11 flex-1">
+                    <RiDiscordFill size={16} />
+                    Discord
+                  </a>
+                </div>
               </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </header>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </header>
+    </>
   );
 }
