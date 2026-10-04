@@ -1,175 +1,229 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/ui/section";
-import { DemoSlot } from "../demo/DemoSlot";
-import { DetectMini } from "../demo/mini/DetectMini";
-import { UnderstandMini } from "../demo/mini/UnderstandMini";
-import { FixMini } from "../demo/mini/FixMini";
+import { cn } from "@/lib/utils";
+import { DemoModal } from "../DemoModal";
 
+/* Each step plays a Remotion clip rendered from the real run (see
+   video/argus-site in the ARGUS repo). When one ends the next begins. */
 const STEPS = [
   {
-    num: "01",
-    clause: "detects",
-    slot: "hiw-01-detect",
-    title: "Detects silent failures",
-    body: "Heuristics, anomaly scoring and a semantic judge run on every node output — so a step that returns a placeholder instead of a summary gets flagged, not marked green.",
-    Mini: DetectMini,
+    id: "attach",
+    title: "Attach in one line",
+    body: (
+      <>
+        Wrap your compiled graph with <code>ArgusRecorder().attach(graph)</code>.
+        Nothing in it is patched: ARGUS listens to LangGraph&rsquo;s own
+        callbacks and keeps the update every node returned.
+      </>
+    ),
+    label: "Attaching ARGUS to a LangGraph app; the next run prints a finding in the terminal.",
   },
   {
-    num: "02",
-    clause: "explains",
-    slot: "hiw-02-understand",
-    title: "Explains the root cause",
-    body: "ARGUS walks the graph backwards to the node that actually introduced bad state, and shows the state diff that proves it.",
-    Mini: UnderstandMini,
+    id: "trace",
+    title: "Get the node that broke",
+    body: (
+      <>
+        When a run goes wrong, ARGUS walks back from the crash to the node that
+        caused it and shows the evidence: the empty update, the missing field,
+        the confidence.
+      </>
+    ),
+    label: "The ARGUS UI on the crashed run, tracing the crash back to merge_summaries.",
   },
   {
-    num: "03",
-    clause: "fixes",
-    slot: "hiw-03-fix",
-    title: "Hands you the fix",
-    body: "argus fix writes a paste-ready prompt for the node that dropped the field — exact source line, no hunting through traces.",
-    Mini: FixMini,
+    id: "gate",
+    title: "Block the deploy, prove the fix",
+    body: (
+      <>
+        <code>argus check</code> exits 1 in CI. Fix the node, then{" "}
+        <code>argus replay</code> reruns from it with every upstream output
+        frozen.
+      </>
+    ),
+    label: "argus check failing the build, then argus replay showing the fixed run come back clean.",
   },
 ] as const;
 
-const AUTOPLAY_MS = 3000;
+const REDUCED = "(prefers-reduced-motion: reduce)";
+const subscribeReduced = (onChange: () => void) => {
+  const mq = window.matchMedia(REDUCED);
+  mq.addEventListener("change", onChange);
+  return () => mq.removeEventListener("change", onChange);
+};
+const readReduced = () => window.matchMedia(REDUCED).matches;
 
 export function HowItWorks() {
   const [active, setActive] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [demoOpen, setDemoOpen] = useState(false);
+  const videos = useRef<(HTMLVideoElement | null)[]>([]);
+  const bars = useRef<(HTMLSpanElement | null)[]>([]);
+  const stage = useRef<HTMLDivElement>(null);
+  const motionOk = !useSyncExternalStore(subscribeReduced, readReduced, () => false);
 
-  // Desktop: autoplay the highlight. Mobile: the most-visible card wins.
+  // Play the active clip only while the player is on screen.
   useEffect(() => {
-    const desktop = window.matchMedia("(min-width: 1024px)");
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (!motionOk) return;
+    const el = stage.current;
+    if (!el) return;
+    let visible = false;
+    let raf = 0;
 
-    let timer: ReturnType<typeof setInterval> | undefined;
-    let observer: IntersectionObserver | undefined;
-
-    function teardown() {
-      if (timer) clearInterval(timer);
-      timer = undefined;
-      observer?.disconnect();
-      observer = undefined;
-    }
-
-    function setup() {
-      teardown();
-
-      if (desktop.matches) {
-        if (reduced.matches) return;
-        timer = setInterval(
-          () => setActive((i) => (i + 1) % STEPS.length),
-          AUTOPLAY_MS
-        );
-        return;
+    const tick = () => {
+      const v = videos.current[active];
+      const bar = bars.current[active];
+      if (v && bar && v.duration) {
+        bar.style.transform = `scaleX(${v.currentTime / v.duration})`;
       }
-
-      const cards = containerRef.current?.querySelectorAll<HTMLElement>(
-        "[data-hiw-index]"
-      );
-      if (!cards?.length) return;
-
-      const ratios = new Map<number, number>();
-      observer = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            const index = Number(
-              (entry.target as HTMLElement).dataset.hiwIndex
-            );
-            ratios.set(index, entry.intersectionRatio);
-          }
-          let best = 0;
-          let bestRatio = -1;
-          for (const [index, ratio] of ratios) {
-            if (ratio > bestRatio) {
-              bestRatio = ratio;
-              best = index;
-            }
-          }
-          setActive(best);
-        },
-        { threshold: [0.2, 0.4, 0.6, 0.8, 1] }
-      );
-      cards.forEach((card) => observer?.observe(card));
-    }
-
-    setup();
-    desktop.addEventListener("change", setup);
-    reduced.addEventListener("change", setup);
-
-    return () => {
-      teardown();
-      desktop.removeEventListener("change", setup);
-      reduced.removeEventListener("change", setup);
+      raf = requestAnimationFrame(tick);
     };
-  }, []);
+
+    const play = () => {
+      videos.current.forEach((v, i) => {
+        if (!v) return;
+        if (i === active && visible) {
+          void v.play().catch(() => undefined);
+        } else {
+          v.pause();
+        }
+      });
+      cancelAnimationFrame(raf);
+      if (visible) raf = requestAnimationFrame(tick);
+    };
+
+    const io = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      play();
+    }, { threshold: 0.35 });
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      cancelAnimationFrame(raf);
+    };
+  }, [active, motionOk]);
+
+  function select(i: number) {
+    const v = videos.current[i];
+    if (v) v.currentTime = 0;
+    bars.current.forEach((bar) => {
+      if (bar) bar.style.transform = "scaleX(0)";
+    });
+    setActive(i);
+  }
 
   return (
-    <section id="how-it-works" className="py-16 md:py-36">
+    <section id="how-it-works" className="relative scroll-mt-20 py-24 md:py-36">
+      <DemoModal open={demoOpen} onClose={() => setDemoOpen(false)} />
       <Container>
-        <h2 className="heading-3 heading-sans max-w-[900px] text-[var(--ink)]">
-          {STEPS.map((step, i) => (
-            <span key={step.num}>
-              {i === 0 ? "ARGUS " : i === 1 ? ", " : ", and "}
-              <Highlight active={active === i}>{step.clause}</Highlight>
-              <span className="step-num ml-1.5 align-super">{step.num}</span>
-              {i === 0
-                ? " silent failures in your agent pipeline"
-                : i === 1
-                  ? " where the state actually broke"
-                  : " the node that actually failed."}
-            </span>
-          ))}
-        </h2>
+        <div className="reveal flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p className="eyebrow">How it works</p>
+            <h2 className="display-2 mt-6 max-w-[15ch] text-[var(--ink)]">
+              Attach once. Get the root cause on every run.
+            </h2>
+          </div>
+          <p className="lede max-w-[25rem] lg:pb-1.5">
+            ARGUS judges every run before it ships, and stops the deploy when
+            one goes wrong.
+          </p>
+        </div>
 
-        <div
-          ref={containerRef}
-          className="mt-12 grid grid-cols-1 gap-10 md:mt-16 lg:grid-cols-3"
-        >
-          {STEPS.map((step, i) => (
-            <div
-              key={step.num}
-              data-hiw-index={i}
-              className="transition-opacity duration-300 ease-out motion-reduce:transition-none"
-              style={{ opacity: active === i ? 1 : 0.6 }}
-            >
-              <div className="rounded-[var(--radius-panel)] border-[length:var(--hairline)] border-[var(--line)] bg-[var(--ex)] p-1">
-                <DemoSlot id={step.slot} aspect="mini">
-                  <step.Mini />
-                </DemoSlot>
+        <div className="mt-14 grid items-start gap-8 lg:mt-20 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-14">
+          <ol role="tablist" aria-label="How ARGUS works" className="order-2 flex flex-col lg:order-1">
+            {STEPS.map((s, i) => {
+              const on = i === active;
+              return (
+                <li key={s.id} className="shadow-[inset_0_-1px_0_var(--line)] first:shadow-[inset_0_1px_0_var(--line),inset_0_-1px_0_var(--line)]">
+                  <button
+                    type="button"
+                    role="tab"
+                    id={`hiw-tab-${s.id}`}
+                    aria-selected={on}
+                    aria-controls="hiw-stage"
+                    onClick={() => select(i)}
+                    className="group relative block w-full py-6 text-left"
+                  >
+                    <span className="flex items-baseline gap-4">
+                      <span className={cn("step-num transition-colors", on && "text-[var(--iris-fg)]")}>
+                        0{i + 1}
+                      </span>
+                      <span
+                        className={cn(
+                          "text-[17px] font-medium tracking-[-0.02em] transition-colors",
+                          on ? "text-[var(--ink)]" : "text-[var(--ink-3)] group-hover:text-[var(--ink-2)]"
+                        )}
+                      >
+                        {s.title}
+                      </span>
+                    </span>
+                    <span
+                      className="grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                      style={{ gridTemplateRows: on ? "1fr" : "0fr" }}
+                    >
+                      <span className="overflow-hidden">
+                        <span className="ident block pl-[calc(2ch+1rem)] pt-3 text-[14.5px] leading-[1.6] text-[var(--ink-2)]">
+                          {s.body}
+                        </span>
+                      </span>
+                    </span>
+                    <span aria-hidden className="absolute inset-x-0 bottom-0 h-px overflow-hidden">
+                      <span
+                        ref={(el) => {
+                          bars.current[i] = el;
+                        }}
+                        className={cn(
+                          "block h-full origin-left bg-[var(--iris)]",
+                          on ? "opacity-100" : "opacity-0"
+                        )}
+                        style={{ transform: "scaleX(0)" }}
+                      />
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+            <li className="pt-6">
+              <button
+                type="button"
+                onClick={() => setDemoOpen(true)}
+                className="group inline-flex items-center gap-1.5 text-[13.5px] text-[var(--ink-2)] transition-colors hover:text-[var(--ink)]"
+              >
+                Click around the real run yourself
+                <ArrowUpRight size={14} className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </button>
+            </li>
+          </ol>
+
+          <div ref={stage} id="hiw-stage" role="tabpanel" aria-labelledby={`hiw-tab-${STEPS[active].id}`} className="order-1 lg:order-2">
+            <div className="frame p-1.5 sm:p-2">
+              <div className="relative aspect-[16/10] overflow-hidden rounded-[11px] bg-[var(--rail)]">
+                {STEPS.map((s, i) => (
+                  <video
+                    key={s.id}
+                    ref={(el) => {
+                      videos.current[i] = el;
+                    }}
+                    className={cn(
+                      "absolute inset-0 h-full w-full object-cover transition-opacity duration-500",
+                      i === active ? "opacity-100" : "opacity-0"
+                    )}
+                    src={`/clips/${s.id}.mp4`}
+                    poster={`/clips/${s.id}.jpg`}
+                    muted
+                    playsInline
+                    preload={i === active ? "auto" : "metadata"}
+                    controls={!motionOk}
+                    aria-label={s.label}
+                    onEnded={() => select((i + 1) % STEPS.length)}
+                  />
+                ))}
               </div>
-              <p className="step-num mt-6">{step.num}</p>
-              <h3 className="mt-3 text-[15px] font-medium text-[var(--ink)]">
-                {step.title}
-              </h3>
-              <p className="body-base mt-2 max-w-[36ch]">{step.body}</p>
             </div>
-          ))}
+          </div>
         </div>
       </Container>
     </section>
-  );
-}
-
-function Highlight({
-  active,
-  children,
-}: {
-  active: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <span
-      className="rounded-[6px] px-1.5 py-0.5 transition-colors duration-300 ease-out motion-reduce:transition-none"
-      style={{
-        background: active ? "var(--iris-subtle)" : "transparent",
-        color: active ? "var(--iris-fg)" : "inherit",
-      }}
-    >
-      {children}
-    </span>
   );
 }

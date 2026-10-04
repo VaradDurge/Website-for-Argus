@@ -10,6 +10,7 @@ interface Props {
   onClose: () => void;
 }
 
+/** The launch film ("return {}"), self-hosted so it plays without a third-party embed. */
 export function VideoModal({ open, onClose }: Props) {
   useEffect(() => {
     if (!open) return;
@@ -29,49 +30,57 @@ export function VideoModal({ open, onClose }: Props) {
 
   return (
     <ModalPortal>
-    <AnimatePresence>
-      {open && (
-        <>
-          <motion.div
-            key="video-backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm"
-            onClick={onClose}
-          />
+      <AnimatePresence>
+        {open && (
+          <>
+            <motion.div
+              key="film-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="fixed inset-0 z-[100] bg-black/85 backdrop-blur-sm"
+              onClick={onClose}
+            />
 
-          <motion.div
-            key="video-panel"
-            initial={{ opacity: 0, scale: 0.96, y: 12 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.96, y: 12 }}
-            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-[101] flex items-center justify-center pointer-events-none"
-          >
-            <div className="pointer-events-auto w-full max-w-[900px] mx-4">
-              <div className="relative rounded-xl overflow-hidden border border-[var(--border)] bg-black">
-                <button
-                  onClick={onClose}
-                  className="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-black/60 text-[var(--ink-2)] hover:text-[var(--ink)] hover:bg-black/80 transition-colors"
-                  aria-label="Close video"
-                >
-                  <X size={16} />
-                </button>
-
-                <iframe
-                  src={`https://www.youtube.com/embed/vrt9i4cD2us?autoplay=1&rel=0`}
-                  allow="autoplay; encrypted-media"
-                  allowFullScreen
-                  className="w-full aspect-video"
-                />
+            <motion.div
+              key="film-panel"
+              role="dialog"
+              aria-modal="true"
+              aria-label="ARGUS launch film"
+              initial={{ opacity: 0, scale: 0.97, y: 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.97, y: 12 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="pointer-events-none fixed inset-0 z-[101] flex items-center justify-center"
+            >
+              <div className="pointer-events-auto mx-4 w-full max-w-[1100px]">
+                <div className="relative overflow-hidden rounded-[14px] bg-black shadow-[0_0_0_1px_var(--line-2),0_40px_120px_-20px_rgba(0,0,0,0.9)]">
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/60 text-white/80 transition-colors hover:bg-black/80 hover:text-white"
+                    aria-label="Close film"
+                  >
+                    <X size={16} />
+                  </button>
+                  <video
+                    className="block aspect-video w-full"
+                    src="/film/argus-film.mp4"
+                    poster="/film/argus-film.jpg"
+                    controls
+                    autoPlay
+                    playsInline
+                    preload="none"
+                  >
+                    Your browser cannot play this video.
+                  </video>
+                </div>
               </div>
-            </div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </ModalPortal>
   );
 }

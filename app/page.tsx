@@ -1,14 +1,11 @@
 import { SiteNav } from "./components/SiteNav";
 import { Hero } from "./components/Hero";
-import { HeroCradle } from "./components/sections/HeroCradle";
-import { SocialProofTicker } from "./components/SocialProofTicker";
+import { Problem } from "./components/sections/Problem";
 import { HowItWorks } from "./components/sections/HowItWorks";
-import { FeatureSections } from "./components/sections/FeatureSections";
-import { Stats } from "./components/Stats";
+import { Capabilities } from "./components/sections/Capabilities";
 import { Testimonial } from "./components/sections/Testimonial";
-import { Security } from "./components/sections/Security";
-import { Changelog } from "./components/sections/Changelog";
 import { FAQ } from "./components/FAQ";
+import { FinalCTA } from "./components/sections/FinalCTA";
 import { Footer } from "./components/Footer";
 
 export default function Home() {
@@ -17,31 +14,12 @@ export default function Home() {
       <SiteNav />
       <main>
         <Hero />
-        <HeroCradle />
-
-        <div className="hairline-t">
-          <SocialProofTicker />
-        </div>
-
-        <div className="hairline-t">
-          <HowItWorks />
-        </div>
-
-        <div className="hairline-t">
-          <FeatureSections />
-        </div>
-
-        <Stats />
+        <Problem />
+        <HowItWorks />
+        <Capabilities />
         <Testimonial />
-        <Security />
-
-        <div className="hairline-t">
-          <Changelog />
-        </div>
-
-        <div className="hairline-t">
-          <FAQ />
-        </div>
+        <FAQ />
+        <FinalCTA />
       </main>
       <Footer />
     </>

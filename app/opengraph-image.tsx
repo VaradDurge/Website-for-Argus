@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og'
 
-export const alt = 'ARGUS — Forensic Observability for AI Agent Pipelines'
+export const alt = 'ARGUS — Catch silent failures in AI agents before you deploy'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
@@ -19,18 +19,19 @@ export default async function OGImage() {
           position: 'relative',
         }}
       >
-        {/* copper atmosphere. Literal values: this renders through Satori,
-            which does not resolve the stylesheet's custom properties. */}
+        {/* iris key light, as on the site. Literal values: this renders
+            through Satori, which does not resolve the stylesheet's custom
+            properties. */}
         <div
           style={{
             display: 'flex',
             position: 'absolute',
-            left: '-10%',
-            right: '-10%',
-            top: '22%',
-            height: '70%',
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
             background:
-              'radial-gradient(closest-side, rgba(255,122,26,0.30), rgba(232,74,90,0.16), rgba(14,13,12,0))',
+              'radial-gradient(circle at 42% 55%, rgba(139,125,255,0.17) 0%, rgba(139,125,255,0.05) 30%, rgba(14,13,12,0) 52%)',
           }}
         />
 
@@ -89,19 +90,18 @@ export default async function OGImage() {
               letterSpacing: '-3px',
             }}
           >
-            Your Agents Are Failing.
+            Catch silent failures
           </div>
           <div
             style={{
               display: 'flex',
               fontSize: '96px',
-              fontStyle: 'italic',
               fontWeight: 700,
               color: '#7d746e',
               letterSpacing: '-3px',
             }}
           >
-            Silently.
+            before you deploy.
           </div>
         </div>
 
@@ -115,7 +115,7 @@ export default async function OGImage() {
             maxWidth: '880px',
           }}
         >
-          ARGUS detects silent failures, semantic drift, and contract violations in your LangGraph pipelines — before production.
+          Your agent finishes, but one node quietly returned nothing. ARGUS finds that node and fails the build before it ships.
         </div>
 
         {/* Domain */}
