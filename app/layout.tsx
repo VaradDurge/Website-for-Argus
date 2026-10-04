@@ -84,7 +84,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      data-theme="dark"
+      data-theme="light"
       className={`${geist.variable} ${mono.variable} ${serif.variable} antialiased`}
     >
       <body className="min-h-screen bg-[var(--void)] text-[var(--ink)]">

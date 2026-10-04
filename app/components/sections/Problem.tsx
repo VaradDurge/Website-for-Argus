@@ -50,35 +50,31 @@ export function Problem() {
         </div>
 
         <figure
-          className="reveal relative mx-auto mt-14 max-w-[56rem] md:mt-20"
+          className="reveal relative mx-auto mt-16 max-w-[56rem] md:mt-20"
           aria-label="nodes.py line 168: return {}"
         >
-          {/* the silent failure gives off the only warm light on the page */}
-          <div aria-hidden className="pointer-events-none absolute inset-x-[12%] top-1/2 -z-10 h-2/3 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(255,191,60,0.16),transparent)] blur-2xl" />
-          <div className="frame overflow-hidden">
-            <div className="flex items-center justify-between gap-4 px-5 py-3.5 shadow-[inset_0_-1px_0_var(--line)]">
-              <span className="flex items-center gap-2 font-mono text-[12px] text-[var(--ink-2)]">
-                <span className="flex gap-1.5" aria-hidden>
-                  <span className="h-2.5 w-2.5 rounded-full bg-[var(--line-3)]" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-[var(--line-3)]" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-[var(--line-3)]" />
-                </span>
-                <span className="ml-2">research_agent/nodes.py</span>
-              </span>
-              <span className="font-mono text-[11.5px] text-[var(--ink-3)]">merge_summaries()</span>
+          <div className="exhibit">
+            <span className="exhibit-tab">Exhibit A</span>
+            <div className="flex items-center justify-between gap-4 px-5 pb-3.5 pt-5 shadow-[inset_0_-1px_0_var(--exhibit-line)]">
+              <span className="font-mono text-[12px] text-[var(--exhibit-ink-2)]">research_agent/nodes.py</span>
+              <span className="font-mono text-[11.5px] text-[var(--exhibit-ink-2)] opacity-70">merge_summaries()</span>
             </div>
             <div className="px-5 pb-9 pt-7 font-mono sm:px-8">
               <CodeLine n={167} className="pl-[2ch]">
                 if not collected:
               </CodeLine>
               <div className="relative my-3 flex items-baseline gap-4 sm:my-5 sm:gap-6">
-                <span aria-hidden className="absolute -inset-x-8 -inset-y-2 bg-[linear-gradient(90deg,rgba(255,191,60,0.1),transparent_70%)] shadow-[inset_2px_0_0_var(--sig-warn)] sm:-inset-x-8" />
-                <span className="relative w-[3ch] shrink-0 text-right text-[13px] text-[var(--sig-warn)]">
-                  168
-                </span>
-                <span className="caret relative whitespace-nowrap text-[clamp(40px,7vw,104px)] leading-none tracking-[-0.04em] text-[var(--ink)]">
+                <span aria-hidden className="absolute -inset-x-5 -inset-y-2 bg-[linear-gradient(90deg,rgba(255,150,60,0.14),transparent_70%)] shadow-[inset_2px_0_0_#ff8a3d] sm:-inset-x-8" />
+                <span className="relative w-[3ch] shrink-0 text-right text-[13px] text-[#ff9a52]">168</span>
+                <span className="caret relative whitespace-nowrap text-[clamp(40px,7vw,104px)] leading-none tracking-[-0.04em] text-[var(--exhibit-ink)]">
                   return{" "}
-                  <span className="text-[var(--sig-warn)] [text-shadow:0_0_28px_rgba(255,191,60,0.55)]">{"{}"}</span>
+                  <span className="relative text-[#ff9a52]">
+                    {"{}"}
+                    {/* the red pen, ringing the evidence */}
+                    <svg aria-hidden viewBox="0 0 120 80" className="pen-ring -left-[18%] -top-[22%] h-[144%] w-[136%]" preserveAspectRatio="none">
+                      <path pathLength={1} d="M 70 6 C 30 2, 4 18, 6 42 C 8 66, 44 78, 78 74 C 108 70, 118 46, 110 26 C 102 8, 74 2, 52 8" />
+                    </svg>
+                  </span>
                 </span>
               </div>
               <CodeLine n={169} />
@@ -87,6 +83,12 @@ export function Problem() {
               </CodeLine>
             </div>
           </div>
+          {/* margin note, in the investigator's hand */}
+          <figcaption className="pen-note absolute -right-4 top-[46%] hidden max-w-[12rem] translate-x-full rotate-[-3deg] xl:block">
+            ← returns nothing.
+            <br />
+            Nothing raises.
+          </figcaption>
         </figure>
 
         <ol className="mx-auto mt-14 grid max-w-[56rem] grid-cols-1 gap-px overflow-clip rounded-[var(--radius-panel)] bg-[var(--line)] shadow-[0_0_0_1px_var(--line)] md:mt-16 md:grid-cols-3">
@@ -114,7 +116,7 @@ function CodeLine({
   children?: React.ReactNode;
 }) {
   return (
-    <div className="flex items-baseline gap-4 text-[13.5px] leading-[1.9] text-[var(--ink-3)] sm:gap-6">
+    <div className="flex items-baseline gap-4 text-[13.5px] leading-[1.9] text-[var(--exhibit-ink-2)] sm:gap-6">
       <span className="w-[3ch] shrink-0 text-right opacity-70">{n}</span>
       <span className={className}>{children}</span>
     </div>

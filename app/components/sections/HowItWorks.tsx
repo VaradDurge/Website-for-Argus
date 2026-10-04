@@ -12,6 +12,7 @@ import { DemoModal } from "../DemoModal";
 const STEPS = [
   {
     id: "attach",
+    tab: "Exhibit B · agent.py",
     title: "Attach in one line",
     body: (
       <>
@@ -24,6 +25,7 @@ const STEPS = [
   },
   {
     id: "trace",
+    tab: "Exhibit C · argus ui",
     title: "Get the node that broke",
     body: (
       <>
@@ -36,6 +38,7 @@ const STEPS = [
   },
   {
     id: "gate",
+    tab: "Exhibit D · CI",
     title: "Block the deploy, prove the fix",
     body: (
       <>
@@ -137,7 +140,8 @@ export function HowItWorks() {
           {/* the stage: pinned while the steps scroll past */}
           <div className="sticky top-[76px] z-10 -mx-5 bg-[var(--void)] px-5 pb-4 pt-2 lg:static lg:order-2 lg:mx-0 lg:bg-transparent lg:p-0">
             <div ref={stage} id="hiw-stage" className="lg:sticky lg:top-[calc(50vh-15rem)]">
-              <div className="frame relative overflow-hidden p-1.5 sm:p-2">
+              <div className="exhibit relative p-1.5 sm:p-2">
+                <span className="exhibit-tab">{STEPS[active].tab}</span>
                 <div className="relative aspect-[16/10] overflow-hidden rounded-[11px] bg-[var(--rail)]">
                   {STEPS.map((s, i) => (
                     <video
@@ -196,10 +200,10 @@ export function HowItWorks() {
                   className="relative flex min-h-[46vh] flex-col justify-center py-10 pl-7 lg:min-h-[78vh]"
                 >
                   {/* the rail: lit for the step that owns the clip */}
-                  <span aria-hidden className="absolute bottom-0 left-0 top-0 w-px bg-[var(--line-2)]">
+                  <span aria-hidden className="absolute bottom-0 left-0 top-0 w-[2px] bg-[var(--line)]">
                     <span
                       className={cn(
-                        "absolute inset-0 origin-top bg-[linear-gradient(180deg,var(--iris-lavender),var(--iris))] shadow-[0_0_12px_rgba(139,125,255,0.8)] transition-transform duration-700",
+                        "absolute inset-0 origin-top bg-[linear-gradient(180deg,#ecd896,#a8842a)] transition-transform duration-700",
                         on ? "scale-y-100" : "scale-y-0"
                       )}
                     />

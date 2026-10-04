@@ -1,63 +1,86 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════════════════════════
-   ARGUS — token layer
+   ARGUS — token layer: "the case file"
+
+   The site is the launch film's world: a forensic case file on warm lab
+   paper. Ink for everything that is fact, iris for ARGUS's gaze and
+   nothing else, ok / warn / fail only as run state, and two human marks
+   on top: a yellow marker and a red pen. The real product appears as dark
+   exhibits laid on the paper.
 
    Governing rule: COLOUR IS SIGNAL. A hue on screen must mean something.
-   Iris = ARGUS (its gaze, its brand, its controls). ok / warn / fail =
-   run state. Everything else is ground and ink.
-
-   The light pair is kept in :root so a toggle can be added without
-   retokening; the warm dark pair is the one the site ships with.
    ═══════════════════════════════════════════════════════════════════ */
 
 :root {
-  --void: #f6f6f4;
-  --panel: #ffffff;
+  --void: #f3f1ea;
+  --panel: #fbfaf6;
   --raised: #ffffff;
-  --rail: #ededea;
-  --ex: #f2f2ef;
-  --band: #e8e8e4;
-  --line: #e3e3df;
-  --line-2: #d6d6d1;
-  --line-3: #bebebb;
-  --ink: #1a1a1c;
-  --ink-2: #5a5a62;
-  --ink-3: #88888a;
+  --rail: #ebe8df;
+  --ex: #efece4;
+  --band: #e8e5db;
+  --line: #dedacf;
+  --line-2: #cec9bc;
+  --line-3: #aaa597;
+  --ink: #141416;
+  --ink-2: #4b4b53;
+  --ink-3: #696970; /* 4.8:1 on paper */
 
-  --iris: #5a46e0;
-  --iris-fg: #5140d6;
-  --iris-hover: #4a38c9;
-  --iris-border: #c9c0fa;
-  --iris-subtle: #efecfe;
-  --iris-on: #ffffff;
+  /* Gold is ARGUS: its gaze, its marks, its brand (the ArgusLabs mark is
+     brushed metal on gold). The tokens keep the name "iris": the eye. */
+  --iris: #a8842a;
+  --iris-fg: #82621a; /* gold ink, 5:1 on paper for small text */
+  --iris-hover: #94741f;
+  --iris-border: #dcc58a;
+  --iris-subtle: #f4ead0;
+  --iris-on: #141416;
+  --iris-lavender: #ead7a0;
+  --iris-orchid: #c9a347;
+  --iris-indigo: #7a5a14;
+  --gold-foil: linear-gradient(
+    100deg,
+    #7a5a14 0%,
+    #b8913a 22%,
+    #ecd896 42%,
+    #c9a347 58%,
+    #8a6716 80%,
+    #c9a347 100%
+  );
 
-  --sig-ok: #0f7a55;
+  --sig-ok: #0b7a52;
   --sig-lime: #5c7a0f;
-  --sig-warn: #a35a06;
-  --sig-fail: #c0263a;
+  --sig-warn: #c4570f; /* silent failure: burnt orange, kept apart from gold */
+  --sig-fail: #c8283a;
   --sig-info: #0b6e7a;
-  --sig-ok-subtle: rgba(15, 122, 85, 0.1);
+  --sig-ok-subtle: rgba(11, 122, 82, 0.1);
   --sig-lime-subtle: rgba(92, 122, 15, 0.1);
-  --sig-warn-subtle: rgba(163, 90, 6, 0.1);
-  --sig-fail-subtle: rgba(192, 38, 58, 0.09);
+  --sig-warn-subtle: rgba(196, 87, 15, 0.1);
+  --sig-fail-subtle: rgba(200, 40, 58, 0.09);
   --sig-info-subtle: rgba(11, 110, 122, 0.1);
 
-  --inverted: #1a1a1c;
-  --inverted-hover: #2e2e33;
-  --on-inverted: #f6f6f4;
+  /* the two human marks */
+  --marker: rgba(255, 207, 31, 0.62);
+  --pen: #d42f3d;
+
+  /* exhibits: the real product, dark, laid on the paper */
+  --exhibit: #111113;
+  --exhibit-line: #26262c;
+  --exhibit-ink: #f2f2f4;
+  --exhibit-ink-2: #a3a3ad;
+
+  --inverted: #141416;
+  --inverted-hover: #2b2b31;
+  --on-inverted: #f8f7f2;
 
   --shadow-control:
-    0 0 0 0.5px rgba(0, 0, 0, 0.07),
-    0 1px 2px rgba(0, 0, 0, 0.04);
+    0 0 0 1px rgba(20, 20, 22, 0.06),
+    0 1px 2px rgba(20, 20, 22, 0.05);
   --shadow-demo:
-    0 0 0 0.5px rgba(0, 0, 0, 0.07),
-    0 62px 37px -30px rgba(0, 0, 0, 0.025),
-    0 33px 19px -12px rgba(0, 0, 0, 0.035),
-    0 10px 10px -5px rgba(0, 0, 0, 0.04),
-    0 4px 4px -2px rgba(0, 0, 0, 0.05);
-  --shadow-hover: 0 8px 24px -10px rgba(0, 0, 0, 0.12);
-  --shadow-hover-lg: 0 12px 32px -16px rgba(0, 0, 0, 0.16);
+    0 0 0 1px rgba(20, 20, 22, 0.08),
+    0 50px 80px -40px rgba(20, 20, 22, 0.35),
+    0 18px 30px -18px rgba(20, 20, 22, 0.2);
+  --shadow-hover: 0 10px 30px -12px rgba(20, 20, 22, 0.18);
+  --shadow-hover-lg: 0 18px 40px -18px rgba(20, 20, 22, 0.24);
 
   /* layout */
   --constrained-max: 1200px;
@@ -92,12 +115,12 @@
   --text-dim: var(--ink-3);
   --accent: var(--iris);
   --accent-soft: var(--iris-fg);
-  --accent-glow: rgba(90, 70, 224, 0.22);
+  --accent-glow: rgba(168, 132, 42, 0.22);
   --signal-ok: var(--sig-ok);
   --signal-warn: var(--sig-warn);
   --signal-fail: var(--sig-fail);
-  --grid: rgba(0, 0, 0, 0.035);
-  --grid-strong: rgba(0, 0, 0, 0.07);
+  --grid: rgba(20, 20, 22, 0.05);
+  --grid-strong: rgba(20, 20, 22, 0.09);
 
   --brand-reddit: #d43900;
   --brand-discord: #4752c4;
@@ -218,16 +241,16 @@
     background: var(--void);
   }
 
-  /* Film grain. Static and blend-free so it never repaints on scroll. */
+  /* Paper grain. Static and blend-free so it never repaints on scroll. */
   body::after {
     content: "";
     position: fixed;
     inset: 0;
     z-index: 9999;
     pointer-events: none;
-    opacity: 0.045;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 160px 160px;
+    opacity: 0.07;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.08 0 0 0 0 0.07 0 0 0 0 0.05 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
   }
 
   ::selection {
@@ -387,16 +410,44 @@
   box-shadow: var(--shadow-control);
 }
 
-/* A framed exhibit: the hairline sits inside a 1px lighter top edge so the
-   surface reads as lit from above rather than outlined. */
+/* A paper card: white stock, hairline edge, soft shadow on the desk. */
 .frame {
   position: relative;
-  background: linear-gradient(180deg, var(--raised), var(--panel) 40%);
+  background: linear-gradient(180deg, #ffffff, var(--panel));
   border-radius: var(--radius-panel);
   box-shadow:
     inset 0 0 0 1px var(--line),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    0 40px 80px -40px rgba(0, 0, 0, 0.7);
+    0 1px 2px rgba(20, 20, 22, 0.04),
+    0 24px 48px -32px rgba(20, 20, 22, 0.28);
+}
+
+/* An exhibit: the real product, dark, laid on the paper like evidence. */
+.exhibit {
+  position: relative;
+  background: var(--exhibit);
+  color: var(--exhibit-ink);
+  border-radius: var(--radius-panel);
+  box-shadow:
+    inset 0 0 0 1px var(--exhibit-line),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 2px 4px rgba(20, 20, 22, 0.1),
+    0 40px 70px -36px rgba(20, 20, 22, 0.55);
+}
+/* the evidence tab clipped to its corner */
+.exhibit-tab {
+  position: absolute;
+  left: 18px;
+  top: -12px;
+  z-index: 2;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #2a2009;
+  background: var(--gold-foil);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 0 2px 6px rgba(20, 20, 22, 0.2);
 }
 
 .divider {
@@ -404,128 +455,42 @@
   background: linear-gradient(to right, transparent, var(--line-2), transparent);
 }
 
-/* Hero light: the gaze's glow, centred under the scope rings. */
+/* Engineering paper: a fine 8px grid under a 40px one, fading out at the
+   edges like a sheet under a desk lamp. */
+.paper-grid {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(20, 20, 22, 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(20, 20, 22, 0.055) 1px, transparent 1px),
+    linear-gradient(to right, rgba(20, 20, 22, 0.022) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(20, 20, 22, 0.022) 1px, transparent 1px);
+  background-size: 40px 40px, 40px 40px, 8px 8px, 8px 8px;
+  background-position: center top;
+  -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 30%, #000 30%, transparent 80%);
+  mask-image: radial-gradient(ellipse 75% 70% at 50% 30%, #000 30%, transparent 80%);
+}
+/* lamp light on the sheet: a warm pool, a touch of gold */
 .hero-light {
   position: absolute;
   inset: -4rem 0 auto 0;
-  height: 54rem;
+  height: 52rem;
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 38% 34% at 50% 34%, rgba(139, 125, 255, 0.2), transparent 70%),
-    radial-gradient(ellipse 60% 44% at 50% 18%, rgba(91, 91, 240, 0.12), transparent 72%),
-    radial-gradient(ellipse 30% 24% at 64% 30%, rgba(229, 143, 255, 0.08), transparent 70%);
+    radial-gradient(ellipse 50% 46% at 50% 22%, rgba(255, 252, 240, 0.9), transparent 70%),
+    radial-gradient(ellipse 36% 30% at 76% 12%, rgba(214, 178, 92, 0.14), transparent 72%);
 }
-
-/* ── the scope (ScopeRings) ── */
-.scope {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  width: min(1180px, 150vw);
-  aspect-ratio: 1;
-  translate: -50% -38%;
-  z-index: -1;
-  pointer-events: none;
-  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 22%, rgba(0, 0, 0, 0.55) 46%, transparent 68%);
-  mask-image: radial-gradient(circle at 50% 50%, #000 22%, rgba(0, 0, 0, 0.55) 46%, transparent 68%);
-}
-.scope__layer {
-  position: absolute;
-  inset: 0;
-}
-.scope__svg {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-.scope__spin-slow,
-.scope__spin-rev {
-  will-change: transform;
-  animation: scope-spin 160s linear infinite;
-}
-.scope__spin-rev {
-  animation-duration: 110s;
-  animation-direction: reverse;
-}
-@keyframes scope-spin {
-  to { transform: rotate(360deg); }
-}
-.scope__line {
-  fill: none;
-  stroke: rgba(200, 191, 255, 0.13);
-  stroke-width: 1;
-  vector-effect: non-scaling-stroke;
-}
-.scope__line--dash {
-  stroke: rgba(200, 191, 255, 0.2);
-  stroke-dasharray: 2 9;
-}
-/* one bright arc riding the dashed ring */
-.scope__line--arc {
-  stroke: rgba(183, 172, 255, 0.55);
-  stroke-width: 1.5;
-  stroke-dasharray: 9 91;
-}
-.scope__line--iris {
-  stroke: rgba(139, 125, 255, 0.45);
-}
-.scope__tick {
-  stroke: rgba(200, 191, 255, 0.16);
-  stroke-width: 1;
-  vector-effect: non-scaling-stroke;
-}
-.scope__tick--major {
-  stroke: rgba(200, 191, 255, 0.34);
-}
-.scope__fiber {
-  stroke: rgba(139, 125, 255, 0.2);
-  stroke-width: 1;
-  vector-effect: non-scaling-stroke;
-}
-.scope__cross {
-  stroke: rgba(255, 255, 255, 0.07);
-  vector-effect: non-scaling-stroke;
-}
-.scope__sweep {
-  position: absolute;
-  inset: 8%;
-  border-radius: 50%;
-  will-change: transform;
-  background: conic-gradient(
-    from 0deg,
-    transparent 0deg 290deg,
-    rgba(139, 125, 255, 0.05) 320deg,
-    rgba(139, 125, 255, 0.16) 352deg,
-    rgba(200, 191, 255, 0.34) 359deg,
-    transparent 360deg
-  );
-  -webkit-mask-image: radial-gradient(circle, transparent 16%, #000 17%);
-  mask-image: radial-gradient(circle, transparent 16%, #000 17%);
-  animation: scope-spin 11s linear infinite;
-}
-.scope__pupil {
-  position: absolute;
-  inset: 34%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(200, 191, 255, 0.3), rgba(139, 125, 255, 0.12) 45%, transparent 70%);
-}
-@media (prefers-reduced-motion: reduce) {
-  .scope__spin-slow,
-  .scope__spin-rev,
-  .scope__sweep { animation: none; }
-}
-
-/* Closing section: a cool key overhead, the clean run's green underneath. */
 .cta-light {
   position: absolute;
   inset: 0;
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 40% 38% at 50% 24%, rgba(139, 125, 255, 0.22), transparent 70%),
-    radial-gradient(ellipse 30% 26% at 62% 18%, rgba(229, 143, 255, 0.08), transparent 70%),
-    radial-gradient(ellipse 60% 30% at 50% 100%, rgba(62, 230, 166, 0.1), transparent 70%);
+    radial-gradient(ellipse 46% 50% at 50% 30%, rgba(255, 252, 240, 0.9), transparent 70%),
+    radial-gradient(ellipse 30% 28% at 30% 20%, rgba(214, 178, 92, 0.12), transparent 70%);
 }
 
 .clean-run {
@@ -537,7 +502,6 @@
   inset: 59px 0 auto;
   height: 1.5px;
   background: var(--sig-ok);
-  box-shadow: 0 0 12px 1px rgba(62, 230, 166, 0.55);
   transform-origin: left;
 }
 .clean-run__node {
@@ -548,7 +512,7 @@
   margin: -7.5px 0 0 -7.5px;
   border-radius: 50%;
   background: var(--void);
-  box-shadow: inset 0 0 0 1.8px var(--sig-ok), 0 0 14px rgba(62, 230, 166, 0.45);
+  box-shadow: inset 0 0 0 1.8px var(--sig-ok);
 }
 .clean-run__node::after {
   content: "";
@@ -616,28 +580,107 @@
   letter-spacing: -0.065em;
   line-height: 0.8;
   color: transparent;
-  background: linear-gradient(180deg, rgba(245, 245, 248, 0.22), rgba(139, 125, 255, 0.08) 70%);
+  background: var(--gold-foil);
   -webkit-background-clip: text;
   background-clip: text;
-  -webkit-mask-image: linear-gradient(180deg, #000 15%, transparent 92%);
-  mask-image: linear-gradient(180deg, #000 15%, transparent 92%);
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.85) 10%, transparent 95%);
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.85) 10%, transparent 95%);
   margin-bottom: -0.04em;
 }
 
-/* Chrome display type: brushed metal, like the ArgusLabs mark. */
+/* Display type: ink, a hair deeper at the top as if pressed into the sheet. */
 .text-sheen {
-  background: linear-gradient(
-    180deg,
-    #ffffff 0%,
-    #f1f0f7 38%,
-    #a9a8b8 100%
-  );
+  background: linear-gradient(180deg, #0b0b0d 0%, #2c2c33 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-/* Section kicker: mono label with an iris point of light. */
+/* Gold foil, for the few marks that are ARGUS's own. */
+.foil {
+  background: var(--gold-foil);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* The marker: a yellow highlighter pulled across a phrase on load. Works
+   across line breaks (box-decoration-break), so it can wrap on phones. */
+.marker {
+  background-image: linear-gradient(
+    100deg,
+    transparent 0.2em,
+    var(--marker) 0.3em,
+    var(--marker) calc(100% - 0.25em),
+    transparent calc(100% - 0.1em)
+  );
+  background-repeat: no-repeat;
+  background-position: 0 88%;
+  background-size: 100% 46%;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  padding-inline: 0.06em;
+  animation: marker-draw 0.9s 0.9s var(--ease-expo) both;
+}
+@keyframes marker-draw {
+  from { background-size: 0% 46%; }
+  to { background-size: 100% 46%; }
+}
+
+/* The red pen: margin notes and hand-drawn rings on the evidence. */
+.pen-note {
+  font-family: var(--font-serif), ui-serif, Georgia, serif;
+  font-style: italic;
+  font-size: 19px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--pen);
+}
+.pen-ring {
+  position: absolute;
+  pointer-events: none;
+  overflow: visible;
+}
+.pen-ring path {
+  fill: none;
+  stroke: var(--pen);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .pen-ring path {
+      animation: pen-draw linear both;
+      animation-timeline: view();
+      animation-range: entry 30% cover 45%;
+    }
+  }
+}
+@keyframes pen-draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* A rubber stamp, slightly crooked. */
+.stamp {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 2px solid currentColor;
+  border-radius: 6px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  rotate: -4deg;
+  opacity: 0.88;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.2 1.7'/%3E%3C/filter%3E%3Crect width='120' height='60' filter='url(%23n)'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.2 1.7'/%3E%3C/filter%3E%3Crect width='120' height='60' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Section kicker: a case-file section mark, the numeral in gold. */
 .kicker {
   display: inline-flex;
   align-items: center;
@@ -647,15 +690,15 @@
   letter-spacing: 0.16em;
   line-height: 1;
   text-transform: uppercase;
-  color: var(--iris-fg);
+  color: var(--ink-2);
 }
 .kicker::before {
   content: "";
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--iris);
-  box-shadow: 0 0 0 3px rgba(139, 125, 255, 0.18), 0 0 12px 2px rgba(139, 125, 255, 0.7);
+  width: 7px;
+  height: 7px;
+  rotate: 45deg;
+  background: var(--gold-foil);
+  box-shadow: 0 0 0 3px rgba(201, 163, 71, 0.18);
 }
 
 /* Cursor-lit surface: Spotlight sets --mx/--my on pointer move. */
@@ -673,7 +716,7 @@
   transition: opacity 0.4s var(--ease-out);
   background: radial-gradient(
     420px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(139, 125, 255, 0.13),
+    rgba(201, 163, 71, 0.16),
     transparent 45%
   );
 }
@@ -714,53 +757,35 @@
     box-shadow 0.35s var(--ease-out),
     transform var(--duration-ui) var(--ease-out);
 }
-/* chrome, lit violet from below */
+/* ink, with a gold edge that warms on hover */
 .btn-primary {
   color: var(--on-inverted);
-  background: linear-gradient(180deg, #ffffff 0%, #e6e5f0 100%);
+  background: linear-gradient(180deg, #2a2a30 0%, var(--inverted) 100%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.12),
-    0 0 0 1px rgba(255, 255, 255, 0.18),
-    0 8px 28px -10px rgba(139, 125, 255, 0.75);
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 0 0 1px rgba(20, 20, 22, 0.9),
+    0 8px 20px -10px rgba(20, 20, 22, 0.55);
 }
 .btn-primary:hover {
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.12),
-    0 0 0 1px rgba(255, 255, 255, 0.3),
-    0 10px 40px -8px rgba(139, 125, 255, 0.95);
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 0 0 1px #8a6716,
+    0 0 0 3px rgba(201, 163, 71, 0.28),
+    0 10px 24px -10px rgba(20, 20, 22, 0.6);
 }
-/* dark glass with an iridescent hairline */
+/* paper, with a hairline that turns gold */
 .btn-secondary {
   color: var(--ink);
-  border: 1px solid transparent;
-  background:
-    linear-gradient(var(--raised), var(--raised)) padding-box,
-    linear-gradient(
-        135deg,
-        rgba(200, 191, 255, 0.42),
-        rgba(255, 255, 255, 0.07) 38%,
-        rgba(255, 255, 255, 0.05) 62%,
-        rgba(229, 143, 255, 0.34)
-      )
-      border-box;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  background: var(--raised);
+  box-shadow:
+    inset 0 0 0 1px var(--line-2),
+    0 1px 2px rgba(20, 20, 22, 0.05);
 }
 .btn-secondary:hover {
-  background:
-    linear-gradient(var(--band), var(--band)) padding-box,
-    linear-gradient(
-        135deg,
-        rgba(200, 191, 255, 0.7),
-        rgba(255, 255, 255, 0.12) 38%,
-        rgba(255, 255, 255, 0.08) 62%,
-        rgba(229, 143, 255, 0.55)
-      )
-      border-box;
+  background: #fffdf7;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    0 8px 30px -14px rgba(139, 125, 255, 0.7);
+    inset 0 0 0 1px var(--iris),
+    0 4px 14px -6px rgba(168, 132, 42, 0.45);
 }
 .btn-primary:active,
 .btn-secondary:active { transform: scale(0.97); }

@@ -105,7 +105,7 @@ export function Footer() {
       <div aria-hidden className="footer-mark select-none">
         <Container className="flex items-end gap-[0.06em]">
           {/* the wordmark is clipped gradient text, so the mark needs its own colour */}
-          <LogoMark className="h-[0.74em] w-auto shrink-0 -translate-y-[0.06em] stroke-[2.2] text-[rgba(245,245,248,0.2)]" />
+          <LogoMark className="h-[0.74em] w-auto shrink-0 -translate-y-[0.06em] stroke-[2.2] text-[#b8913a]" />
           <span>ARGUS</span>
         </Container>
       </div>

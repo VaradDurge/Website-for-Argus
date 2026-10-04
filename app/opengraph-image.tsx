@@ -11,7 +11,7 @@ export default async function OGImage() {
         style={{
           width: '1200px',
           height: '630px',
-          background: '#0e0d0c',
+          background: '#f3f1ea',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
@@ -19,7 +19,7 @@ export default async function OGImage() {
           position: 'relative',
         }}
       >
-        {/* iris key light, as on the site. Literal values: this renders
+        {/* a warm lamp on the paper, as on the site. Literal values: this renders
             through Satori, which does not resolve the stylesheet's custom
             properties. */}
         <div
@@ -31,7 +31,7 @@ export default async function OGImage() {
             top: 0,
             bottom: 0,
             background:
-              'radial-gradient(circle at 42% 55%, rgba(139,125,255,0.17) 0%, rgba(139,125,255,0.05) 30%, rgba(14,13,12,0) 52%)',
+              'linear-gradient(200deg, rgba(214,178,92,0.16) 0%, rgba(214,178,92,0.04) 30%, rgba(243,241,234,0) 55%)',
           }}
         />
 
@@ -47,8 +47,8 @@ export default async function OGImage() {
           <div
             style={{
               display: 'flex',
-              background: '#f2ede9',
-              color: '#0e0d0c',
+              background: '#141416',
+              color: '#e6cf8a',
               fontSize: '18px',
               fontWeight: 700,
               padding: '6px 12px',
@@ -63,7 +63,7 @@ export default async function OGImage() {
               display: 'flex',
               fontSize: '18px',
               fontWeight: 600,
-              color: '#a8a09a',
+              color: '#4b4b53',
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
             }}
@@ -86,18 +86,26 @@ export default async function OGImage() {
               display: 'flex',
               fontSize: '96px',
               fontWeight: 700,
-              color: '#f2ede9',
+              color: '#141416',
               letterSpacing: '-3px',
             }}
           >
-            Catch silent failures
+            <span>Catch&nbsp;</span>
+            <span
+              style={{
+                backgroundImage:
+                  'linear-gradient(180deg, rgba(255,207,31,0) 52%, rgba(255,207,31,0.62) 52%, rgba(255,207,31,0.62) 94%, rgba(255,207,31,0) 94%)',
+              }}
+            >
+              silent failures
+            </span>
           </div>
           <div
             style={{
               display: 'flex',
               fontSize: '96px',
               fontWeight: 700,
-              color: '#7d746e',
+              color: '#141416',
               letterSpacing: '-3px',
             }}
           >
@@ -110,7 +118,7 @@ export default async function OGImage() {
           style={{
             display: 'flex',
             fontSize: '26px',
-            color: '#a8a09a',
+            color: '#4b4b53',
             lineHeight: 1.5,
             maxWidth: '880px',
           }}
@@ -126,7 +134,7 @@ export default async function OGImage() {
             bottom: '48px',
             right: '80px',
             fontSize: '20px',
-            color: '#7d746e',
+            color: '#82621a',
             fontWeight: 500,
           }}
         >
