@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { ModalPortal } from "./ModalPortal";
+import { useDialogFocus } from "./useDialogFocus";
 
 interface Props {
   open: boolean;
@@ -12,6 +13,9 @@ interface Props {
 
 /** The launch film ("return {}"), self-hosted so it plays without a third-party embed. */
 export function VideoModal({ open, onClose }: Props) {
+  const panel = useRef<HTMLDivElement>(null);
+  useDialogFocus(open, panel);
+
   useEffect(() => {
     if (!open) return;
     const handler = (e: KeyboardEvent) => {
@@ -45,6 +49,7 @@ export function VideoModal({ open, onClose }: Props) {
 
             <motion.div
               key="film-panel"
+              ref={panel}
               role="dialog"
               aria-modal="true"
               aria-label="ARGUS launch film"

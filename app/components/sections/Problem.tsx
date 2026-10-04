@@ -82,7 +82,7 @@ export function Problem() {
           </figure>
         </div>
 
-        <ol className="mt-16 grid gap-px overflow-hidden rounded-[var(--radius-panel)] bg-[var(--line)] shadow-[0_0_0_1px_var(--line)] md:mt-24 md:grid-cols-3">
+        <ol className="mt-16 grid grid-cols-1 gap-px overflow-clip rounded-[var(--radius-panel)] bg-[var(--line)] shadow-[0_0_0_1px_var(--line)] md:mt-24 md:grid-cols-3">
           {CHAIN.map((item, i) => (
             <li key={item.label} className="reveal bg-[var(--void)] p-7 md:p-8">
               <p className="step-num">

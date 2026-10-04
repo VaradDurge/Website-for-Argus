@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import { ModalPortal } from "./ModalPortal";
+import { useDialogFocus } from "./useDialogFocus";
 
 // The instrument is heavy and only matters once someone asks for it.
 const ArgusDemo = dynamic(() => import("./demo/ArgusDemo").then((m) => m.ArgusDemo), {
@@ -17,10 +18,14 @@ const ArgusDemo = dynamic(() => import("./demo/ArgusDemo").then((m) => m.ArgusDe
 });
 
 export function DemoModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const panel = useRef<HTMLDivElement>(null);
+  useDialogFocus(open, panel);
+
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      // Esc inside the demo's search box closes the search (the demo handles it)
+      if (e.key === "Escape" && !(e.target instanceof HTMLInputElement)) onClose();
     };
     window.addEventListener("keydown", onKey);
     const prev = document.body.style.overflow;
@@ -47,6 +52,7 @@ export function DemoModal({ open, onClose }: { open: boolean; onClose: () => voi
             />
             <motion.div
               key="demo-panel"
+              ref={panel}
               role="dialog"
               aria-modal="true"
               aria-label="Interactive ARGUS run"

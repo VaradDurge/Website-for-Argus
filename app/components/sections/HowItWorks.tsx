@@ -93,8 +93,8 @@ export function HowItWorks() {
       if (visible) raf = requestAnimationFrame(tick);
     };
 
-    const io = new IntersectionObserver(([entry]) => {
-      visible = entry.isIntersecting;
+    const io = new IntersectionObserver((entries) => {
+      visible = entries[entries.length - 1].isIntersecting;
       play();
     }, { threshold: 0.35 });
     io.observe(el);
@@ -131,56 +131,57 @@ export function HowItWorks() {
         </div>
 
         <div className="mt-14 grid items-start gap-8 lg:mt-20 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-14">
-          <ol role="tablist" aria-label="How ARGUS works" className="order-2 flex flex-col lg:order-1">
+          <ol aria-label="How ARGUS works" className="order-2 flex flex-col lg:order-1">
             {STEPS.map((s, i) => {
               const on = i === active;
               return (
-                <li key={s.id} className="shadow-[inset_0_-1px_0_var(--line)] first:shadow-[inset_0_1px_0_var(--line),inset_0_-1px_0_var(--line)]">
+                <li
+                  key={s.id}
+                  className="relative shadow-[inset_0_-1px_0_var(--line)] first:shadow-[inset_0_1px_0_var(--line),inset_0_-1px_0_var(--line)]"
+                >
                   <button
                     type="button"
-                    role="tab"
-                    id={`hiw-tab-${s.id}`}
-                    aria-selected={on}
+                    aria-current={on ? "step" : undefined}
                     aria-controls="hiw-stage"
                     onClick={() => select(i)}
-                    className="group relative block w-full py-6 text-left"
+                    className="group flex w-full items-baseline gap-4 pt-6 text-left"
                   >
-                    <span className="flex items-baseline gap-4">
-                      <span className={cn("step-num transition-colors", on && "text-[var(--iris-fg)]")}>
-                        0{i + 1}
-                      </span>
-                      <span
-                        className={cn(
-                          "text-[17px] font-medium tracking-[-0.02em] transition-colors",
-                          on ? "text-[var(--ink)]" : "text-[var(--ink-3)] group-hover:text-[var(--ink-2)]"
-                        )}
-                      >
-                        {s.title}
-                      </span>
+                    <span className={cn("step-num transition-colors", on && "text-[var(--iris-fg)]")}>
+                      0{i + 1}
                     </span>
                     <span
-                      className="grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
-                      style={{ gridTemplateRows: on ? "1fr" : "0fr" }}
+                      className={cn(
+                        "text-[17px] font-medium tracking-[-0.02em] transition-colors",
+                        on ? "text-[var(--ink)]" : "text-[var(--ink-3)] group-hover:text-[var(--ink-2)]"
+                      )}
                     >
-                      <span className="overflow-hidden">
-                        <span className="ident block pl-[calc(2ch+1rem)] pt-3 text-[14.5px] leading-[1.6] text-[var(--ink-2)]">
-                          {s.body}
-                        </span>
-                      </span>
-                    </span>
-                    <span aria-hidden className="absolute inset-x-0 bottom-0 h-px overflow-hidden">
-                      <span
-                        ref={(el) => {
-                          bars.current[i] = el;
-                        }}
-                        className={cn(
-                          "block h-full origin-left bg-[var(--iris)]",
-                          on ? "opacity-100" : "opacity-0"
-                        )}
-                        style={{ transform: "scaleX(0)" }}
-                      />
+                      {s.title}
                     </span>
                   </button>
+                  <div
+                    aria-hidden={!on}
+                    className="grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                    style={{ gridTemplateRows: on ? "1fr" : "0fr" }}
+                  >
+                    <div className="overflow-hidden">
+                      <p className="ident pl-[calc(2ch+1rem)] pt-3 text-[14.5px] leading-[1.6] text-[var(--ink-2)]">
+                        {s.body}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="h-6" />
+                  <span aria-hidden className="absolute inset-x-0 bottom-0 h-px overflow-hidden">
+                    <span
+                      ref={(el) => {
+                        bars.current[i] = el;
+                      }}
+                      className={cn(
+                        "block h-full origin-left bg-[var(--iris)]",
+                        on ? "opacity-100" : "opacity-0"
+                      )}
+                      style={{ transform: "scaleX(0)" }}
+                    />
+                  </span>
                 </li>
               );
             })}
@@ -196,7 +197,7 @@ export function HowItWorks() {
             </li>
           </ol>
 
-          <div ref={stage} id="hiw-stage" role="tabpanel" aria-labelledby={`hiw-tab-${STEPS[active].id}`} className="order-1 lg:order-2">
+          <div ref={stage} id="hiw-stage" className="order-1 lg:order-2">
             <div className="frame p-1.5 sm:p-2">
               <div className="relative aspect-[16/10] overflow-hidden rounded-[11px] bg-[var(--rail)]">
                 {STEPS.map((s, i) => (
@@ -207,14 +208,15 @@ export function HowItWorks() {
                     }}
                     className={cn(
                       "absolute inset-0 h-full w-full object-cover transition-opacity duration-500",
-                      i === active ? "opacity-100" : "opacity-0"
+                      i === active ? "opacity-100" : "pointer-events-none opacity-0"
                     )}
+                    aria-hidden={i !== active}
                     src={`/clips/${s.id}.mp4`}
                     poster={`/clips/${s.id}.jpg`}
                     muted
                     playsInline
                     preload={i === active ? "auto" : "metadata"}
-                    controls={!motionOk}
+                    controls={!motionOk && i === active}
                     aria-label={s.label}
                     onEnded={() => select((i + 1) % STEPS.length)}
                   />

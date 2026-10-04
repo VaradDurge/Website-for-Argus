@@ -15,7 +15,7 @@ export function Capabilities() {
           </h2>
         </div>
 
-        <div className="mt-14 grid gap-px overflow-hidden rounded-[var(--radius-block)] bg-[var(--line)] shadow-[0_0_0_1px_var(--line)] md:mt-20 md:grid-cols-2">
+        <div className="mt-14 grid grid-cols-1 gap-px overflow-clip rounded-[var(--radius-block)] bg-[var(--line)] shadow-[0_0_0_1px_var(--line)] md:mt-20 md:grid-cols-2">
           <Cell
             title="Field contracts"
             body={

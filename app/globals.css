@@ -119,7 +119,7 @@
   --line-3: #48413c;
   --ink: #f4efea;
   --ink-2: #aea59e;
-  --ink-3: #7c736d;
+  --ink-3: #8a817b; /* 5.1:1 on void, 4.5:1 on band: AA for small labels */
 
   --iris: #8b7dff;
   --iris-fg: #a99aff;
@@ -411,35 +411,69 @@
     radial-gradient(ellipse 60% 34% at 50% 100%, rgba(61, 217, 160, 0.07), transparent 70%);
 }
 
+.clean-run {
+  position: relative;
+  height: 120px;
+}
 .clean-run__line {
-  stroke: var(--sig-ok);
-  stroke-width: 1.5;
-  stroke-dasharray: 1 1;
-  vector-effect: non-scaling-stroke;
+  position: absolute;
+  inset: 59px 0 auto;
+  height: 1.5px;
+  background: var(--sig-ok);
+  transform-origin: left;
 }
-.clean-run__node circle:first-child {
-  fill: var(--void);
-  stroke: var(--sig-ok);
-  stroke-width: 1.8;
-  vector-effect: non-scaling-stroke;
+.clean-run__node {
+  position: absolute;
+  top: 60px;
+  width: 15px;
+  height: 15px;
+  margin: -7.5px 0 0 -7.5px;
+  border-radius: 50%;
+  background: var(--void);
+  box-shadow: inset 0 0 0 1.8px var(--sig-ok);
 }
-.clean-run__dot { fill: var(--sig-ok); }
+.clean-run__node::after {
+  content: "";
+  position: absolute;
+  inset: 4.6px;
+  border-radius: 50%;
+  background: var(--sig-ok);
+}
+/* the gate, open: a dashed post with a gap where the run passes through */
 .clean-run__gate {
-  stroke: var(--ink-3);
-  stroke-width: 1.2;
-  stroke-dasharray: 4 5;
-  vector-effect: non-scaling-stroke;
+  position: absolute;
+  left: 80%;
+  top: 16px;
+  bottom: 16px;
+  width: 0;
+}
+.clean-run__post {
+  position: absolute;
+  inset: 0 auto 0 -0.6px;
+  width: 1.2px;
+  background: linear-gradient(to bottom, var(--ink-3) 50%, transparent 0) 0 0 / 1.2px 9px repeat-y;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(50% - 15px), transparent 0 calc(50% + 15px), #000 0);
+  mask-image: linear-gradient(to bottom, #000 calc(50% - 15px), transparent 0 calc(50% + 15px), #000 0);
+}
+.clean-run__label,
+.clean-run__exit {
+  position: absolute;
+  white-space: nowrap;
+  font-family: var(--font-mono), ui-monospace, monospace;
 }
 .clean-run__label {
-  font-family: var(--font-mono), ui-monospace, monospace;
+  bottom: calc(100% + 6px);
+  left: 0;
+  transform: translateX(-50%);
   font-size: 11px;
-  letter-spacing: 2.4px;
-  fill: var(--ink-3);
+  letter-spacing: 0.2em;
+  color: var(--ink-3);
 }
 .clean-run__exit {
-  font-family: var(--font-mono), ui-monospace, monospace;
+  top: calc(50% + 10px);
+  left: 14px;
   font-size: 13px;
-  fill: var(--sig-ok);
+  color: var(--sig-ok);
 }
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
@@ -453,8 +487,8 @@
   }
 }
 @keyframes clean-draw {
-  from { stroke-dashoffset: 1; }
-  to { stroke-dashoffset: 0; }
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }
 
 /* Oversized footer wordmark, fading into the floor. */

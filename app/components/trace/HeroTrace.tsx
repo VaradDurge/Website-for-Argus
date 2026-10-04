@@ -233,8 +233,8 @@ export function HeroTrace() {
       resize(entry.contentRect.width);
       draw(reduced.matches ? T.still : t);
     });
-    const io = new IntersectionObserver(([entry]) => {
-      visible = entry.isIntersecting;
+    const io = new IntersectionObserver((entries) => {
+      visible = entries[entries.length - 1].isIntersecting;
       sync();
     });
     ro.observe(svg);
