@@ -104,58 +104,63 @@
   --brand-instagram: #c31f5c;
 }
 
-/* ─── dark pair (active) ───
-   Warm near-black rather than neutral grey: the grounds carry a slight
-   amber cast so the page reads as one material, not a dashboard. */
+/* ─── dark pair (active): "ARGUS Scope" ───
+   A precision scope in the dark: cool near-black ground, chrome type,
+   luminous signal colours, and iris (ARGUS's gaze) as the one source of
+   light. Iris shades toward lavender and orchid for its glows and edges. */
 [data-theme="dark"] {
-  --void: #0c0b0a;
-  --panel: #131110;
-  --raised: #1a1816;
-  --rail: #090807;
-  --ex: #110f0e;
-  --band: #1d1a18;
-  --line: #221f1d;
-  --line-2: #2e2a27;
-  --line-3: #48413c;
-  --ink: #f4efea;
-  --ink-2: #aea59e;
-  --ink-3: #8a817b; /* 5.1:1 on void, 4.5:1 on band: AA for small labels */
+  --void: #050507;
+  --panel: #0b0b10;
+  --raised: #111118;
+  --rail: #030304;
+  --ex: #08080c;
+  --band: #15151d;
+  --line: #1b1b24;
+  --line-2: #262631;
+  --line-3: #3b3b49;
+  --ink: #f5f5f8;
+  --ink-2: #a6a6b3;
+  --ink-3: #8b8b98; /* 5.8:1 on void, 5:1 on band */
 
   --iris: #8b7dff;
-  --iris-fg: #a99aff;
-  --iris-hover: #9c8dff;
-  --iris-border: #3f3670;
-  --iris-subtle: #221e3a;
-  --iris-on: #0c0b0a;
+  --iris-fg: #b7acff;
+  --iris-hover: #9d91ff;
+  --iris-border: #3d3577;
+  --iris-subtle: #1c1838;
+  --iris-on: #050507;
+  /* iridescent neighbours, for light and edges only */
+  --iris-lavender: #c8bfff;
+  --iris-orchid: #e58fff;
+  --iris-indigo: #5b5bf0;
 
-  --sig-ok: #3dd9a0;
+  --sig-ok: #3ee6a6;
   --sig-lime: #b8e04a;
-  --sig-warn: #f0b03c;
-  --sig-fail: #ff6b7a;
+  --sig-warn: #ffbf3c;
+  --sig-fail: #ff6b81;
   --sig-info: #4fd1e0;
-  --sig-ok-subtle: rgba(61, 217, 160, 0.14);
+  --sig-ok-subtle: rgba(62, 230, 166, 0.13);
   --sig-lime-subtle: rgba(184, 224, 74, 0.14);
-  --sig-warn-subtle: rgba(240, 176, 60, 0.14);
-  --sig-fail-subtle: rgba(255, 107, 122, 0.14);
+  --sig-warn-subtle: rgba(255, 191, 60, 0.13);
+  --sig-fail-subtle: rgba(255, 107, 129, 0.13);
   --sig-info-subtle: rgba(79, 209, 224, 0.14);
 
-  --inverted: #f4efea;
+  --inverted: #f5f5f8;
   --inverted-hover: #ffffff;
-  --on-inverted: #0c0b0a;
+  --on-inverted: #050507;
 
   --shadow-control:
-    0 0 0 0.5px rgba(255, 255, 255, 0.07),
-    0 1px 2px rgba(0, 0, 0, 0.5);
+    0 0 0 0.5px rgba(255, 255, 255, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.6);
   --shadow-demo:
-    0 0 0 0.5px rgba(255, 255, 255, 0.07),
-    0 62px 37px -30px rgba(0, 0, 0, 0.5),
-    0 33px 19px -12px rgba(0, 0, 0, 0.45),
-    0 10px 10px -5px rgba(0, 0, 0, 0.4);
-  --shadow-hover: 0 8px 24px -10px rgba(0, 0, 0, 0.6);
-  --shadow-hover-lg: 0 12px 32px -16px rgba(0, 0, 0, 0.7);
+    0 0 0 0.5px rgba(255, 255, 255, 0.08),
+    0 62px 37px -30px rgba(0, 0, 0, 0.6),
+    0 33px 19px -12px rgba(0, 0, 0, 0.5),
+    0 10px 10px -5px rgba(0, 0, 0, 0.45);
+  --shadow-hover: 0 8px 24px -10px rgba(0, 0, 0, 0.7);
+  --shadow-hover-lg: 0 12px 32px -16px rgba(0, 0, 0, 0.8);
 
-  --accent-glow: rgba(139, 125, 255, 0.22);
-  --grid: rgba(255, 255, 255, 0.03);
+  --accent-glow: rgba(139, 125, 255, 0.28);
+  --grid: rgba(255, 255, 255, 0.035);
   --grid-strong: rgba(255, 255, 255, 0.07);
 
   --brand-reddit: #ff5414;
@@ -211,6 +216,18 @@
   body {
     overflow-x: hidden;
     background: var(--void);
+  }
+
+  /* Film grain. Static and blend-free so it never repaints on scroll. */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.045;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 160px 160px;
   }
 
   ::selection {
@@ -387,17 +404,116 @@
   background: linear-gradient(to right, transparent, var(--line-2), transparent);
 }
 
-/* Hero light: a cool key behind the headline and a faint warm fill on the
-   far side. Both are gone well before the trace starts. */
+/* Hero light: the gaze's glow, centred under the scope rings. */
 .hero-light {
   position: absolute;
   inset: -4rem 0 auto 0;
-  height: 44rem;
+  height: 54rem;
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 44% 48% at 18% 0%, rgba(139, 125, 255, 0.13), transparent 70%),
-    radial-gradient(ellipse 38% 42% at 82% 2%, rgba(240, 150, 90, 0.07), transparent 72%);
+    radial-gradient(ellipse 38% 34% at 50% 34%, rgba(139, 125, 255, 0.2), transparent 70%),
+    radial-gradient(ellipse 60% 44% at 50% 18%, rgba(91, 91, 240, 0.12), transparent 72%),
+    radial-gradient(ellipse 30% 24% at 64% 30%, rgba(229, 143, 255, 0.08), transparent 70%);
+}
+
+/* ── the scope (ScopeRings) ── */
+.scope {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: min(1180px, 150vw);
+  aspect-ratio: 1;
+  translate: -50% -38%;
+  z-index: -1;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 22%, rgba(0, 0, 0, 0.55) 46%, transparent 68%);
+  mask-image: radial-gradient(circle at 50% 50%, #000 22%, rgba(0, 0, 0, 0.55) 46%, transparent 68%);
+}
+.scope__layer {
+  position: absolute;
+  inset: 0;
+}
+.scope__svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.scope__spin-slow,
+.scope__spin-rev {
+  will-change: transform;
+  animation: scope-spin 160s linear infinite;
+}
+.scope__spin-rev {
+  animation-duration: 110s;
+  animation-direction: reverse;
+}
+@keyframes scope-spin {
+  to { transform: rotate(360deg); }
+}
+.scope__line {
+  fill: none;
+  stroke: rgba(200, 191, 255, 0.13);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.scope__line--dash {
+  stroke: rgba(200, 191, 255, 0.2);
+  stroke-dasharray: 2 9;
+}
+/* one bright arc riding the dashed ring */
+.scope__line--arc {
+  stroke: rgba(183, 172, 255, 0.55);
+  stroke-width: 1.5;
+  stroke-dasharray: 9 91;
+}
+.scope__line--iris {
+  stroke: rgba(139, 125, 255, 0.45);
+}
+.scope__tick {
+  stroke: rgba(200, 191, 255, 0.16);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.scope__tick--major {
+  stroke: rgba(200, 191, 255, 0.34);
+}
+.scope__fiber {
+  stroke: rgba(139, 125, 255, 0.2);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.scope__cross {
+  stroke: rgba(255, 255, 255, 0.07);
+  vector-effect: non-scaling-stroke;
+}
+.scope__sweep {
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  will-change: transform;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg 290deg,
+    rgba(139, 125, 255, 0.05) 320deg,
+    rgba(139, 125, 255, 0.16) 352deg,
+    rgba(200, 191, 255, 0.34) 359deg,
+    transparent 360deg
+  );
+  -webkit-mask-image: radial-gradient(circle, transparent 16%, #000 17%);
+  mask-image: radial-gradient(circle, transparent 16%, #000 17%);
+  animation: scope-spin 11s linear infinite;
+}
+.scope__pupil {
+  position: absolute;
+  inset: 34%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(200, 191, 255, 0.3), rgba(139, 125, 255, 0.12) 45%, transparent 70%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .scope__spin-slow,
+  .scope__spin-rev,
+  .scope__sweep { animation: none; }
 }
 
 /* Closing section: a cool key overhead, the clean run's green underneath. */
@@ -407,8 +523,9 @@
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 46% 40% at 50% 18%, rgba(139, 125, 255, 0.1), transparent 70%),
-    radial-gradient(ellipse 60% 34% at 50% 100%, rgba(61, 217, 160, 0.07), transparent 70%);
+    radial-gradient(ellipse 40% 38% at 50% 24%, rgba(139, 125, 255, 0.22), transparent 70%),
+    radial-gradient(ellipse 30% 26% at 62% 18%, rgba(229, 143, 255, 0.08), transparent 70%),
+    radial-gradient(ellipse 60% 30% at 50% 100%, rgba(62, 230, 166, 0.1), transparent 70%);
 }
 
 .clean-run {
@@ -420,6 +537,7 @@
   inset: 59px 0 auto;
   height: 1.5px;
   background: var(--sig-ok);
+  box-shadow: 0 0 12px 1px rgba(62, 230, 166, 0.55);
   transform-origin: left;
 }
 .clean-run__node {
@@ -430,7 +548,7 @@
   margin: -7.5px 0 0 -7.5px;
   border-radius: 50%;
   background: var(--void);
-  box-shadow: inset 0 0 0 1.8px var(--sig-ok);
+  box-shadow: inset 0 0 0 1.8px var(--sig-ok), 0 0 14px rgba(62, 230, 166, 0.45);
 }
 .clean-run__node::after {
   content: "";
@@ -497,23 +615,84 @@
   font-weight: 600;
   letter-spacing: -0.065em;
   line-height: 0.8;
-  color: color-mix(in srgb, var(--ink) 13%, transparent);
+  color: transparent;
+  background: linear-gradient(180deg, rgba(245, 245, 248, 0.22), rgba(139, 125, 255, 0.08) 70%);
+  -webkit-background-clip: text;
+  background-clip: text;
   -webkit-mask-image: linear-gradient(180deg, #000 15%, transparent 92%);
   mask-image: linear-gradient(180deg, #000 15%, transparent 92%);
   margin-bottom: -0.04em;
 }
 
-/* Display type lit from above. */
+/* Chrome display type: brushed metal, like the ArgusLabs mark. */
 .text-sheen {
   background: linear-gradient(
     180deg,
-    var(--ink) 30%,
-    color-mix(in srgb, var(--ink) 64%, var(--void))
+    #ffffff 0%,
+    #f1f0f7 38%,
+    #a9a8b8 100%
   );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
+
+/* Section kicker: mono label with an iris point of light. */
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--iris-fg);
+}
+.kicker::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--iris);
+  box-shadow: 0 0 0 3px rgba(139, 125, 255, 0.18), 0 0 12px 2px rgba(139, 125, 255, 0.7);
+}
+
+/* Cursor-lit surface: Spotlight sets --mx/--my on pointer move. */
+.spotlight {
+  position: relative;
+  isolation: isolate;
+}
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out);
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(139, 125, 255, 0.13),
+    transparent 45%
+  );
+}
+.spotlight:hover::before { opacity: 1; }
+
+/* Endless strip for the works-with row. */
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+.marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 38s linear infinite;
+}
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+.marquee-mask:hover .marquee { animation-play-state: paused; }
 
 /* ───────── controls ───────── */
 
@@ -524,46 +703,71 @@
   justify-content: center;
   gap: 8px;
   height: 36px;
-  padding-inline: 15px;
+  padding-inline: 16px;
   font-size: 13.5px;
   font-weight: 500;
   letter-spacing: -0.01em;
   white-space: nowrap;
-  border-radius: var(--radius-control);
+  border-radius: 999px;
   transition:
     background var(--duration-ui) var(--ease-out),
-    box-shadow var(--duration-ui) var(--ease-out),
+    box-shadow 0.35s var(--ease-out),
     transform var(--duration-ui) var(--ease-out);
 }
+/* chrome, lit violet from below */
 .btn-primary {
   color: var(--on-inverted);
-  background: var(--inverted);
+  background: linear-gradient(180deg, #ffffff 0%, #e6e5f0 100%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.5),
-    0 0 0 0.5px rgba(255, 255, 255, 0.25),
-    0 6px 16px -8px rgba(0, 0, 0, 0.8);
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.18),
+    0 8px 28px -10px rgba(139, 125, 255, 0.75);
 }
-.btn-primary:hover { background: var(--inverted-hover); }
+.btn-primary:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.3),
+    0 10px 40px -8px rgba(139, 125, 255, 0.95);
+}
+/* dark glass with an iridescent hairline */
 .btn-secondary {
   color: var(--ink);
-  background: color-mix(in srgb, var(--raised) 70%, transparent);
-  box-shadow:
-    inset 0 0 0 1px var(--line-2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--raised), var(--raised)) padding-box,
+    linear-gradient(
+        135deg,
+        rgba(200, 191, 255, 0.42),
+        rgba(255, 255, 255, 0.07) 38%,
+        rgba(255, 255, 255, 0.05) 62%,
+        rgba(229, 143, 255, 0.34)
+      )
+      border-box;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 .btn-secondary:hover {
-  background: var(--band);
+  background:
+    linear-gradient(var(--band), var(--band)) padding-box,
+    linear-gradient(
+        135deg,
+        rgba(200, 191, 255, 0.7),
+        rgba(255, 255, 255, 0.12) 38%,
+        rgba(255, 255, 255, 0.08) 62%,
+        rgba(229, 143, 255, 0.55)
+      )
+      border-box;
   box-shadow:
-    inset 0 0 0 1px var(--line-3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 8px 30px -14px rgba(139, 125, 255, 0.7);
 }
 .btn-primary:active,
 .btn-secondary:active { transform: scale(0.97); }
 .btn-lg {
-  height: 44px;
-  padding-inline: 19px;
+  height: 46px;
+  padding-inline: 22px;
   font-size: 15px;
-  border-radius: 11px;
 }
 
 .btn-ghost {

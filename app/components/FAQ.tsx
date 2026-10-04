@@ -31,8 +31,8 @@ export function FAQ() {
     <section id="faq" className="relative py-24 md:py-32">
       <Container className="grid gap-12 lg:grid-cols-[0.8fr_1.4fr] lg:gap-20">
         <div className="reveal">
-          <p className="eyebrow">FAQ</p>
-          <h2 className="display-2 mt-6 text-[var(--ink)]">Questions, answered.</h2>
+          <p className="kicker">FAQ</p>
+          <h2 className="display-2 text-sheen mt-6">Questions, answered.</h2>
           <p className="mt-5 text-[14.5px] text-[var(--ink-2)]">
             Anything else?{" "}
             <Link href="/docs" className="docs-link">

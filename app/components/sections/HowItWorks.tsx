@@ -6,8 +6,9 @@ import { Container } from "@/components/ui/section";
 import { cn } from "@/lib/utils";
 import { DemoModal } from "../DemoModal";
 
-/* Each step plays a Remotion clip rendered from the real run (see
-   video/argus-site in the ARGUS repo). When one ends the next begins. */
+/* A pinned scroll-story: the clip stays in view while the three steps
+   scroll past; whichever step crosses the middle of the screen owns the
+   clip. Clips are Remotion renders of the real run (ARGUS/video/argus-site). */
 const STEPS = [
   {
     id: "attach",
@@ -59,11 +60,26 @@ export function HowItWorks() {
   const [active, setActive] = useState(0);
   const [demoOpen, setDemoOpen] = useState(false);
   const videos = useRef<(HTMLVideoElement | null)[]>([]);
-  const bars = useRef<(HTMLSpanElement | null)[]>([]);
+  const steps = useRef<(HTMLLIElement | null)[]>([]);
+  const bar = useRef<HTMLSpanElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const motionOk = !useSyncExternalStore(subscribeReduced, readReduced, () => false);
 
-  // Play the active clip only while the player is on screen.
+  // The step crossing the middle band of the viewport is the active one.
+  useEffect(() => {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) setActive(Number((entry.target as HTMLElement).dataset.step));
+        }
+      },
+      { rootMargin: "-46% 0px -46% 0px" }
+    );
+    steps.current.forEach((el) => el && io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
+  // Play the active clip while the stage is on screen; mirror its progress.
   useEffect(() => {
     if (!motionOk) return;
     const el = stage.current;
@@ -73,30 +89,27 @@ export function HowItWorks() {
 
     const tick = () => {
       const v = videos.current[active];
-      const bar = bars.current[active];
-      if (v && bar && v.duration) {
-        bar.style.transform = `scaleX(${v.currentTime / v.duration})`;
+      if (v && bar.current && v.duration) {
+        bar.current.style.transform = `scaleX(${v.currentTime / v.duration})`;
       }
       raf = requestAnimationFrame(tick);
     };
-
-    const play = () => {
+    const sync = () => {
       videos.current.forEach((v, i) => {
         if (!v) return;
-        if (i === active && visible) {
-          void v.play().catch(() => undefined);
-        } else {
-          v.pause();
-        }
+        if (i === active && visible) void v.play().catch(() => undefined);
+        else v.pause();
       });
       cancelAnimationFrame(raf);
       if (visible) raf = requestAnimationFrame(tick);
     };
 
+    const v = videos.current[active];
+    if (v) v.currentTime = 0;
     const io = new IntersectionObserver((entries) => {
       visible = entries[entries.length - 1].isIntersecting;
-      play();
-    }, { threshold: 0.35 });
+      sync();
+    });
     io.observe(el);
     return () => {
       io.disconnect();
@@ -104,126 +117,134 @@ export function HowItWorks() {
     };
   }, [active, motionOk]);
 
-  function select(i: number) {
-    const v = videos.current[i];
-    if (v) v.currentTime = 0;
-    bars.current.forEach((bar) => {
-      if (bar) bar.style.transform = "scaleX(0)";
-    });
-    setActive(i);
-  }
+  const goTo = (i: number) =>
+    steps.current[i]?.scrollIntoView({ behavior: motionOk ? "smooth" : "auto", block: "center" });
 
   return (
-    <section id="how-it-works" className="relative scroll-mt-20 py-24 md:py-36">
+    <section id="how-it-works" className="relative scroll-mt-20 pt-24 md:pt-36">
       <DemoModal open={demoOpen} onClose={() => setDemoOpen(false)} />
       <Container>
-        <div className="reveal flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <p className="eyebrow">How it works</p>
-            <h2 className="display-2 mt-6 max-w-[15ch] text-[var(--ink)]">
-              Attach once. Get the root cause on every run.
-            </h2>
-          </div>
-          <p className="lede max-w-[25rem] lg:pb-1.5">
-            ARGUS judges every run before it ships, and stops the deploy when
-            one goes wrong.
+        <div className="reveal mx-auto flex max-w-[44rem] flex-col items-center text-center">
+          <p className="kicker">How it works</p>
+          <h2 className="display-2 text-sheen mt-6">Attach once. Get the root cause on every run.</h2>
+          <p className="lede mt-5 max-w-[30rem]">
+            ARGUS judges every run before it ships, and stops the deploy when one
+            goes wrong.
           </p>
         </div>
 
-        <div className="mt-14 grid items-start gap-8 lg:mt-20 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-14">
-          <ol aria-label="How ARGUS works" className="order-2 flex flex-col lg:order-1">
-            {STEPS.map((s, i) => {
-              const on = i === active;
-              return (
-                <li
-                  key={s.id}
-                  className="relative shadow-[inset_0_-1px_0_var(--line)] first:shadow-[inset_0_1px_0_var(--line),inset_0_-1px_0_var(--line)]"
-                >
-                  <button
-                    type="button"
-                    aria-current={on ? "step" : undefined}
-                    aria-controls="hiw-stage"
-                    onClick={() => select(i)}
-                    className="group flex w-full items-baseline gap-4 pt-6 text-left"
-                  >
-                    <span className={cn("step-num transition-colors", on && "text-[var(--iris-fg)]")}>
-                      0{i + 1}
-                    </span>
-                    <span
-                      className={cn(
-                        "text-[17px] font-medium tracking-[-0.02em] transition-colors",
-                        on ? "text-[var(--ink)]" : "text-[var(--ink-3)] group-hover:text-[var(--ink-2)]"
-                      )}
-                    >
-                      {s.title}
-                    </span>
-                  </button>
-                  <div
-                    aria-hidden={!on}
-                    className="grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
-                    style={{ gridTemplateRows: on ? "1fr" : "0fr" }}
-                  >
-                    <div className="overflow-hidden">
-                      <p className="ident pl-[calc(2ch+1rem)] pt-3 text-[14.5px] leading-[1.6] text-[var(--ink-2)]">
-                        {s.body}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="h-6" />
-                  <span aria-hidden className="absolute inset-x-0 bottom-0 h-px overflow-hidden">
-                    <span
+        <div className="mt-12 grid gap-x-16 lg:mt-20 lg:grid-cols-[minmax(0,24rem)_minmax(0,1fr)]">
+          {/* the stage: pinned while the steps scroll past */}
+          <div className="sticky top-[76px] z-10 -mx-5 bg-[var(--void)] px-5 pb-4 pt-2 lg:static lg:order-2 lg:mx-0 lg:bg-transparent lg:p-0">
+            <div ref={stage} id="hiw-stage" className="lg:sticky lg:top-[calc(50vh-15rem)]">
+              <div className="frame relative overflow-hidden p-1.5 sm:p-2">
+                <div className="relative aspect-[16/10] overflow-hidden rounded-[11px] bg-[var(--rail)]">
+                  {STEPS.map((s, i) => (
+                    <video
+                      key={s.id}
                       ref={(el) => {
-                        bars.current[i] = el;
+                        videos.current[i] = el;
                       }}
                       className={cn(
-                        "block h-full origin-left bg-[var(--iris)]",
-                        on ? "opacity-100" : "opacity-0"
+                        "absolute inset-0 h-full w-full object-cover transition-opacity duration-700",
+                        i === active ? "opacity-100" : "pointer-events-none opacity-0"
                       )}
-                      style={{ transform: "scaleX(0)" }}
+                      aria-hidden={i !== active}
+                      src={`/clips/${s.id}.mp4`}
+                      poster={`/clips/${s.id}.jpg`}
+                      muted
+                      loop
+                      playsInline
+                      preload={i === active ? "auto" : "metadata"}
+                      controls={!motionOk && i === active}
+                      aria-label={s.label}
                     />
-                  </span>
-                </li>
-              );
-            })}
-            <li className="pt-6">
-              <button
-                type="button"
-                onClick={() => setDemoOpen(true)}
-                className="group inline-flex items-center gap-1.5 text-[13.5px] text-[var(--ink-2)] transition-colors hover:text-[var(--ink)]"
-              >
-                Click around the real run yourself
-                <ArrowUpRight size={14} className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-              </button>
-            </li>
-          </ol>
-
-          <div ref={stage} id="hiw-stage" className="order-1 lg:order-2">
-            <div className="frame p-1.5 sm:p-2">
-              <div className="relative aspect-[16/10] overflow-hidden rounded-[11px] bg-[var(--rail)]">
+                  ))}
+                </div>
+                <span aria-hidden className="absolute inset-x-6 bottom-0 h-px overflow-hidden">
+                  <span
+                    ref={bar}
+                    className="block h-full origin-left bg-[linear-gradient(90deg,var(--iris-indigo),var(--iris),var(--iris-orchid))]"
+                    style={{ transform: "scaleX(0)" }}
+                  />
+                </span>
+              </div>
+              <div className="mt-4 hidden items-center justify-center gap-2 lg:flex" aria-hidden>
                 {STEPS.map((s, i) => (
-                  <video
+                  <span
                     key={s.id}
-                    ref={(el) => {
-                      videos.current[i] = el;
-                    }}
                     className={cn(
-                      "absolute inset-0 h-full w-full object-cover transition-opacity duration-500",
-                      i === active ? "opacity-100" : "pointer-events-none opacity-0"
+                      "h-1.5 rounded-full transition-all duration-500",
+                      i === active ? "w-6 bg-[var(--iris)]" : "w-1.5 bg-[var(--line-3)]"
                     )}
-                    aria-hidden={i !== active}
-                    src={`/clips/${s.id}.mp4`}
-                    poster={`/clips/${s.id}.jpg`}
-                    muted
-                    playsInline
-                    preload={i === active ? "auto" : "metadata"}
-                    controls={!motionOk && i === active}
-                    aria-label={s.label}
-                    onEnded={() => select((i + 1) % STEPS.length)}
                   />
                 ))}
               </div>
             </div>
           </div>
+
+          <ol aria-label="How ARGUS works" className="lg:order-1">
+            {STEPS.map((s, i) => {
+              const on = i === active;
+              return (
+                <li
+                  key={s.id}
+                  data-step={i}
+                  ref={(el) => {
+                    steps.current[i] = el;
+                  }}
+                  className="relative flex min-h-[46vh] flex-col justify-center py-10 pl-7 lg:min-h-[78vh]"
+                >
+                  {/* the rail: lit for the step that owns the clip */}
+                  <span aria-hidden className="absolute bottom-0 left-0 top-0 w-px bg-[var(--line-2)]">
+                    <span
+                      className={cn(
+                        "absolute inset-0 origin-top bg-[linear-gradient(180deg,var(--iris-lavender),var(--iris))] shadow-[0_0_12px_rgba(139,125,255,0.8)] transition-transform duration-700",
+                        on ? "scale-y-100" : "scale-y-0"
+                      )}
+                    />
+                  </span>
+                  <button
+                    type="button"
+                    aria-current={on ? "step" : undefined}
+                    aria-controls="hiw-stage"
+                    onClick={() => goTo(i)}
+                    className="text-left"
+                  >
+                    <span className={cn("step-num transition-colors duration-500", on && "text-[var(--iris-fg)]")}>
+                      Step 0{i + 1}
+                    </span>
+                    <span
+                      className={cn(
+                        "mt-4 block text-[clamp(24px,2.4vw,32px)] font-medium leading-[1.15] tracking-[-0.03em] transition-colors duration-500",
+                        on ? "text-[var(--ink)]" : "text-[var(--ink-3)]"
+                      )}
+                    >
+                      {s.title}
+                    </span>
+                  </button>
+                  <p
+                    className={cn(
+                      "ident mt-4 max-w-[26rem] text-[15.5px] leading-[1.65] transition-colors duration-500",
+                      on ? "text-[var(--ink-2)]" : "text-[var(--ink-3)]"
+                    )}
+                  >
+                    {s.body}
+                  </p>
+                  {s.id === "trace" ? (
+                    <button
+                      type="button"
+                      onClick={() => setDemoOpen(true)}
+                      className="group mt-6 inline-flex w-fit items-center gap-1.5 text-[13.5px] text-[var(--iris-fg)] transition-colors hover:text-[var(--ink)]"
+                    >
+                      Click around the real run yourself
+                      <ArrowUpRight size={14} className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                    </button>
+                  ) : null}
+                </li>
+              );
+            })}
+          </ol>
         </div>
       </Container>
     </section>

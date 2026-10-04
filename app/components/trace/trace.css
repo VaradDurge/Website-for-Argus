@@ -26,7 +26,7 @@
 
 .trace .grid-line {
   fill: none;
-  stroke: rgba(255, 255, 255, 0.045);
+  stroke: rgba(200, 191, 255, 0.05);
   stroke-width: 1;
   vector-effect: non-scaling-stroke;
 }
@@ -35,7 +35,7 @@
   mask-image: radial-gradient(ellipse 60% 70% at 55% 50%, #000 30%, transparent 80%);
 }
 
-.trace .glow-stop { stop-color: var(--iris); stop-opacity: 0.22; }
+.trace .glow-stop { stop-color: var(--iris); stop-opacity: 0.32; }
 .trace .glow-stop--end { stop-opacity: 0; }
 .trace .lock-glow {
   opacity: 0;
@@ -57,18 +57,28 @@
 }
 .trace .edges-run path {
   fill: none;
-  stroke: var(--ink-2);
+  stroke: #dcd8f5;
   stroke-width: 2.4;
   stroke-linecap: round;
 }
-.trace .edges-run { transition: opacity 0.5s var(--ease-out); }
-.trace-wrap[data-out] .edges-run { opacity: 0; }
+.trace .edges-glow path {
+  fill: none;
+  stroke: var(--iris-lavender);
+  stroke-width: 10;
+  stroke-linecap: round;
+  opacity: 0.17;
+}
+.trace .edges-run,
+.trace .edges-glow { transition: opacity 0.5s var(--ease-out); }
+.trace-wrap[data-out] .edges-run,
+.trace-wrap[data-out] .edges-glow { opacity: 0; }
 
 .trace .back {
   fill: none;
-  stroke: var(--iris);
+  stroke: var(--iris-fg);
   stroke-width: 3.2;
   stroke-linecap: round;
+  filter: drop-shadow(0 0 6px rgba(139, 125, 255, 0.9));
 }
 
 /* ── stations ── */
@@ -115,6 +125,7 @@
 .trace .st[data-s="done"] .v-done { opacity: 1; }
 
 .trace .st[data-s="silent"] .ring {
+  filter: drop-shadow(0 0 7px rgba(255, 191, 60, 0.75));
   stroke: var(--sig-warn);
   fill: color-mix(in srgb, var(--sig-warn) 18%, var(--void));
   animation: trace-pop-lock 0.5s var(--ease-out);
@@ -123,6 +134,7 @@
 .trace .st[data-s="silent"] .v-silent { opacity: 1; fill: var(--sig-warn); }
 
 .trace .st[data-s="crash"] .ring {
+  filter: drop-shadow(0 0 8px rgba(255, 107, 129, 0.85));
   stroke: var(--sig-fail);
   fill: var(--sig-fail);
   animation: trace-pop-crash 0.4s var(--ease-out);
@@ -148,7 +160,11 @@
   transition: opacity 0.35s, fill 0.35s;
 }
 .trace-wrap[data-merge] .empty { opacity: 1; animation: trace-pop 0.45s var(--ease-out); }
-.trace-wrap[data-lock] .empty { fill: var(--sig-warn); animation: trace-pop-lock 0.6s var(--ease-out); }
+.trace-wrap[data-lock] .empty {
+  fill: var(--sig-warn);
+  filter: drop-shadow(0 0 10px rgba(255, 191, 60, 0.7));
+  animation: trace-pop-lock 0.6s var(--ease-out);
+}
 
 .trace .raised {
   font-family: var(--font-mono), ui-monospace, monospace;
@@ -177,12 +193,13 @@
 }
 
 /* ── execution tokens ── */
-.trace .token circle { fill: var(--ink); }
-.trace .token .token-halo { opacity: 0.12; }
+.trace .token circle { fill: #ffffff; }
+.trace .token .token-halo { fill: var(--iris-lavender); opacity: 0.28; }
 
 /* ── ARGUS's gaze ── */
+.trace .gaze { filter: drop-shadow(0 0 10px rgba(139, 125, 255, 0.55)); }
 .trace .gaze-box {
-  fill: color-mix(in srgb, var(--iris) 6%, transparent);
+  fill: color-mix(in srgb, var(--iris) 8%, transparent);
   stroke: var(--iris);
   stroke-width: 1.6;
   vector-effect: non-scaling-stroke;
@@ -284,6 +301,7 @@
 .trace .gate-side { font-size: 14px; fill: var(--ink-3); }
 .trace .gate-bar {
   fill: var(--sig-fail);
+  filter: drop-shadow(0 0 10px rgba(255, 107, 129, 0.8));
   transform-box: fill-box;
   transform-origin: center;
   transform: scaleY(0);

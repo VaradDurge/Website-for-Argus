@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { BetaAccessModal } from "../BetaAccessModal";
 import { WaitlistModal } from "../WaitlistModal";
 import { CopyInstall } from "../CopyInstall";
+import { ScopeRings } from "../ScopeRings";
 
 /* The hero ends on a blocked deploy (exit 1). The page ends on the same
    spine run clean: every node passes and the gate stays open (exit 0).
@@ -42,7 +43,8 @@ export function FinalCTA() {
       <WaitlistModal open={listOpen} onClose={() => setListOpen(false)} />
       <div aria-hidden className="cta-light" />
 
-      <Container>
+      <Container className="relative">
+        <ScopeRings />
         <div className="reveal mx-auto flex max-w-[48rem] flex-col items-center text-center">
           <h2 className="display-1 text-sheen">Ship agents you can trust.</h2>
           <p className="lede mt-6 max-w-[30rem]">
@@ -57,7 +59,7 @@ export function FinalCTA() {
               Book a call
             </button>
           </div>
-          <CopyInstall className="mt-4 border-0 bg-transparent shadow-none hover:bg-transparent hover:shadow-none" />
+          <CopyInstall plain className="mt-4" />
           <button
             type="button"
             onClick={() => setListOpen(true)}

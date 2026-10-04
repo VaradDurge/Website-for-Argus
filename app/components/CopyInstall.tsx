@@ -5,7 +5,14 @@ import { Check, Copy } from "lucide-react";
 import { INSTALL_CMD } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
-export function CopyInstall({ className }: { className?: string }) {
+export function CopyInstall({
+  className,
+  plain = false,
+}: {
+  className?: string;
+  /** Text-only, for sitting under a row of buttons. */
+  plain?: boolean;
+}) {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -30,7 +37,9 @@ export function CopyInstall({ className }: { className?: string }) {
       onClick={copy}
       aria-label={copied ? "Copied" : `Copy: ${INSTALL_CMD}`}
       className={cn(
-        "btn-secondary group gap-2.5 font-mono text-[13px] font-normal tracking-normal",
+        plain
+          ? "group inline-flex h-9 items-center gap-2.5 rounded-full px-3 font-mono text-[13px] text-[var(--ink-2)] transition-colors hover:text-[var(--ink)]"
+          : "btn-secondary group gap-2.5 font-mono text-[13px] font-normal tracking-normal",
         copied && "copy-pulse",
         className
       )}

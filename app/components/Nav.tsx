@@ -56,15 +56,16 @@ export function Nav({ stars }: { stars?: number | null }) {
       <WaitlistModal open={waitlistOpen} onClose={() => setWaitlistOpen(false)} />
       <BetaAccessModal open={callOpen} onClose={() => setCallOpen(false)} />
 
-      <header
-        className={cn(
-          "sticky top-0 z-50 transition-[background-color,box-shadow,backdrop-filter] duration-300",
-          scrolled || menuOpen
-            ? "bg-[color-mix(in_srgb,var(--void)_74%,transparent)] shadow-[inset_0_-1px_0_var(--line)] backdrop-blur-xl backdrop-saturate-150"
-            : "bg-transparent"
-        )}
-      >
-        <nav className="constrained flex h-16 items-center justify-between gap-6">
+      {/* A floating island: clear over the hero, glass once the page moves. */}
+      <header className="sticky top-0 z-50 px-3 pt-3 sm:px-5">
+        <nav
+          className={cn(
+            "mx-auto flex h-14 max-w-[1180px] items-center justify-between gap-6 rounded-full pl-5 pr-2 transition-[background-color,box-shadow,backdrop-filter] duration-500",
+            scrolled || menuOpen
+              ? "bg-[color-mix(in_srgb,var(--panel)_70%,transparent)] shadow-[inset_0_0_0_1px_var(--line-2),inset_0_1px_0_rgba(255,255,255,0.06),0_24px_60px_-24px_rgba(0,0,0,0.9)] backdrop-blur-xl backdrop-saturate-150"
+              : "bg-transparent shadow-[inset_0_0_0_1px_transparent]"
+          )}
+        >
           <Link href="/" className="flex shrink-0 items-center gap-2.5" aria-label="ArgusLabs home">
             <Logo />
             <span className="rounded-full px-2 py-[3px] font-mono text-[9.5px] uppercase tracking-[0.14em] text-[var(--ink-3)] shadow-[inset_0_0_0_1px_var(--line-2)]">
@@ -121,13 +122,13 @@ export function Nav({ stars }: { stars?: number | null }) {
         <AnimatePresence>
           {menuOpen && (
             <motion.div
-              className="overflow-hidden lg:hidden"
+              className="mx-auto mt-2 max-w-[1180px] overflow-hidden rounded-[28px] bg-[color-mix(in_srgb,var(--panel)_86%,transparent)] shadow-[inset_0_0_0_1px_var(--line-2),0_24px_60px_-24px_rgba(0,0,0,0.9)] backdrop-blur-xl lg:hidden"
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className="constrained flex flex-col gap-1 pb-6 pt-2">
+              <div className="flex flex-col gap-1 px-4 pb-5 pt-3">
                 {LINKS.map((link) => (
                   <NavLink
                     key={link.label}

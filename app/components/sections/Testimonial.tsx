@@ -13,7 +13,7 @@ export function Testimonial() {
       <Container>
         <figure className="reveal relative mx-auto max-w-[54rem] px-6 py-12 text-center sm:px-14 sm:py-16">
           {/* ARGUS's selection frame, the same one the hero trace locks with */}
-          <span aria-hidden className="pointer-events-none absolute inset-0 shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--iris)_35%,transparent)]" />
+          <span aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_50%,rgba(139,125,255,0.08),transparent_70%)] shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--iris)_40%,transparent),0_0_60px_-20px_rgba(139,125,255,0.5)]" />
           {CORNERS.map((pos) => (
             <span
               key={pos}

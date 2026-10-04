@@ -1,4 +1,5 @@
 import { Container } from "@/components/ui/section";
+import { Spotlight } from "../Spotlight";
 
 /* Every vignette is real: the consumers= API, the section headings argus fix
    writes (src/argus/fix_prompt.py), replay's frozen-upstream mode, and the
@@ -8,14 +9,12 @@ export function Capabilities() {
   return (
     <section className="relative py-24 md:py-36">
       <Container>
-        <div className="reveal max-w-[40rem]">
-          <p className="eyebrow">Built for how agents break</p>
-          <h2 className="display-2 mt-6 text-[var(--ink)]">
-            Less digging. <span className="text-[var(--ink-3)]">More shipping.</span>
-          </h2>
+        <div className="reveal mx-auto flex max-w-[40rem] flex-col items-center text-center">
+          <p className="kicker">Built for how agents break</p>
+          <h2 className="display-2 text-sheen mt-6">Less digging. More shipping.</h2>
         </div>
 
-        <div className="mt-14 grid grid-cols-1 gap-px overflow-clip rounded-[var(--radius-block)] bg-[var(--line)] shadow-[0_0_0_1px_var(--line)] md:mt-20 md:grid-cols-2">
+        <div className="mt-14 grid grid-cols-1 gap-px overflow-clip rounded-[var(--radius-block)] mx-auto max-w-[64rem] bg-[var(--line)] shadow-[0_0_0_1px_var(--line)] md:mt-20 md:grid-cols-2">
           <Cell
             title="Field contracts"
             body={
@@ -114,13 +113,13 @@ function Cell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="reveal flex flex-col gap-10 bg-[var(--void)] p-7 sm:p-9">
+    <Spotlight className="reveal flex flex-col gap-10 bg-[var(--void)] p-7 sm:p-9">
       <div className="min-h-[6.5rem]">{children}</div>
       <div>
         <h3 className="text-[17px] font-medium tracking-[-0.02em] text-[var(--ink)]">{title}</h3>
         <p className="ident mt-2.5 max-w-[30rem] text-pretty text-[14.5px] leading-[1.6] text-[var(--ink-2)]">{body}</p>
       </div>
-    </div>
+    </Spotlight>
   );
 }
 

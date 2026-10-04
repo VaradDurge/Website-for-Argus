@@ -292,6 +292,20 @@ export function HeroTrace() {
             <path key={e.id} d={e.d} className="unreached" />
           ))}
         </g>
+        {/* phosphor: a soft wide copy under each walked edge, driven by the
+            same data-edge offsets as the crisp line above it */}
+        <g className="edges-glow" aria-hidden>
+          {EDGES.map((e) => (
+            <path
+              key={e.id}
+              data-edge={e.id}
+              d={e.d}
+              pathLength={1}
+              strokeDasharray="1 1"
+              strokeDashoffset={1}
+            />
+          ))}
+        </g>
         <g className="edges-run">
           {EDGES.map((e) => (
             <path
