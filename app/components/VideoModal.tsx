@@ -11,7 +11,7 @@ interface Props {
   onClose: () => void;
 }
 
-/** The launch film ("return {}"), self-hosted so it plays without a third-party embed. */
+/** The ARGUS film (Argus_Improvised), self-hosted so it plays without a third-party embed. */
 export function VideoModal({ open, onClose }: Props) {
   const panel = useRef<HTMLDivElement>(null);
   useDialogFocus(open, panel);
@@ -71,8 +71,8 @@ export function VideoModal({ open, onClose }: Props) {
                   </button>
                   <video
                     className="block aspect-video w-full"
-                    src="/film/argus-film.mp4"
-                    poster="/film/argus-film.jpg"
+                    src="/film/argus-improvised.mp4"
+                    poster="/film/argus-improvised.jpg"
                     controls
                     autoPlay
                     playsInline
