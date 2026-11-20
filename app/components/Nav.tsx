@@ -68,9 +68,6 @@ export function Nav({ stars }: { stars?: number | null }) {
         >
           <Link href="/" className="flex shrink-0 items-center gap-2.5" aria-label="ArgusLabs home">
             <Logo />
-            <span className="rounded-full px-2 py-[3px] font-mono text-[9.5px] uppercase tracking-[0.14em] text-[var(--ink-3)] shadow-[inset_0_0_0_1px_var(--line-2)]">
-              Beta
-            </span>
           </Link>
 
           <ul className="hidden items-center gap-1 lg:flex">
