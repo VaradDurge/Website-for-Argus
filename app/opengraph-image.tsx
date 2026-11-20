@@ -1,10 +1,19 @@
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 import { ImageResponse } from 'next/og'
+
+const logo = async (file: string, mime: string) =>
+  `data:${mime};base64,${(await readFile(join(process.cwd(), 'public/logos', file))).toString('base64')}`
 
 export const alt = 'ARGUS — Catch silent failures in AI agents before you deploy'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
 export default async function OGImage() {
+  const [logo16vc, logoAltair] = await Promise.all([
+    logo('16vc.png', 'image/png'),
+    logo('altair.svg', 'image/svg+xml'),
+  ])
   return new ImageResponse(
     (
       <div
@@ -35,7 +44,7 @@ export default async function OGImage() {
           }}
         />
 
-        {/* 16VC Badge */}
+        {/* 16VC + AltaIR fellowships */}
         <div
           style={{
             display: 'flex',
@@ -44,20 +53,8 @@ export default async function OGImage() {
             marginBottom: '40px',
           }}
         >
-          <div
-            style={{
-              display: 'flex',
-              background: '#141416',
-              color: '#e6cf8a',
-              fontSize: '18px',
-              fontWeight: 700,
-              padding: '6px 12px',
-              borderRadius: '6px',
-              letterSpacing: '-0.5px',
-            }}
-          >
-            16VC
-          </div>
+          <img src={logo16vc} alt="16VC" height={34} width={80} style={{ borderRadius: '6px' }} />
+          <img src={logoAltair} alt="AltaIR Capital" height={34} width={93} />
           <div
             style={{
               display: 'flex',

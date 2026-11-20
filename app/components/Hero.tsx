@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type CSSProperties } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Play } from "lucide-react";
 import { Container } from "@/components/ui/section";
@@ -79,9 +80,8 @@ export function Hero() {
             <CopyInstall plain className="h-8 px-2 text-[12.5px]" />
             <span aria-hidden className="text-[var(--line-3)] max-sm:hidden">·</span>
             <span className="inline-flex items-center gap-2 text-[var(--ink-2)]">
-              <span className="rounded-[4px] bg-[var(--ink)] px-1.5 py-[3px] text-[10px] font-semibold tracking-[-0.02em] text-[#e6cf8a]">
-                16VC
-              </span>
+              <Image src="/logos/16vc.png" alt="16VC" width={38} height={16} className="h-4 w-auto rounded-[3px]" />
+              <Image src="/logos/altair.svg" alt="AltaIR Capital" width={44} height={16} className="h-4 w-auto" />
               Founder Fellow
             </span>
             <span aria-hidden className="text-[var(--line-3)]">·</span>
